@@ -44,33 +44,56 @@ class RegisterPage extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               children: [
-                TextFormField(
-                    decoration: InputDecoration(
-                  labelText: "Your Email (Child)",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                )),
-                TextFormField(
-                    decoration: InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                )),
-                TextFormField(
-                    decoration: InputDecoration(
-                  labelText: "Confirm Password",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                )),
-                TextFormField(
-                    decoration: InputDecoration(
-                  labelText: "Parent Email",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                )),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'Welcome',
+                    style: TextStyle(fontSize: 28),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
+                    labelText: "Your Email (Child)",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
+                    labelText: "Confirm Password",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
+                    labelText: "Parent Email",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 196, 196, 196),
