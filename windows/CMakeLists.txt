@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(mosaik_mobile LANGUAGES CXX)
+project(mosaic LANGUAGES CXX)
 
-set(BINARY_NAME "mosaik_mobile")
+set(BINARY_NAME "mosaic")
 
 cmake_policy(SET CMP0063 NEW)
 
