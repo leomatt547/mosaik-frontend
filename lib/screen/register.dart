@@ -8,7 +8,36 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Icon(
+          Icons.cottage_outlined,
+          size: 30,
+          color: Colors.black,
+        ),
+        actions: const <Widget>[
+          Padding(
+            padding: EdgeInsets.all(4),
+            child: Icon(
+              Icons.check_box_outline_blank_outlined,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(4),
+            child: Icon(
+              Icons.account_circle_outlined,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.all(0),
+              child: Icon(
+                Icons.more_vert,
+                size: 30,
+                color: Colors.black,
+              )),
+        ],
         backgroundColor: const Color.fromARGB(255, 196, 196, 196),
       ),
       body: Center(
