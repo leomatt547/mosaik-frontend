@@ -41,7 +41,7 @@ class LandingPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Route route = MaterialPageRoute(
-                      builder: (context) => const RegisterPage());
+                      builder: (context) => const RegisterParentPage());
                   Navigator.push(context, route);
                 },
                 child: const Text('Register'),
