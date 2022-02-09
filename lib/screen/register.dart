@@ -59,6 +59,16 @@ class RegisterChildPage extends StatelessWidget {
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
                       decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
                     labelText: "Your Email (Child)",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0)),
@@ -186,6 +196,16 @@ class RegisterParentPage extends StatelessWidget {
                     'Welcome',
                     style: TextStyle(fontSize: 28),
                   ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
                 ),
                 Padding(
                   padding:
