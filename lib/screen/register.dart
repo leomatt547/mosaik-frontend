@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'landing_screen.dart';
 
 class RegisterChildPage extends StatelessWidget {
   const RegisterChildPage({Key? key}) : super(key: key);
@@ -8,6 +9,13 @@ class RegisterChildPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Route route =
+                  MaterialPageRoute(builder: (context) => const LandingPage());
+              Navigator.push(context, route);
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: const Icon(
           Icons.cottage_outlined,
           size: 30,
@@ -151,6 +159,13 @@ class RegisterParentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Route route =
+                  MaterialPageRoute(builder: (context) => const LandingPage());
+              Navigator.push(context, route);
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: const Icon(
           Icons.cottage_outlined,
           size: 30,
