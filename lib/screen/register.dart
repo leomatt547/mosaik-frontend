@@ -86,21 +86,23 @@ class RegisterChildPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                    labelText: "Confirm Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Confirm Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
@@ -236,21 +238,23 @@ class RegisterParentPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
-                    labelText: "Confirm Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Confirm Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
