@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import './screen/landing_screen.dart';
+import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/splash.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    home: LandingPage(),
-  ));
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  Widget build(BuildContext ctx) {
+    return MaterialApp(home: Splash());
+  }
 }
