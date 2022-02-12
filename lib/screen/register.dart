@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:http/http.dart' as http;
 import 'landing_screen.dart';
 
 class RegisterChildPage extends StatelessWidget {
-  const RegisterChildPage({Key? key}) : super(key: key);
+  RegisterChildPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,26 +75,47 @@ class RegisterChildPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      controller: nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter name';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
-                    labelText: "Name",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Name",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter email';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
-                    labelText: "Your Email (Child)",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Your Email (Child)",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      controller: passwordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter password';
+                        }
+                        return null;
+                      },
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Password",
@@ -97,6 +127,12 @@ class RegisterChildPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter confirm password';
+                        }
+                        return null;
+                      },
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Confirm Password",
@@ -108,11 +144,17 @@ class RegisterChildPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter email';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
-                    labelText: "Parent Email",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Parent Email",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
@@ -127,7 +169,7 @@ class RegisterChildPage extends StatelessWidget {
                     ),
                     onPressed: () {
                       Route route = MaterialPageRoute(
-                          builder: (context) => const RegisterParentPage());
+                          builder: (context) => RegisterParentPage());
                       Navigator.push(context, route);
                     },
                   ),
@@ -140,8 +182,44 @@ class RegisterChildPage extends StatelessWidget {
                     "Create Account",
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
+                    }
+                    Map data = {
+                      'nama': nameController.text.toString(),
+                      'email': emailController.text.toString(),
+                      'password': passwordController.text.toString(),
+                    };
+
+                    String body = json.encode(data);
+                    final response = await http.post(
+                      Uri.parse("http://localhost:8080/parents"),
+                      body: body,
+                      encoding: Encoding.getByName('utf-8'),
+                    );
+
+                    if (response.statusCode == 201) {
+                      Alert(
+                        context: context,
+                        type: AlertType.success,
+                        title: "Registrasi berhasil",
+                        desc: "Selamat anda berhasil registrasi",
+                        buttons: [
+                          DialogButton(
+                            child: const Text(
+                              "Oke",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        ],
+                      ).show();
+                      return;
+                    }
                   },
                 ),
               ],
@@ -154,8 +232,13 @@ class RegisterChildPage extends StatelessWidget {
 }
 
 class RegisterParentPage extends StatelessWidget {
-  const RegisterParentPage({Key? key}) : super(key: key);
+  RegisterParentPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -218,26 +301,47 @@ class RegisterParentPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter name';
+                        }
+                        return null;
+                      },
+                      controller: nameController,
                       decoration: InputDecoration(
-                    labelText: "Name",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Name",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter email';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
                       decoration: InputDecoration(
-                    labelText: "Your Email (Parent)",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
+                        labelText: "Your Email (Parent)",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter password';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Password",
@@ -249,6 +353,13 @@ class RegisterParentPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter confirm password';
+                        }
+                        return null;
+                      },
+                      controller: confirmPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Confirm Password",
@@ -269,7 +380,7 @@ class RegisterParentPage extends StatelessWidget {
                     ),
                     onPressed: () {
                       Route route = MaterialPageRoute(
-                          builder: (context) => const RegisterChildPage());
+                          builder: (context) => RegisterChildPage());
                       Navigator.push(context, route);
                     },
                   ),
@@ -282,8 +393,44 @@ class RegisterParentPage extends StatelessWidget {
                     "Create Account",
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
+                    }
+                    Map data = {
+                      'nama': nameController.text.toString(),
+                      'email': emailController.text.toString(),
+                      'password': passwordController.text.toString(),
+                    };
+
+                    String body = json.encode(data);
+                    final response = await http.post(
+                      Uri.parse("http://localhost:8080/parents"),
+                      body: body,
+                      encoding: Encoding.getByName('utf-8'),
+                    );
+
+                    if (response.statusCode == 201) {
+                      Alert(
+                        context: context,
+                        type: AlertType.success,
+                        title: "Registrasi berhasil",
+                        desc: "Selamat anda berhasil registrasi",
+                        buttons: [
+                          DialogButton(
+                            child: const Text(
+                              "Oke",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        ],
+                      ).show();
+                      return;
+                    }
                   },
                 ),
               ],
