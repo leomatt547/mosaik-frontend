@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mosaic/screen/login.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import 'landing_screen.dart';
+import '../constant.dart';
 
 class RegisterChildPage extends StatelessWidget {
   RegisterChildPage({Key? key}) : super(key: key);
@@ -196,7 +198,7 @@ class RegisterChildPage extends StatelessWidget {
 
                     String body = json.encode(data);
                     final response = await http.post(
-                      Uri.parse("http://localhost:8080/parents"),
+                      Uri.parse(API_URL + "/parents"),
                       body: body,
                       encoding: Encoding.getByName('utf-8'),
                     );
@@ -214,7 +216,11 @@ class RegisterChildPage extends StatelessWidget {
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => const LoginPage());
+                              Navigator.push(context, route);
+                            },
                           )
                         ],
                       ).show();
@@ -407,7 +413,7 @@ class RegisterParentPage extends StatelessWidget {
 
                     String body = json.encode(data);
                     final response = await http.post(
-                      Uri.parse("http://localhost:8080/parents"),
+                      Uri.parse(API_URL + "/parents"),
                       body: body,
                       encoding: Encoding.getByName('utf-8'),
                     );
@@ -425,7 +431,11 @@ class RegisterParentPage extends StatelessWidget {
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => const LoginPage());
+                              Navigator.push(context, route);
+                            },
                           )
                         ],
                       ).show();
