@@ -58,7 +58,7 @@ class LandingPage extends StatelessWidget {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => RegisterParentPage()),
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
             },
             icon: const Icon(Icons.account_circle_outlined),

@@ -218,7 +218,7 @@ class RegisterChildPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )
@@ -433,7 +433,7 @@ class RegisterParentPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )
