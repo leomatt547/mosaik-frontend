@@ -3,6 +3,7 @@ import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -51,6 +52,7 @@ class LoginPage extends StatelessWidget {
                         String password = passwordController.text.toString();
 
                         // TODO: API Call
+                        String token = 'token';
 
                         // Validate data (hardcode)
                         if (email != 'mark@gmail.com' ||
@@ -62,6 +64,8 @@ class LoginPage extends StatelessWidget {
                             desc: "Your email or password is wrong",
                           ).show();
                         } else {
+                          const FlutterSecureStorage()
+                              .write(key: 'token', value: token);
                           Route route = MaterialPageRoute(
                               builder: (context) => const LandingPage());
                           Navigator.push(context, route);
