@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mosaic/screen/browsing_screen.dart';
 import 'register.dart';
 import 'login.dart';
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({Key? key}) : super(key: key);
+class LandingPage extends StatefulWidget {
+  @override
+  _LandingPageState createState() {
+    return _LandingPageState();
+  }
+}
+
+class _LandingPageState extends State<LandingPage> {
+  // this allows us to access the TextField text
+  TextEditingController textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +35,7 @@ class LandingPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -137,23 +147,56 @@ class LandingPage extends StatelessWidget {
                       backgroundColor: Colors.white))
             ],
           ),
-          const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: TextField(
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                      borderSide:
-                          const BorderSide(color: Colors.white, width: 2.0),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Flexible(
+                  flex: 6,
+                  child: TextField(
+                    controller: textFieldController,
+                    autocorrect: false,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50))),
+                        fillColor: Color.fromARGB(255, 196, 196, 196),
+                        filled: true),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () {
+                        _sendDataToSecondScreen(context);
+                      },
+                      icon: const Icon(Icons.search),
+                      color: Colors.black,
                     ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    fillColor: Color.fromARGB(255, 196, 196, 196),
-                    filled: true),
-              )),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  void _sendDataToSecondScreen(BuildContext context) {
+    String textToSend = textFieldController.text;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BrowsingScreen(textToSend),
+        ));
   }
 }
