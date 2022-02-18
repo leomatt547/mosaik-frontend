@@ -68,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => RegisterPage()),
+                MaterialPageRoute(builder: (context) => RegisterParentPage()),
               );
             },
             icon: const Icon(Icons.account_circle_outlined),
@@ -149,44 +149,26 @@ class _LandingPageState extends State<LandingPage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  flex: 6,
-                  child: TextFormField(
-                    controller: textFieldController,
-                    autocorrect: false,
-                    style: TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50))),
-                        fillColor: Color.fromARGB(255, 196, 196, 196),
-                        filled: true),
-                    onFieldSubmitted: (term) {
-                      _sendDataToSecondScreen(context);
-                    },
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        _sendDataToSecondScreen(context);
-                      },
-                      icon: const Icon(Icons.search),
-                      color: Colors.black,
+            child: Flexible(
+              flex: 6,
+              child: TextFormField(
+                controller: textFieldController,
+                autocorrect: false,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2.0),
                     ),
-                  ),
-                )
-              ],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50))),
+                    fillColor: Color.fromARGB(255, 196, 196, 196),
+                    filled: true),
+                onFieldSubmitted: (term) {
+                  _sendDataToSecondScreen(context);
+                },
+              ),
             ),
           ),
         ],

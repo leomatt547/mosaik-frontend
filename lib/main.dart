@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/splash.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  // await dotenv.load(fileName: '.env');
   runApp(MyApp());
 }
 

@@ -23,7 +23,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void onSelected(BuildContext context, int item) {
+    void onSelectedMoreOptions(BuildContext context, int item) {
       switch (item) {
         case 0:
           print('New tab');
@@ -32,7 +32,26 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
           print('go to history');
           break;
         case 2:
+          print('Downloads');
+          break;
+        case 2:
           print('go to Settings screen');
+          break;
+      }
+    }
+
+    void onSelectedAccount(BuildContext context, int item) {
+      switch (item) {
+        case 0:
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+          );
+          break;
+        case 1:
+          print('Create CHild Account');
+          break;
+        case 2:
+          print('Logout');
           break;
       }
     }
@@ -108,49 +127,81 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                             controller: _teController,
                           ),
                         ),
-                        Flexible(
-                          flex: 1,
-                          child: Center(
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.check_box_outline_blank_outlined,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {}),
+                        // Flexible(
+                        //   flex: 1,
+                        //   child: Center(
+                        //     child: IconButton(
+                        //         icon: Icon(
+                        //           Icons.check_box_outline_blank_outlined,
+                        //           color: Colors.black,
+                        //         ),
+                        //         onPressed: () {}),
+                        //   ),
+                        // ),
+                        PopupMenuButton<int>(
+                          icon: Icon(
+                            Icons.account_circle,
+                            color: Colors.black,
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Center(
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.account_circle,
-                                color: Colors.black,
+                          color: Color.fromARGB(255, 196, 196, 196),
+                          onSelected: (item) =>
+                              onSelectedAccount(context, item),
+                          itemBuilder: (context) => [
+                            PopupMenuItem<int>(
+                              value: 0,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.manage_accounts_rounded),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Manage Account',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          UpdateProfilePage()),
-                                );
-                              },
                             ),
-                          ),
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.person_add),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Create Child Account',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Log out',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                         Theme(
                           data: Theme.of(context).copyWith(
-                            dividerColor: Colors.black,
                             iconTheme: IconThemeData(color: Colors.black),
                           ),
                           child: PopupMenuButton<int>(
                             color: Color.fromARGB(255, 196, 196, 196),
-                            onSelected: (item) => onSelected(context, item),
+                            onSelected: (item) =>
+                                onSelectedMoreOptions(context, item),
                             itemBuilder: (context) => [
                               PopupMenuItem<int>(
                                 value: 0,
                                 child: Row(
                                   children: [
-                                    Icon(Icons.add),
+                                    Icon(Icons.add_box_outlined),
                                     const SizedBox(width: 8),
                                     Text(
                                       'New tab',
@@ -159,7 +210,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   ],
                                 ),
                               ),
-                              PopupMenuDivider(),
                               PopupMenuItem<int>(
                                 value: 1,
                                 child: Row(
@@ -168,6 +218,19 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                     const SizedBox(width: 8),
                                     Text(
                                       'History',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.download),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Download',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ],
