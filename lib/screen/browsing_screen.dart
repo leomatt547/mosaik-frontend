@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/update_profile.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BrowsingScreen extends StatefulWidget {
@@ -22,6 +23,20 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void onSelected(BuildContext context, int item) {
+      switch (item) {
+        case 0:
+          print('New tab');
+          break;
+        case 1:
+          print('go to history');
+          break;
+        case 2:
+          print('go to Settings screen');
+          break;
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -59,22 +74,37 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                         ),
                         Flexible(
                           flex: 4,
-                          child: TextField(
+                          child: TextFormField(
                             autocorrect: false,
-                            style: TextStyle(color: Colors.black, fontSize: 20),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                             decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: Colors.black,
-                                      width: 2),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: Colors.black,
-                                      width: 2),
-                                )),
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 7),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15))),
+                                fillColor: Color.fromARGB(255, 103, 103, 103),
+                                filled: true),
+                            onFieldSubmitted: (term) {
+                              String finalURL = _teController.text;
+                              if (!finalURL.startsWith("https://")) {
+                                finalURL = "https://" + finalURL;
+                              }
+                              if (_webViewController != null) {
+                                updateLoading(true);
+                                _webViewController
+                                    .loadUrl(finalURL)
+                                    .then((onValue) {})
+                                    .catchError((e) {
+                                  updateLoading(false);
+                                });
+                              }
+                            },
                             controller: _teController,
                           ),
                         ),
@@ -83,26 +113,82 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                           child: Center(
                             child: IconButton(
                                 icon: Icon(
-                                  Icons.arrow_forward,
+                                  Icons.check_box_outline_blank_outlined,
                                   color: Colors.black,
                                 ),
-                                onPressed: () {
-                                  String finalURL = _teController.text;
-                                  if (!finalURL.startsWith("https://")) {
-                                    finalURL = "https://" + finalURL;
-                                  }
-                                  if (_webViewController != null) {
-                                    updateLoading(true);
-                                    _webViewController
-                                        .loadUrl(finalURL)
-                                        .then((onValue) {})
-                                        .catchError((e) {
-                                      updateLoading(false);
-                                    });
-                                  }
-                                }),
+                                onPressed: () {}),
                           ),
-                        )
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Center(
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.account_circle,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdateProfilePage()),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.black,
+                            iconTheme: IconThemeData(color: Colors.black),
+                          ),
+                          child: PopupMenuButton<int>(
+                            color: Color.fromARGB(255, 196, 196, 196),
+                            onSelected: (item) => onSelected(context, item),
+                            itemBuilder: (context) => [
+                              PopupMenuItem<int>(
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.add),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'New tab',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuDivider(),
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.history),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'History',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.settings),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Settings',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -115,7 +201,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                       WebView(
                         initialUrl: 'https://' + widget.text,
                         onPageFinished: (data) {
+                          print(_webViewController.currentUrl());
                           updateLoading(false);
+                          _webViewController.currentUrl().then((value) =>
+                              _teController.text = (value.toString()));
                         },
                         javascriptMode: JavascriptMode.unrestricted,
                         onWebViewCreated: (webViewController) {

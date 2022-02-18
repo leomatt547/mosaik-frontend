@@ -154,10 +154,10 @@ class _LandingPageState extends State<LandingPage> {
               children: <Widget>[
                 Flexible(
                   flex: 6,
-                  child: TextField(
+                  child: TextFormField(
                     controller: textFieldController,
                     autocorrect: false,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -169,6 +169,9 @@ class _LandingPageState extends State<LandingPage> {
                                 BorderRadius.all(Radius.circular(50))),
                         fillColor: Color.fromARGB(255, 196, 196, 196),
                         filled: true),
+                    onFieldSubmitted: (term) {
+                      _sendDataToSecondScreen(context);
+                    },
                   ),
                 ),
                 Flexible(
