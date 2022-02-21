@@ -68,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => RegisterPage()),
+                MaterialPageRoute(builder: (context) => RegisterParentPage()),
               );
             },
             icon: const Icon(Icons.account_circle_outlined),
