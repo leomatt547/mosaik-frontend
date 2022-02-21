@@ -23,7 +23,7 @@ class RegisterChildPage extends StatelessWidget {
         leading: IconButton(
             onPressed: () {
               Route route =
-                  MaterialPageRoute(builder: (context) => const LandingPage());
+                  MaterialPageRoute(builder: (context) => LandingPage());
               Navigator.push(context, route);
             },
             icon: const Icon(Icons.arrow_back)),
@@ -253,7 +253,7 @@ class RegisterParentPage extends StatelessWidget {
         leading: IconButton(
             onPressed: () {
               Route route =
-                  MaterialPageRoute(builder: (context) => const LandingPage());
+                  MaterialPageRoute(builder: (context) => LandingPage());
               Navigator.push(context, route);
             },
             icon: const Icon(Icons.arrow_back)),
