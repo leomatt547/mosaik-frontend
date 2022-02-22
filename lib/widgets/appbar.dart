@@ -22,21 +22,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: <Widget>[
+      // automaticallyImplyLeading: false,
+      iconTheme: const IconThemeData(color: Colors.black),
+      titleSpacing: 0.0,
+      title: Row(children: [
         IconButton(
           onPressed: () {
-            print("left");
-          },
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
-        IconButton(
-          onPressed: () {
+            // TODO: Next Page when browsing (nice to have)
             print("right");
           },
           icon: const Icon(Icons.arrow_forward),
-          color: Colors.black,
         ),
+        IconButton(
+            onPressed: () {
+              // TODO: Refresh when browsing
+              print("refresh");
+            },
+            icon: const Icon(Icons.refresh_outlined)),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -44,14 +46,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             );
           },
           icon: const Icon(Icons.cottage_outlined),
-          color: Colors.black,
         ),
+      ]),
+      actions: <Widget>[
         IconButton(
           onPressed: () {
+            // TODO: Tab when browsing
             print("box");
           },
           icon: const Icon(Icons.check_box_outline_blank_outlined),
-          color: Colors.black,
         ),
         IconButton(
           onPressed: () {
@@ -60,7 +63,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             );
           },
           icon: const Icon(Icons.account_circle_outlined),
-          color: Colors.black,
         ),
         Theme(
           data: Theme.of(context).copyWith(
