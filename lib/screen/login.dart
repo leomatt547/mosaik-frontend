@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -15,10 +16,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
-      ),
+      appBar: const CustomAppBar(),
       body: Center(
         child: Form(
           key: _formKey,

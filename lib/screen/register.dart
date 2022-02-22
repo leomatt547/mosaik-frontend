@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/login.dart';
+import 'package:mosaic/widgets/appbar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
-import 'landing_screen.dart';
 import '../constant.dart';
 
 class RegisterChildPage extends StatelessWidget {
@@ -19,46 +19,7 @@ class RegisterChildPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Route route =
-                  MaterialPageRoute(builder: (context) => const LandingPage());
-              Navigator.push(context, route);
-            },
-            icon: const Icon(Icons.arrow_back)),
-        title: const Icon(
-          Icons.cottage_outlined,
-          size: 30,
-          color: Colors.black,
-        ),
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              Icons.check_box_outline_blank_outlined,
-              size: 30,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              Icons.account_circle_outlined,
-              size: 30,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.all(0),
-              child: Icon(
-                Icons.more_vert,
-                size: 30,
-                color: Colors.black,
-              )),
-        ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
-      ),
+      appBar: const CustomAppBar(),
       body: Center(
         child: Form(
           key: _formKey,
@@ -249,46 +210,7 @@ class RegisterParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Route route =
-                  MaterialPageRoute(builder: (context) => const LandingPage());
-              Navigator.push(context, route);
-            },
-            icon: const Icon(Icons.arrow_back)),
-        title: const Icon(
-          Icons.cottage_outlined,
-          size: 30,
-          color: Colors.black,
-        ),
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              Icons.check_box_outline_blank_outlined,
-              size: 30,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              Icons.account_circle_outlined,
-              size: 30,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.all(0),
-              child: Icon(
-                Icons.more_vert,
-                size: 30,
-                color: Colors.black,
-              )),
-        ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
-      ),
+      appBar: CustomAppBar(),
       body: Center(
         child: Form(
           key: _formKey,
