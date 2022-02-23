@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/login.dart';
 
@@ -16,6 +17,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 2:
         print('go to Settings screen');
         break;
+    }
+  }
+
+  accountButton() {
+    if (getToken() == null) {
+      return Icons.account_circle_outlined;
+    } else {
+      return Icons.account_circle_rounded;
     }
   }
 
@@ -62,7 +71,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               MaterialPageRoute(builder: (context) => LoginPage()),
             );
           },
-          icon: const Icon(Icons.account_circle_outlined),
+          icon: Icon(accountButton()),
         ),
         Theme(
           data: Theme.of(context).copyWith(
