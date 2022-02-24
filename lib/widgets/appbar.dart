@@ -24,7 +24,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         print('Create child account');
         break;
       case 5:
-        print('Logout');
+        storage.remove('token');
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
         break;
     }
   }
