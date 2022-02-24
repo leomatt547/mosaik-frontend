@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
+import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatelessWidget {
@@ -49,23 +52,30 @@ class LoginPage extends StatelessWidget {
                         String email = emailController.text.toString();
                         String password = passwordController.text.toString();
 
-                        // TODO: API Call
-                        String token = 'token';
+                        Map data = {
+                          'email': email,
+                          'password': password,
+                        };
 
-                        // Validate data (hardcode)
-                        if (email != 'mark@gmail.com' ||
-                            password != 'password') {
+                        String body = json.encode(data);
+                        final response = await http.post(
+                          Uri.parse(API_URL + "/login"),
+                          body: body,
+                          encoding: Encoding.getByName('utf-8'),
+                        );
+
+                        if (response.statusCode == 200) {
+                          storage.write('token', response.body);
+                          Route route = MaterialPageRoute(
+                              builder: (context) => const LandingPage());
+                          Navigator.push(context, route);
+                        } else {
                           Alert(
                             context: context,
                             type: AlertType.error,
                             title: "Credential is invalid",
                             desc: "Your email or password is wrong",
                           ).show();
-                        } else {
-                          storage.write('token', token);
-                          Route route = MaterialPageRoute(
-                              builder: (context) => const LandingPage());
-                          Navigator.push(context, route);
                         }
                       }
                     },
