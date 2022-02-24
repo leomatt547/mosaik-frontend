@@ -61,7 +61,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
     FocusScopeNode currentFocus = FocusScope.of(context);
     return GestureDetector(
       onTap: () {
-        print("container");
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
