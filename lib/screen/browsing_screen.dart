@@ -36,7 +36,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
         case 2:
           print('Downloads');
           break;
-        case 2:
+        case 3:
           print('go to Settings screen');
           break;
       }
