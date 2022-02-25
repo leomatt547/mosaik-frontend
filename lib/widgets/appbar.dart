@@ -32,6 +32,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
+  homeButton(context) {
+    if (getToken() == null) {
+      return IconButton(
+        onPressed: () {
+          // Do nothing
+        },
+        icon: const Icon(Icons.cottage_outlined),
+      );
+    } else {
+      return IconButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const LandingPage()),
+          );
+        },
+        icon: const Icon(Icons.cottage_outlined),
+      );
+    }
+  }
+
   accountButton(context) {
     if (getToken() == null) {
       return IconButton(
@@ -113,14 +133,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               print("refresh");
             },
             icon: const Icon(Icons.refresh_outlined)),
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const LandingPage()),
-            );
-          },
-          icon: const Icon(Icons.cottage_outlined),
-        ),
+        homeButton(context),
       ]),
       actions: <Widget>[
         IconButton(
