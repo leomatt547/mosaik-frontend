@@ -42,7 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           onPressed: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const LandingPage()),
+              MaterialPageRoute(builder: (context) => LandingPage()),
             );
           },
           icon: const Icon(Icons.cottage_outlined),
