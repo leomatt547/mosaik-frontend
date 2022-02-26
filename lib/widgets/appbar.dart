@@ -9,18 +9,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
+        // ignore: avoid_print
         print('New tab');
         break;
       case 1:
+        // ignore: avoid_print
         print('go to history');
         break;
       case 2:
+        // ignore: avoid_print
         print('go to Settings screen');
         break;
       case 3:
+        // ignore: avoid_print
         print('Manage Account');
         break;
       case 4:
+        // ignore: avoid_print
         print('Create child account');
         break;
       case 5:
@@ -122,14 +127,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(children: [
         IconButton(
           onPressed: () {
+            // ignore: todo
             // TODO: Next Page when browsing (nice to have)
+            // ignore: avoid_print
             print("right");
           },
           icon: const Icon(Icons.arrow_forward),
         ),
         IconButton(
             onPressed: () {
+              // ignore: todo
               // TODO: Refresh when browsing
+              // ignore: avoid_print
               print("refresh");
             },
             icon: const Icon(Icons.refresh_outlined)),
@@ -138,7 +147,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: <Widget>[
         IconButton(
           onPressed: () {
+            // ignore: todo
             // TODO: Tab when browsing
+            // ignore: avoid_print
             print("box");
           },
           icon: const Icon(Icons.check_box_outline_blank_outlined),
