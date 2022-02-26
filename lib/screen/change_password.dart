@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/change_password.dart';
 
-class UpdateProfilePage extends StatefulWidget {
-  const UpdateProfilePage({Key? key}) : super(key: key);
+class ChangePassword extends StatefulWidget {
+  const ChangePassword({Key? key}) : super(key: key);
 
   @override
-  _UpdateProfilePageState createState() => _UpdateProfilePageState();
+  _ChangePasswordState createState() => _ChangePasswordState();
 }
 
-class _UpdateProfilePageState extends State<UpdateProfilePage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+class _ChangePasswordState extends State<ChangePassword> {
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmNewPasswordController = TextEditingController();
   void onSave() {
-    print(nameController.text.toString());
-    print(emailController.text.toString());
+    print(oldPasswordController.text.toString());
+    print(newPasswordController.text.toString());
+    print(confirmNewPasswordController.text.toString());
   }
 
   @override
@@ -22,7 +23,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: const Text(
-          'Update Profile',
+          'Change Password',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -35,58 +36,55 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: Image.asset('assets/img/profile-picture.png',
-                  height: 150, fit: BoxFit.fill),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter name';
+                      return 'Enter Old password';
                     }
                     return null;
                   },
-                  controller: nameController,
+                  controller: oldPasswordController,
+                  obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Name",
+                    labelText: "Old Password",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0)),
                   )),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter email';
+                      return 'Enter password';
                     }
                     return null;
                   },
-                  controller: emailController,
+                  controller: newPasswordController,
+                  obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Your Email (Parent)",
+                    labelText: "New Password",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0)),
                   )),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 196, 196, 196),
-                ),
-                child: const Text(
-                  "Change Password",
-                  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                ),
-                onPressed: () {
-                  Route route =
-                      MaterialPageRoute(builder: (context) => ChangePassword());
-                  Navigator.push(context, route);
-                },
-              ),
+              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+              child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter confirm password';
+                    }
+                    return null;
+                  },
+                  controller: confirmNewPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Confirm New Password",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
