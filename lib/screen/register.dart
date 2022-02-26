@@ -19,6 +19,7 @@ class RegisterChildPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(),
       body: Center(
         child: Form(
@@ -179,7 +180,7 @@ class RegisterChildPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )
@@ -210,7 +211,8 @@ class RegisterParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Form(
           key: _formKey,
@@ -355,7 +357,7 @@ class RegisterParentPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )

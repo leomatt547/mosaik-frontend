@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
-import 'package:mosaic/screen/register.dart';
+import 'package:mosaic/screen/login.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -16,6 +17,96 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 2:
         print('go to Settings screen');
         break;
+      case 3:
+        print('Manage Account');
+        break;
+      case 4:
+        print('Create child account');
+        break;
+      case 5:
+        print('Logout');
+        break;
+    }
+  }
+
+  homeButton(context) {
+    if (getToken() == null) {
+      return IconButton(
+        onPressed: () {
+          // Do nothing
+        },
+        icon: const Icon(Icons.cottage_outlined),
+      );
+    } else {
+      return IconButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const LandingPage()),
+          );
+        },
+        icon: const Icon(Icons.cottage_outlined),
+      );
+    }
+  }
+
+  accountButton(context) {
+    if (getToken() == null) {
+      return IconButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        },
+        icon: const Icon(Icons.account_circle_outlined),
+      );
+    } else {
+      return PopupMenuButton<int>(
+        icon: const Icon(Icons.account_circle_rounded),
+        color: const Color.fromARGB(255, 196, 196, 196),
+        onSelected: (item) => onSelected(context, item),
+        itemBuilder: (BuildContext context) => [
+          PopupMenuItem<int>(
+            value: 3,
+            child: Row(
+              children: const [
+                Icon(Icons.manage_accounts_rounded),
+                SizedBox(width: 8),
+                Text(
+                  'Manage Account',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          const PopupMenuDivider(),
+          PopupMenuItem<int>(
+            value: 4,
+            child: Row(
+              children: const [
+                Icon(Icons.person_add),
+                SizedBox(width: 8),
+                Text(
+                  'Create Child Account',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuItem<int>(
+            value: 5,
+            child: Row(
+              children: const [
+                Icon(Icons.logout),
+                SizedBox(width: 8),
+                Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
     }
   }
 
@@ -39,14 +130,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               print("refresh");
             },
             icon: const Icon(Icons.refresh_outlined)),
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const LandingPage()),
-            );
-          },
-          icon: const Icon(Icons.cottage_outlined),
-        ),
+        homeButton(context),
       ]),
       actions: <Widget>[
         IconButton(
@@ -56,14 +140,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           icon: const Icon(Icons.check_box_outline_blank_outlined),
         ),
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => RegisterParentPage()),
-            );
-          },
-          icon: const Icon(Icons.account_circle_outlined),
-        ),
+        accountButton(context),
         Theme(
           data: Theme.of(context).copyWith(
             dividerColor: Colors.black,
