@@ -9,6 +9,7 @@ import 'package:mosaic/widgets/form.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
@@ -68,7 +69,7 @@ class LoginPage extends StatelessWidget {
                         if (response.statusCode == 200) {
                           storage.write('token', response.body);
                           Route route = MaterialPageRoute(
-                              builder: (context) => const LandingPage());
+                              builder: (context) => LandingPage());
                           Navigator.push(context, route);
                         } else {
                           Alert(
