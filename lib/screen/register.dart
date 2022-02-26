@@ -7,6 +7,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import '../constant.dart';
 
+// ignore: must_be_immutable
 class RegisterChildPage extends StatelessWidget {
   RegisterChildPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
@@ -199,6 +200,7 @@ class RegisterChildPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class RegisterParentPage extends StatelessWidget {
   RegisterParentPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
