@@ -77,6 +77,17 @@ class LoginPage extends StatelessWidget {
                             type: AlertType.error,
                             title: "Credential is invalid",
                             desc: "Your email or password is wrong",
+                            buttons: [
+                              DialogButton(
+                                child: const Text(
+                                  "Okay",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
                           ).show();
                         }
                       }
