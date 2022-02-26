@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                         if (response.statusCode == 200) {
                           storage.write('token', response.body);
                           Route route = MaterialPageRoute(
-                              builder: (context) => LandingPage());
+                              builder: (context) => const LandingPage());
                           Navigator.push(context, route);
                         } else {
                           Alert(
@@ -77,6 +77,17 @@ class LoginPage extends StatelessWidget {
                             type: AlertType.error,
                             title: "Credential is invalid",
                             desc: "Your email or password is wrong",
+                            buttons: [
+                              DialogButton(
+                                child: const Text(
+                                  "Okay",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
                           ).show();
                         }
                       }
