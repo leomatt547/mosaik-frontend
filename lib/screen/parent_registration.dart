@@ -106,24 +106,6 @@ class ParentRegistration extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                    child: const Text(
-                      "Child Account",
-                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                    ),
-                    onPressed: () {
-                      Route route = MaterialPageRoute(
-                          builder: (context) => ChildRegistration());
-                      Navigator.push(context, route);
-                    },
-                  ),
-                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 196, 196, 196),
