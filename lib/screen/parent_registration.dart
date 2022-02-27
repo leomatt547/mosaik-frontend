@@ -136,12 +136,12 @@ class ParentRegistration extends StatelessWidget {
                       Alert(
                         context: context,
                         type: AlertType.success,
-                        title: "Registrasi berhasil",
-                        desc: "Selamat anda berhasil registrasi",
+                        title: "Success",
+                        desc: "Your account has been successfully created",
                         buttons: [
                           DialogButton(
                             child: const Text(
-                              "Oke",
+                              "OK",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),

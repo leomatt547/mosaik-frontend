@@ -114,13 +114,13 @@ class ChildRegistration extends StatelessWidget {
                     primary: const Color.fromARGB(255, 196, 196, 196),
                   ),
                   child: const Text(
-                    "Buat Akun",
+                    "Create Account",
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Memproses Data')),
+                        const SnackBar(content: Text('Processing Data')),
                       );
                     } else {
                       return;
