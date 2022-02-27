@@ -39,6 +39,7 @@ dependencies:
   webview_flutter: ^3.0.0
   flutter_dotenv: ^5.0.2
   get_storage: ^2.0.3
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

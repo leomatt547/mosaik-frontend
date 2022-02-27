@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
@@ -67,7 +68,13 @@ class LoginPage extends StatelessWidget {
                         );
 
                         if (response.statusCode == 200) {
-                          storage.write('token', response.body);
+                          String jwt = response.body.replaceAll('"', '').trim();
+                          storage.write('token', jwt);
+                          
+                          // Extract parent_id from token
+                          Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
+                          storage.write('parent_id', jwtPayload['parent_id']);
+                          
                           Route route = MaterialPageRoute(
                               builder: (context) => LandingPage());
                           Navigator.push(context, route);
