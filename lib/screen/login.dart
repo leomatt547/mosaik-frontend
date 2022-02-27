@@ -10,6 +10,7 @@ import 'package:mosaic/widgets/form.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
@@ -83,6 +84,17 @@ class LoginPage extends StatelessWidget {
                             type: AlertType.error,
                             title: "Credential is invalid",
                             desc: "Your email or password is wrong",
+                            buttons: [
+                              DialogButton(
+                                child: const Text(
+                                  "Okay",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
                           ).show();
                         }
                       }
