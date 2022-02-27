@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/child_registration.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';

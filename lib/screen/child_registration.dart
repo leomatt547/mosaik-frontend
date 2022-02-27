@@ -32,7 +32,7 @@ class ChildRegistration extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Membuat Akun Anak',
+                    'Child Account Registration',
                     style: TextStyle(fontSize: 28),
                   ),
                 ),
@@ -43,12 +43,12 @@ class ChildRegistration extends StatelessWidget {
                       controller: nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Masukkan nama anak';
+                          return 'Child\'s name cannot be empty';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: "Nama Anak",
+                        labelText: "Child's Name",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -60,15 +60,15 @@ class ChildRegistration extends StatelessWidget {
                       controller: emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Masukkan email anak';
+                          return 'Child\'s email cannot be empty';
                         }
                         if (!EmailValidator.validate(value)) {
-                          return 'Email tidak valid';
+                          return 'Email is invalid';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: "Email Anak",
+                        labelText: "Child's Email",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -80,13 +80,13 @@ class ChildRegistration extends StatelessWidget {
                       controller: passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Masukkan kata sandi';
+                          return 'Password cannot be empty';
                         }
                         return null;
                       },
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: "Kata Sandi",
+                        labelText: "Password",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -98,13 +98,13 @@ class ChildRegistration extends StatelessWidget {
                     controller: confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Konfirmasi kata sandi';
+                          return 'Confirm Password cannot be empty';
                         }
                         return null;
                       },
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: "Konfirmasi Kata Sandi",
+                        labelText: "Confirm Password",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -146,12 +146,12 @@ class ChildRegistration extends StatelessWidget {
                       Alert(
                         context: context,
                         type: AlertType.success,
-                        title: "Berhasil",
-                        desc: "Registrasi anak berhasil",
+                        title: "Success",
+                        desc: "Child account has been successfully created",
                         buttons: [
                           DialogButton(
                             child: const Text(
-                              "TUTUP",
+                              "OK",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
@@ -167,12 +167,12 @@ class ChildRegistration extends StatelessWidget {
                       Alert(
                         context: context,
                         type: AlertType.error,
-                        title: "Gagal",
-                        desc: "Terjadi kesalahan pada sistem",
+                        title: "Registration Failed",
+                        desc: "Oops, something has gone wrong",
                         buttons: [
                           DialogButton(
                             child: const Text(
-                              "TUTUP",
+                              "CLOSE",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
