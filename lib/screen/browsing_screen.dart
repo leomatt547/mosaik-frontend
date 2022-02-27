@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/update_profile.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/gestures.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BrowsingScreen extends StatefulWidget {
   final String text;
