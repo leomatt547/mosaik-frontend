@@ -7,6 +7,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import '../constant.dart';
 
+// ignore: must_be_immutable
 class RegisterChildPage extends StatelessWidget {
   RegisterChildPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
@@ -19,6 +20,7 @@ class RegisterChildPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(),
       body: Center(
         child: Form(
@@ -179,7 +181,7 @@ class RegisterChildPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )
@@ -198,6 +200,7 @@ class RegisterChildPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class RegisterParentPage extends StatelessWidget {
   RegisterParentPage({Key? key}) : super(key: key);
   static final _formKey = GlobalKey<FormState>();
@@ -210,7 +213,8 @@ class RegisterParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Form(
           key: _formKey,
@@ -355,7 +359,7 @@ class RegisterParentPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LoginPage());
+                                  builder: (context) => LoginPage());
                               Navigator.push(context, route);
                             },
                           )
