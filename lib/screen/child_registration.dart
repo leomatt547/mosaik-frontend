@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/login.dart';
-import 'package:mosaic/screen/parent_registration.dart';
+import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +32,7 @@ class ChildRegistration extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Welcome',
+                    'Membuat Akun Anak',
                     style: TextStyle(fontSize: 28),
                   ),
                 ),
@@ -43,12 +43,12 @@ class ChildRegistration extends StatelessWidget {
                       controller: nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Enter name';
+                          return 'Masukkan nama anak';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: "Name",
+                        labelText: "Nama Anak",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -60,12 +60,15 @@ class ChildRegistration extends StatelessWidget {
                       controller: emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Enter email';
+                          return 'Masukkan email anak';
+                        }
+                        if (!EmailValidator.validate(value)) {
+                          return 'Email tidak valid';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: "Your Email (Child)",
+                        labelText: "Email Anak",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -77,13 +80,13 @@ class ChildRegistration extends StatelessWidget {
                       controller: passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Enter password';
+                          return 'Masukkan kata sandi';
                         }
                         return null;
                       },
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        labelText: "Kata Sandi",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
@@ -92,103 +95,93 @@ class ChildRegistration extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
+                    controller: confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Enter confirm password';
+                          return 'Konfirmasi kata sandi';
                         }
                         return null;
                       },
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: "Confirm Password",
+                        labelText: "Konfirmasi Kata Sandi",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       )),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter email';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Parent Email",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                    child: const Text(
-                      "Parent Account",
-                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                    ),
-                    onPressed: () {
-                      Route route = MaterialPageRoute(
-                          builder: (context) => ParentRegistration());
-                      Navigator.push(context, route);
-                    },
-                  ),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 196, 196, 196),
                   ),
                   child: const Text(
-                    "Create Account",
+                    "Buat Akun",
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                        const SnackBar(content: Text('Memproses Data')),
                       );
+                    } else {
+                      return;
                     }
                     Map data = {
                       'nama': nameController.text.toString(),
                       'email': emailController.text.toString(),
                       'password': passwordController.text.toString(),
+                      'parent_id': storage.read('parent_id'),
                     };
 
                     String body = json.encode(data);
                     final response = await http.post(
-                      Uri.parse(API_URL + "/parents"),
+                      Uri.parse(API_URL + "/childs"),
                       body: body,
                       encoding: Encoding.getByName('utf-8'),
+                      headers: {
+                        'Authorization': 'Bearer ' + getToken()
+                      }
                     );
 
                     if (response.statusCode == 201) {
                       Alert(
                         context: context,
                         type: AlertType.success,
-                        title: "Registrasi berhasil",
-                        desc: "Selamat anda berhasil registrasi",
+                        title: "Berhasil",
+                        desc: "Registrasi anak berhasil",
                         buttons: [
                           DialogButton(
                             child: const Text(
-                              "Oke",
+                              "TUTUP",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => LoginPage());
+                                  builder: (context) => const LandingPage());
                               Navigator.push(context, route);
                             },
                           )
                         ],
                       ).show();
-                      return;
+                    } else {
+                      Alert(
+                        context: context,
+                        type: AlertType.error,
+                        title: "Gagal",
+                        desc: "Terjadi kesalahan pada sistem",
+                        buttons: [
+                          DialogButton(
+                            child: const Text(
+                              "TUTUP",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        ],
+                      ).show();
                     }
+                    return;
                   },
                 ),
               ],
