@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                         if (response.statusCode == 200) {
                           storage.write('token', response.body);
                           Route route = MaterialPageRoute(
-                              builder: (context) => const LandingPage());
+                              builder: (context) => LandingPage());
                           Navigator.push(context, route);
                         } else {
                           Alert(
