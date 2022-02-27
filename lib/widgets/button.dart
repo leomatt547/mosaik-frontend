@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screen/register.dart';
+import '../screen/parent_registration.dart';
 
 Widget registerButton(context) {
   return Padding(
@@ -15,7 +15,7 @@ Widget registerButton(context) {
       ),
       onPressed: () {
         Route route =
-            MaterialPageRoute(builder: (context) => RegisterParentPage());
+            MaterialPageRoute(builder: (context) => ParentRegistration());
         Navigator.push(context, route);
       },
     ),
