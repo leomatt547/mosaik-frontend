@@ -27,14 +27,25 @@ class LoginPage extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(
+                bottom: 100, top: 80, left: 30, right: 30),
+            padding: const EdgeInsets.only(bottom: 30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                    blurRadius: 5, color: Colors.black, offset: Offset(0, 3))
+              ],
+              border: Border.all(),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
             child: Column(
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Hi,',
-                    style: TextStyle(fontSize: 28),
+                    'Hi, let\'s start browsing',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 emailForm(emailController),
@@ -102,6 +113,13 @@ class LoginPage extends StatelessWidget {
                         }
                       }
                     },
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    '------ OR ------',
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 registerButton(context),
