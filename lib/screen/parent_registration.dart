@@ -25,7 +25,18 @@ class ParentRegistration extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.only(bottom: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                    blurRadius: 5, color: Colors.black, offset: Offset(0, 3))
+              ],
+              border: Border.all(),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
+            padding: const EdgeInsets.only(bottom: 10),
+            margin:
+                const EdgeInsets.only(bottom: 30, top: 60, left: 30, right: 30),
             child: Column(
               children: [
                 const Padding(
