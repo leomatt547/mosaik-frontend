@@ -5,15 +5,16 @@ class HistoryList extends StatelessWidget {
   final List<History> history;
   final Function deleteHistory;
 
-  HistoryList(this.history, this.deleteHistory);
+  // ignore: use_key_in_widget_constructors
+  const HistoryList(this.history, this.deleteHistory);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'History',
               style: TextStyle(
                 fontFamily: 'OpenSans',
@@ -21,11 +22,11 @@ class HistoryList extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Container(
+            SizedBox(
               height: 450,
               child: history.isEmpty
                   ? Column(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Text(
                           'No browsing history',
                           style: TextStyle(
@@ -49,7 +50,7 @@ class HistoryList extends StatelessWidget {
                       itemBuilder: (ctx, index) {
                         return Card(
                           elevation: 5,
-                          margin: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.symmetric(
                             vertical: 8,
                             horizontal: 5,
                           ),
@@ -57,8 +58,7 @@ class HistoryList extends StatelessWidget {
                             title: Text(
                               history[index].url.toString(),
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontFamily: 'OpenSans',
+                              style: const TextStyle(
                                 fontSize: 20,
                               ),
                             ),
@@ -68,7 +68,7 @@ class HistoryList extends StatelessWidget {
                                 .group(1)
                                 .toString()),
                             trailing: IconButton(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               color: Colors.black,
                               onPressed: () => deleteHistory(history[index].id),
                             ),
