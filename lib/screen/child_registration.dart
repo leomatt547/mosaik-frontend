@@ -10,7 +10,7 @@ import '../constant.dart';
 
 class ChildRegistration extends StatelessWidget {
   ChildRegistration({Key? key}) : super(key: key);
-  static final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -95,7 +95,7 @@ class ChildRegistration extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: TextFormField(
-                    controller: confirmPasswordController,
+                      controller: confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Confirm Password cannot be empty';
@@ -134,13 +134,10 @@ class ChildRegistration extends StatelessWidget {
 
                     String body = json.encode(data);
                     final response = await http.post(
-                      Uri.parse(API_URL + "/childs"),
-                      body: body,
-                      encoding: Encoding.getByName('utf-8'),
-                      headers: {
-                        'Authorization': 'Bearer ' + getToken()
-                      }
-                    );
+                        Uri.parse(API_URL + "/childs"),
+                        body: body,
+                        encoding: Encoding.getByName('utf-8'),
+                        headers: {'Authorization': 'Bearer ' + getToken()});
 
                     if (response.statusCode == 201) {
                       Alert(
@@ -157,7 +154,7 @@ class ChildRegistration extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LandingPage());
+                                  builder: (context) => LandingPage());
                               Navigator.push(context, route);
                             },
                           )

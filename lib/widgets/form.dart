@@ -7,7 +7,7 @@ Widget passwordForm(passwordController) {
         controller: passwordController,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Enter password';
+            return 'Password cannot be empty';
           }
           return null;
         },
@@ -26,7 +26,7 @@ Widget emailForm(emailController) {
         controller: emailController,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Enter email';
+            return 'Email cannot be empty';
           }
           return null;
         },

@@ -9,7 +9,7 @@ import '../constant.dart';
 
 class ParentRegistration extends StatelessWidget {
   ParentRegistration({Key? key}) : super(key: key);
-  static final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
