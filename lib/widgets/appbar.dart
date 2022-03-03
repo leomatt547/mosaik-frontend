@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_registration.dart';
+import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/login.dart';
 
@@ -14,8 +15,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         print('New tab');
         break;
       case 1:
-        // ignore: avoid_print
-        print('go to history');
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HistoryScreen()),
+        );
         break;
       case 2:
         // ignore: avoid_print
