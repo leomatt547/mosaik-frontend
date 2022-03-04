@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/child_registration.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/screen/update_profile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:mosaic/widgets/appbar.dart';
@@ -54,10 +57,15 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
           );
           break;
         case 1:
-          print('Create CHild Account');
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ChildRegistration()),
+          );
           break;
         case 2:
-          print('Logout');
+          storage.remove('token');
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
           break;
       }
     }
@@ -200,19 +208,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               onSelected: (item) =>
                                   onSelectedMoreOptions(context, item),
                               itemBuilder: (context) => [
-                                PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.add_box_outlined),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'New tab',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                                 PopupMenuItem<int>(
                                   value: 1,
                                   child: Row(
