@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/utils/response_message.dart';
 
-Widget nameForm(nameController) {
+Widget nameForm(nameController, labelForm) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
     child: TextFormField(
@@ -13,7 +13,7 @@ Widget nameForm(nameController) {
         },
         controller: nameController,
         decoration: InputDecoration(
-          labelText: "Name",
+          labelText: labelForm,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
         )),
   );
@@ -62,19 +62,19 @@ Widget confirmPasswordForm(confirmPasswordController, passwordController) {
   );
 }
 
-Widget emailForm(emailController) {
+Widget emailForm(emailController, labelForm) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
     child: TextFormField(
         controller: emailController,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return responseMessage['emptyForm']['password'];
+            return responseMessage['emptyForm']['email'];
           }
           return null;
         },
         decoration: InputDecoration(
-          labelText: "Your Email",
+          labelText: labelForm,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
         )),
   );

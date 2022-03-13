@@ -47,8 +47,8 @@ class ParentRegistration extends StatelessWidget {
                     style: TextStyle(fontSize: 28),
                   ),
                 ),
-                nameForm(nameController),
-                emailForm(emailController),
+                nameForm(nameController, "Name"),
+                emailForm(emailController, "Your Email"),
                 passwordForm(passwordController),
                 confirmPasswordForm(
                     confirmPasswordController, passwordController),
