@@ -47,8 +47,7 @@ Widget confirmPasswordForm(confirmPasswordController, passwordController) {
             return responseMessage['emptyForm']['confirmPassword'];
           }
 
-          // TODO: Fix matching password
-          if (value != passwordController) {
+          if (value != passwordController.text) {
             return responseMessage['notMatchForm']['confirmPassword'];
           }
 

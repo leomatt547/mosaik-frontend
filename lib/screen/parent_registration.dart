@@ -88,7 +88,7 @@ class ParentRegistration extends StatelessWidget {
                           buttons: [
                             DialogButton(
                               child: const Text(
-                                "OK",
+                                "Okay",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -101,6 +101,26 @@ class ParentRegistration extends StatelessWidget {
                           ],
                         ).show();
                         return;
+                      } else {
+                        Map<String, dynamic> responseBody =
+                            jsonDecode(response.body);
+                        String errorMessage = responseBody["error"];
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: errorMessage,
+                          buttons: [
+                            DialogButton(
+                              child: const Text(
+                                "Okay",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
                       }
                     }
                   },
