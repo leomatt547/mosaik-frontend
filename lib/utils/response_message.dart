@@ -8,4 +8,7 @@ Map responseMessage = {
   'notMatchForm': {
     'confirmPassword': 'Confirm password does not match',
   },
+  'invalidType': {
+    'email': 'Email is invalid',
+  },
 };

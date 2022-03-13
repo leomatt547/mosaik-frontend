@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:mosaic/utils/response_message.dart';
 
@@ -71,6 +72,11 @@ Widget emailForm(emailController, labelForm) {
           if (value == null || value.isEmpty) {
             return responseMessage['emptyForm']['email'];
           }
+
+          if (!EmailValidator.validate(value)) {
+            return responseMessage['invalidType']['email'];
+          }
+
           return null;
         },
         decoration: InputDecoration(
