@@ -157,7 +157,7 @@ class ChildRegistration extends StatelessWidget {
                             ),
                             onPressed: () {
                               Route route = MaterialPageRoute(
-                                  builder: (context) => const LandingPage());
+                                  builder: (context) => LandingPage());
                               Navigator.push(context, route);
                             },
                           )
