@@ -9,14 +9,57 @@ import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// ignore: must_be_immutable
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   static final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  var bodyProgress = Container(
+    decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10.0)
+    ),
+    width: 300.0,
+    height: 200.0,
+    alignment: AlignmentDirectional.center,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        const Center(
+          child: SizedBox(
+            height: 50.0,
+            width: 50.0,
+            child: CircularProgressIndicator(
+              value: null,
+              strokeWidth: 7.0,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 25.0),
+          child: Center(
+            child: Text(
+              "Logging in...",
+              style: GoogleFonts.average(
+                fontWeight: FontWeight.w700,
+              )
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,25 +73,30 @@ class LoginPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               children: <Widget>[
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Hi,',
-                    style: TextStyle(fontSize: 28),
-                  ),
+                      'Hi,',
+                      style: GoogleFonts.average(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                      )),
                 ),
                 emailForm(emailController),
                 passwordForm(passwordController),
                 Padding(
                   padding:
-                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 196, 196, 196),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Login",
-                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      style: GoogleFonts.average(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -66,37 +114,7 @@ class LoginPage extends StatelessWidget {
                           body: body,
                           encoding: Encoding.getByName('utf-8'),
                         );
-
-                        if (response.statusCode == 200) {
-                          String jwt = response.body.replaceAll('"', '').trim();
-                          storage.write('token', jwt);
-                          
-                          // Extract parent_id from token
-                          Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
-                          storage.write('parent_id', jwtPayload['parent_id']);
-                          
-                          Route route = MaterialPageRoute(
-                              builder: (context) => LandingPage());
-                          Navigator.push(context, route);
-                        } else {
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Credential is invalid",
-                            desc: "Your email or password is wrong",
-                            buttons: [
-                              DialogButton(
-                                child: const Text(
-                                  "Okay",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                width: 120,
-                              )
-                            ],
-                          ).show();
-                        }
+                        _onLoading(response);
                       }
                     },
                   ),
@@ -109,4 +127,56 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+
+  void _onLoading(response) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: bodyProgress,
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+        );
+      },
+    );
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pop(context); //pop dialog
+      _login(response);
+    });
+  }
+
+  void _login(response) {
+    if (response.statusCode == 200) {
+      String jwt = response.body.replaceAll('"', '').trim();
+      storage.write('token', jwt);
+
+      // Extract parent_id from token
+      Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
+      storage.write('parent_id', jwtPayload['parent_id']);
+
+      Route route = MaterialPageRoute(
+          builder: (context) => LandingPage());
+      Navigator.push(context, route);
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Credential is invalid",
+        desc: "Your email or password is wrong",
+        buttons: [
+          DialogButton(
+            child: const Text(
+              "Okay",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    }
+  }
 }
+
