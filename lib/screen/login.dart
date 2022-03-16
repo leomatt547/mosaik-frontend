@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                emailForm(emailController),
+                emailForm(emailController, "Your Email"),
                 passwordForm(passwordController),
                 Padding(
                   padding:
