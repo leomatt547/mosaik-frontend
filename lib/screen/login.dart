@@ -13,7 +13,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
-  static final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -27,17 +27,28 @@ class LoginPage extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(
+                bottom: 100, top: 80, left: 30, right: 30),
+            padding: const EdgeInsets.only(bottom: 30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                    blurRadius: 5, color: Colors.black, offset: Offset(0, 3))
+              ],
+              border: Border.all(),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
             child: Column(
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    'Hi,',
-                    style: TextStyle(fontSize: 28),
+                    'Hi, let\'s start browsing',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-                emailForm(emailController),
+                emailForm(emailController, "Your Email"),
                 passwordForm(passwordController),
                 Padding(
                   padding:
@@ -70,20 +81,23 @@ class LoginPage extends StatelessWidget {
                         if (response.statusCode == 200) {
                           String jwt = response.body.replaceAll('"', '').trim();
                           storage.write('token', jwt);
-                          
+
                           // Extract parent_id from token
-                          Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
+                          Map<String, dynamic> jwtPayload =
+                              JwtHelper.parseJwtPayLoad(jwt);
                           storage.write('parent_id', jwtPayload['parent_id']);
-                          
+
                           Route route = MaterialPageRoute(
                               builder: (context) => LandingPage());
                           Navigator.push(context, route);
                         } else {
+                          Map<String, dynamic> responseBody =
+                              jsonDecode(response.body);
+                          String errorMessage = responseBody["error"];
                           Alert(
                             context: context,
                             type: AlertType.error,
-                            title: "Credential is invalid",
-                            desc: "Your email or password is wrong",
+                            title: errorMessage,
                             buttons: [
                               DialogButton(
                                 child: const Text(
@@ -99,6 +113,13 @@ class LoginPage extends StatelessWidget {
                         }
                       }
                     },
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    '------ OR ------',
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 registerButton(context),

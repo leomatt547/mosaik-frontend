@@ -4,7 +4,7 @@ import '../screen/parent_registration.dart';
 
 Widget registerButton(context) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+    padding: const EdgeInsets.only(left: 20, right: 20),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: const Color.fromARGB(255, 196, 196, 196),
