@@ -1,5 +1,6 @@
 import '../models/history.dart';
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
 
 class HistoryList extends StatelessWidget {
   final List<History> history;
@@ -61,11 +62,14 @@ class HistoryList extends StatelessWidget {
                                 .firstMatch(history[index].url.toString())!
                                 .group(1)
                                 .toString()),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              color: Colors.black,
-                              onPressed: () => deleteHistory(history[index].id),
-                            ),
+                            trailing: storage.read('parent_id') != null
+                                ? IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    color: Colors.black,
+                                    onPressed: () =>
+                                        deleteHistory(history[index].id),
+                                  )
+                                : null,
                           ),
                         );
                       },
