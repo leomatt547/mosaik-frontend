@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/landing_screen.dart';
-import 'package:mosaic/screen/update_profile.dart';
+import 'package:mosaic/screen/update_profile_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -46,11 +46,11 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
       switch (item) {
         case 0:
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+            MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
           );
           break;
         case 1:
-          print('Create CHild Account');
+          print('Create Child Account');
           break;
         case 2:
           print('Logout');
