@@ -18,7 +18,7 @@ class ParentRegistrationScreen extends StatefulWidget {
 
 class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
 
-  static final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
