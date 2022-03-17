@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   var bodyProgress = Container(
     decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -109,12 +110,27 @@ class _LoginPageState extends State<LoginPage> {
                         };
 
                         String body = json.encode(data);
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: bodyProgress,
+                              contentPadding: EdgeInsets.zero,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                        );
+
                         final response = await http.post(
                           Uri.parse(API_URL + "/login"),
                           body: body,
                           encoding: Encoding.getByName('utf-8'),
                         );
-                        _onLoading(response);
+
+                        Navigator.pop(context); //pop dialog
+                        _login(response);
                       }
                     },
                   ),
@@ -126,24 +142,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void _onLoading(response) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: bodyProgress,
-          contentPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-        );
-      },
-    );
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pop(context); //pop dialog
-      _login(response);
-    });
   }
 
   void _login(response) {
