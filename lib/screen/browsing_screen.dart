@@ -273,9 +273,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               body: bodyNewUrl,
                               encoding: Encoding.getByName('utf-8'),
                             );
-                            print("CREATE URL");
                             if (storage.read('parent_id') != null) {
-                              print("CREATE URL PARENT");
                               Map dataVisit = {
                                 "url_id": json.decode(newUrl.body)["id"],
                                 "duration": 3,
@@ -291,7 +289,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                         'Bearer ' + storage.read('token')
                                   });
                             } else {
-                              print("CREATE URL cHILD");
                               Map dataVisit = {
                                 "url_id": json.decode(newUrl.body)["id"],
                                 "duration": 3,
@@ -306,9 +303,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                     'Authorization':
                                         'Bearer ' + storage.read('token')
                                   });
-                              print(json.decode(newVisit.body));
                             }
-                            print("enddddd");
                           });
                         },
                         javascriptMode: JavascriptMode.unrestricted,
