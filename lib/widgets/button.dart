@@ -8,12 +8,12 @@ Widget registerButton(context) {
     padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: const Color.fromARGB(255, 196, 196, 196),
+        primary: Colors.black,
       ),
       child: Text(
         "Create an Account",
         style: GoogleFonts.average(
-          color: Colors.black,
+          color: Colors.white,
           fontWeight: FontWeight.w700,
         ),
       ),
