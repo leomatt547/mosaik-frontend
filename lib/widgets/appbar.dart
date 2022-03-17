@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/child_registration.dart';
+import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/login.dart';
 
@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         // ignore: avoid_print
         print('Create child account');
         Route route =
-            MaterialPageRoute(builder: (context) => ChildRegistration());
+            MaterialPageRoute(builder: (context) => ChildRegistrationScreen());
         Navigator.push(context, route);
         break;
       case 5:
