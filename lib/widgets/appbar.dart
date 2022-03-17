@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_registration.dart';
+import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/login.dart';
 
@@ -14,8 +15,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         print('New tab');
         break;
       case 1:
-        // ignore: avoid_print
-        print('go to history');
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HistoryScreen()),
+        );
         break;
       case 2:
         // ignore: avoid_print
@@ -149,15 +151,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         homeButton(context),
       ]),
       actions: <Widget>[
-        IconButton(
-          onPressed: () {
-            // ignore: todo
-            // TODO: Tab when browsing
-            // ignore: avoid_print
-            print("box");
-          },
-          icon: const Icon(Icons.check_box_outline_blank_outlined),
-        ),
         accountButton(context),
         Theme(
           data: Theme.of(context).copyWith(
@@ -168,20 +161,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: const Color.fromARGB(255, 196, 196, 196),
             onSelected: (item) => onSelected(context, item),
             itemBuilder: (context) => [
-              PopupMenuItem<int>(
-                value: 0,
-                child: Row(
-                  children: const [
-                    Icon(Icons.add),
-                    SizedBox(width: 8),
-                    Text(
-                      'New tab',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              const PopupMenuDivider(),
               PopupMenuItem<int>(
                 value: 1,
                 child: Row(
