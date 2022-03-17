@@ -273,20 +273,42 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               body: bodyNewUrl,
                               encoding: Encoding.getByName('utf-8'),
                             );
-                            Map dataVisit = {
-                              "url_id": json.decode(newUrl.body)["id"],
-                              "duration": 3,
-                              "parent_id": storage.read('parent_id')
-                            };
-                            String bodyNewVisit = json.encode(dataVisit);
-                            final newVisit = await http.post(
-                                Uri.parse(API_URL + "/parentvisits"),
-                                body: bodyNewVisit,
-                                encoding: Encoding.getByName('utf-8'),
-                                headers: {
-                                  'Authorization':
-                                      'Bearer ' + storage.read('token')
-                                });
+                            print("CREATE URL");
+                            if (storage.read('parent_id') != null) {
+                              print("CREATE URL PARENT");
+                              Map dataVisit = {
+                                "url_id": json.decode(newUrl.body)["id"],
+                                "duration": 3,
+                                "parent_id": storage.read('parent_id')
+                              };
+                              String bodyNewVisit = json.encode(dataVisit);
+                              final newVisit = await http.post(
+                                  Uri.parse(API_URL + "/parentvisits"),
+                                  body: bodyNewVisit,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            } else {
+                              print("CREATE URL cHILD");
+                              Map dataVisit = {
+                                "url_id": json.decode(newUrl.body)["id"],
+                                "duration": 3,
+                                "child_id": storage.read('child_id')
+                              };
+                              String bodyNewVisit = json.encode(dataVisit);
+                              final newVisit = await http.post(
+                                  Uri.parse(API_URL + "/childvisits"),
+                                  body: bodyNewVisit,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                              print(json.decode(newVisit.body));
+                            }
+                            print("enddddd");
                           });
                         },
                         javascriptMode: JavascriptMode.unrestricted,
