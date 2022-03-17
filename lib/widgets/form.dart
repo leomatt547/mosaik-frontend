@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget passwordForm(passwordController) {
   return Padding(
@@ -15,7 +16,10 @@ Widget passwordForm(passwordController) {
         decoration: InputDecoration(
           labelText: "Password",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-        )),
+        ),
+        style: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+        ),),
   );
 }
 
@@ -33,6 +37,9 @@ Widget emailForm(emailController) {
         decoration: InputDecoration(
           labelText: "Your Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-        )),
+        ),
+        style: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+        ),),
   );
 }
