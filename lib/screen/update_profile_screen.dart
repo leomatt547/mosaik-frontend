@@ -162,17 +162,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: bodyProgress,
-                              contentPadding: EdgeInsets.zero,
-                              backgroundColor: Colors.transparent,
-                            );
-                          },
-                        );
+                        _showLoading();
 
                         Map data = {
                           'nama': nameController.text.toString(),
@@ -236,6 +226,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
   }
 
+  void _showLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: bodyProgress,
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+        );
+      },
+    );
+  }
+
   void _showFailedPopup() {
     Alert(
       context: context,
@@ -271,6 +275,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
 
     final response = await http.get(Uri.parse(url));
+
     var extractedData = json.decode(response.body);
     // print('${extractedData['id']}, ${extractedData['nama']}, ${extractedData['email']}');
     print('Test');
@@ -278,9 +283,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (extractedData == null) {
       return;
     }
+
     if (extractedData['nama'] != null && extractedData['email'] != null) {
       nameController.text = extractedData['nama'];
       emailController.text = extractedData['email'];
     }
+
   }
 }
