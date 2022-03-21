@@ -64,6 +64,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getUserData();
+    
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -77,7 +79,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         backgroundColor: const Color.fromARGB(255, 196, 196, 196),
       ),
       body: Center(
-          child: Column(
+          child: Form(
+            key: _formKey,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -158,15 +162,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Map data = {
-                          'nama': nameController.text.toString(),
-                          'email': emailController.text.toString(),
-                        };
-
-                        String body = json.encode(data);
-                        String url = API_URL +
-                            '/parents/${storage.read('parent_id')}';
-
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -178,6 +173,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             );
                           },
                         );
+
+                        Map data = {
+                          'nama': nameController.text.toString(),
+                          'email': emailController.text.toString(),
+                        };
+
+                        String body = json.encode(data);
+                        String url;
+                        if (storage.read('parent_id') != null) {
+                          url = API_URL +
+                              '/parents/${storage.read('parent_id')}';
+                        } else if (storage.read('child_id') != null) {
+                          url = API_URL +
+                              '/parents/${storage.read('child_id')}';
+                        } else {
+                          _showFailedPopup();
+                          return;
+                        }
 
                         final response = await http.put(
                             Uri.parse(url),
@@ -194,7 +207,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     },
                   ),
                 ),
-              ])),
+              ])
+          ),
+      )
     );
   }
 
@@ -217,23 +232,55 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         ],
       ).show();
     } else {
+      _showFailedPopup();
+    }
+  }
 
-      Alert(
-        context: context,
-        type: AlertType.error,
-        title: "Failed",
-        desc: "Oops, something has gone wrong",
-        buttons: [
-          DialogButton(
-            child: const Text(
-              "CLOSE",
-              style:
-              TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ).show();
+  void _showFailedPopup() {
+    Alert(
+      context: context,
+      type: AlertType.error,
+      title: "Failed",
+      desc: "Oops, something has gone wrong",
+      buttons: [
+        DialogButton(
+          child: const Text(
+            "CLOSE",
+            style:
+            TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          onPressed: () => Navigator.pop(context),
+        )
+      ],
+    ).show();
+
+  }
+
+  Future<void> _getUserData() async {
+    String url;
+
+    if (storage.read('parent_id') != null) {
+      url = API_URL +
+          '/parents/${storage.read('parent_id')}';
+    } else if (storage.read('child_id') != null) {
+      url = API_URL +
+          '/parents/${storage.read('child_id')}';
+    } else {
+      _showFailedPopup();
+      return;
+    }
+
+    final response = await http.get(Uri.parse(url));
+    var extractedData = json.decode(response.body);
+    // print('${extractedData['id']}, ${extractedData['nama']}, ${extractedData['email']}');
+    print('Test');
+
+    if (extractedData == null) {
+      return;
+    }
+    if (extractedData['nama'] != null && extractedData['email'] != null) {
+      nameController.text = extractedData['nama'];
+      emailController.text = extractedData['email'];
     }
   }
 }
