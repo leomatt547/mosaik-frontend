@@ -1,16 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({Key? key}) : super(key: key);
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _ChangePasswordState createState() => _ChangePasswordState();
+  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
+
+  var bodyProgress = Container(
+    decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10.0)
+    ),
+    width: 300.0,
+    height: 200.0,
+    alignment: AlignmentDirectional.center,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        const Center(
+          child: SizedBox(
+            height: 50.0,
+            width: 50.0,
+            child: CircularProgressIndicator(
+              value: null,
+              strokeWidth: 7.0,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 25.0),
+          child: Center(
+            child: Text(
+                "Processing...",
+                style: GoogleFonts.average(
+                  fontWeight: FontWeight.w700,
+                )
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
   void onSave() {
     print(oldPasswordController.text.toString());
     print(newPasswordController.text.toString());
@@ -22,10 +62,11 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title: Text(
           'Change Password',
-          style: TextStyle(
+          style: GoogleFonts.average(
             color: Colors.black,
+            fontWeight: FontWeight.w700,
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 196, 196, 196),
@@ -92,11 +133,27 @@ class _ChangePasswordState extends State<ChangePassword> {
                 style: ElevatedButton.styleFrom(
                   primary: const Color.fromARGB(255, 196, 196, 196),
                 ),
-                child: const Text(
+                child: Text(
                   "Save",
-                  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  style: GoogleFonts.average(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: bodyProgress,
+                        contentPadding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                      );
+                    },
+                  );
+
+                  Navigator.pop(context); //pop dialog
                   onSave();
                 },
               ),
