@@ -10,7 +10,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-
   bool _obscureOldPw = true;
   bool _obscureNewPw = true;
   bool _obscureConfirmNewPw = true;
@@ -21,9 +20,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0)
-    ),
+        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
     width: 300.0,
     height: 200.0,
     alignment: AlignmentDirectional.center,
@@ -45,12 +42,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         Container(
           margin: const EdgeInsets.only(top: 25.0),
           child: Center(
-            child: Text(
-                "Processing...",
+            child: Text("Processing...",
                 style: GoogleFonts.average(
                   fontWeight: FontWeight.w700,
-                )
-            ),
+                )),
           ),
         ),
       ],
@@ -100,9 +95,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                passwordForm(oldPasswordController, 'Old Password cannot be empty', 'Old Password', _obscureOldPw, _oldPwToggle),
-            passwordForm(newPasswordController, 'New Password cannot be empty', 'New Password', _obscureNewPw, _newPwToggle),
-            passwordForm(confirmNewPasswordController, 'Confirm New Password cannot be empty', 'Confirm New Password', _obscureConfirmNewPw, _confirmNewPwToggle),
+            passwordForm(oldPasswordController, 'Old Password cannot be empty',
+                'Old Password', _obscureOldPw, _oldPwToggle),
+            passwordForm(newPasswordController, 'New Password cannot be empty',
+                'New Password', _obscureNewPw, _newPwToggle),
+            passwordForm(
+                confirmNewPasswordController,
+                'Confirm New Password cannot be empty',
+                'Confirm New Password',
+                _obscureConfirmNewPw,
+                _confirmNewPwToggle),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
