@@ -21,14 +21,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
+  bool _obscureText = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0)
-    ),
+        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
     width: 300.0,
     height: 200.0,
     alignment: AlignmentDirectional.center,
@@ -50,17 +49,21 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           margin: const EdgeInsets.only(top: 25.0),
           child: Center(
-            child: Text(
-              "Logging in...",
-              style: GoogleFonts.average(
-                fontWeight: FontWeight.w700,
-              )
-            ),
+            child: Text("Logging in...",
+                style: GoogleFonts.average(
+                  fontWeight: FontWeight.w700,
+                )),
           ),
         ),
       ],
     ),
   );
+
+  void _passwordToggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,18 +79,18 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(20),
-                  child: Text(
-                      'Hi,',
+                  child: Text('Hi,',
                       style: GoogleFonts.average(
                         fontSize: 28,
                         fontWeight: FontWeight.w700,
                       )),
                 ),
-                emailForm(emailController),
-                passwordForm(passwordController),
+                emailForm(emailController, 'Your Email'),
+                passwordForm(passwordController, 'Password cannot be empty',
+                    'Password', _obscureText, _passwordToggle),
                 Padding(
                   padding:
-                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                      const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: const Color.fromARGB(255, 196, 196, 196),
@@ -153,8 +156,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
       storage.write('parent_id', jwtPayload['parent_id']);
 
-      Route route = MaterialPageRoute(
-          builder: (context) => LandingPage());
+      Route route = MaterialPageRoute(builder: (context) => LandingPage());
       Navigator.push(context, route);
     } else {
       Alert(
@@ -166,8 +168,7 @@ class _LoginPageState extends State<LoginPage> {
           DialogButton(
             child: const Text(
               "Okay",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 20),
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
             width: 120,
@@ -177,4 +178,3 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
-

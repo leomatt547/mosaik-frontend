@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mosaic/widgets/form.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -9,15 +10,17 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  bool _obscureOldPw = true;
+  bool _obscureNewPw = true;
+  bool _obscureConfirmNewPw = true;
+
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0)
-    ),
+        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
     width: 300.0,
     height: 200.0,
     alignment: AlignmentDirectional.center,
@@ -39,17 +42,33 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         Container(
           margin: const EdgeInsets.only(top: 25.0),
           child: Center(
-            child: Text(
-                "Processing...",
+            child: Text("Processing...",
                 style: GoogleFonts.average(
                   fontWeight: FontWeight.w700,
-                )
-            ),
+                )),
           ),
         ),
       ],
     ),
   );
+
+  void _oldPwToggle() {
+    setState(() {
+      _obscureOldPw = !_obscureOldPw;
+    });
+  }
+
+  void _newPwToggle() {
+    setState(() {
+      _obscureNewPw = !_obscureNewPw;
+    });
+  }
+
+  void _confirmNewPwToggle() {
+    setState(() {
+      _obscureConfirmNewPw = !_obscureConfirmNewPw;
+    });
+  }
 
   void onSave() {
     print(oldPasswordController.text.toString());
@@ -76,57 +95,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter Old password';
-                    }
-                    return null;
-                  },
-                  controller: oldPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Old Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter password';
-                    }
-                    return null;
-                  },
-                  controller: newPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "New Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter confirm password';
-                    }
-                    return null;
-                  },
-                  controller: confirmNewPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Confirm New Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
-            ),
+            passwordForm(oldPasswordController, 'Old Password cannot be empty',
+                'Old Password', _obscureOldPw, _oldPwToggle),
+            passwordForm(newPasswordController, 'New Password cannot be empty',
+                'New Password', _obscureNewPw, _newPwToggle),
+            passwordForm(
+                confirmNewPasswordController,
+                'Confirm New Password cannot be empty',
+                'Confirm New Password',
+                _obscureConfirmNewPw,
+                _confirmNewPwToggle),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
