@@ -176,7 +176,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               '/parents/${storage.read('parent_id')}';
                         } else if (storage.read('child_id') != null) {
                           url = API_URL +
-                              '/parents/${storage.read('child_id')}';
+                              '/childs/${storage.read('child_id')}';
                         } else {
                           _showFailedPopup();
                           return;
