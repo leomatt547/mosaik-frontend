@@ -1,9 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/screen/update_profile_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BrowsingScreen extends StatefulWidget {
   final String text;
@@ -31,7 +35,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
           print('New tab');
           break;
         case 1:
-          print('go to history');
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const HistoryScreen()),
+          );
           break;
         case 2:
           print('Downloads');
@@ -42,129 +48,97 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
       }
     }
 
-    void onSelectedAccount(BuildContext context, int item) {
-      switch (item) {
-        case 0:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
-          );
-          break;
-        case 1:
-          print('Create Child Account');
-          break;
-        case 2:
-          print('Logout');
-          break;
-      }
-    }
-
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    return GestureDetector(
-      onTap: () {
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Color.fromARGB(255, 196, 196, 196),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Flexible(
-                            flex: 1,
-                            child: Center(
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.cottage_outlined,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LandingPage(),
-                                        ));
-                                  }),
-                            ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: Container(
+                  color: const Color.fromARGB(255, 196, 196, 196),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: Center(
+                            child: IconButton(
+                                icon: const Icon(
+                                  Icons.cottage_outlined,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LandingPage(),
+                                      ));
+                                }),
                           ),
-                          Flexible(
-                            flex: 4,
-                            child: TextFormField(
-                              autocorrect: false,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                              decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: Colors.white,
-                                  ),
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 7),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  fillColor: Color.fromARGB(255, 103, 103, 103),
-                                  filled: true),
-                              onFieldSubmitted: (term) {
-                                String finalURL = _teController.text;
-                                if (!finalURL.startsWith("https://")) {
-                                  finalURL = "https://" + finalURL;
-                                }
-                                if (_webViewController != null) {
-                                  updateLoading(true);
-                                  _webViewController
-                                      .loadUrl(finalURL)
-                                      .then((onValue) {})
-                                      .catchError((e) {
-                                    updateLoading(false);
-                                  });
-                                }
-                              },
-                              controller: _teController,
-                            ),
+                        ),
+                        Flexible(
+                          flex: 4,
+                          child: TextFormField(
+                            autocorrect: false,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
+                            decoration: const InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 7),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15))),
+                                fillColor: Color.fromARGB(255, 103, 103, 103),
+                                filled: true),
+                            onFieldSubmitted: (term) {
+                              String finalURL = _teController.text;
+                              if (!finalURL.startsWith("https://")) {
+                                finalURL = "https://" + finalURL;
+                              }
+                              if (_webViewController != null) {
+                                updateLoading(true);
+                                _webViewController
+                                    .loadUrl(finalURL)
+                                    .then((onValue) {})
+                                    .catchError((e) {
+                                  updateLoading(false);
+                                });
+                              }
+                            },
+                            controller: _teController,
                           ),
-                          // Flexible(
-                          //   flex: 1,
-                          //   child: Center(
-                          //     child: IconButton(
-                          //         icon: Icon(
-                          //           Icons.check_box_outline_blank_outlined,
-                          //           color: Colors.black,
-                          //         ),
-                          //         onPressed: () {}),
-                          //   ),
-                          // ),
-                          PopupMenuButton<int>(
-                            icon: Icon(
-                              Icons.account_circle,
-                              color: Colors.black,
-                            ),
-                            color: Color.fromARGB(255, 196, 196, 196),
+                        ),
+                        const CustomAppBar()
+                            .handleUserTypeAccountButton(context),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            iconTheme: const IconThemeData(color: Colors.black),
+                          ),
+                          child: PopupMenuButton<int>(
+                            color: const Color.fromARGB(255, 196, 196, 196),
                             onSelected: (item) =>
-                                onSelectedAccount(context, item),
+                                onSelectedMoreOptions(context, item),
                             itemBuilder: (context) => [
                               PopupMenuItem<int>(
-                                value: 0,
+                                value: 1,
                                 child: Row(
-                                  children: [
-                                    Icon(Icons.manage_accounts_rounded),
-                                    const SizedBox(width: 8),
+                                  children: const [
+                                    Icon(Icons.history),
+                                    SizedBox(width: 8),
                                     Text(
-                                      'Manage Account',
+                                      'History',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ],
@@ -173,11 +147,11 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               PopupMenuItem<int>(
                                 value: 1,
                                 child: Row(
-                                  children: [
-                                    Icon(Icons.person_add),
-                                    const SizedBox(width: 8),
+                                  children: const [
+                                    Icon(Icons.download),
+                                    SizedBox(width: 8),
                                     Text(
-                                      'Create Child Account',
+                                      'Download',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ],
@@ -186,11 +160,11 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               PopupMenuItem<int>(
                                 value: 2,
                                 child: Row(
-                                  children: [
-                                    Icon(Icons.logout),
-                                    const SizedBox(width: 8),
+                                  children: const [
+                                    Icon(Icons.settings),
+                                    SizedBox(width: 8),
                                     Text(
-                                      'Log out',
+                                      'Settings',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ],
@@ -198,106 +172,81 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               ),
                             ],
                           ),
-                          Theme(
-                            data: Theme.of(context).copyWith(
-                              iconTheme: IconThemeData(color: Colors.black),
-                            ),
-                            child: PopupMenuButton<int>(
-                              color: Color.fromARGB(255, 196, 196, 196),
-                              onSelected: (item) =>
-                                  onSelectedMoreOptions(context, item),
-                              itemBuilder: (context) => [
-                                PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.add_box_outlined),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'New tab',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.history),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'History',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.download),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Download',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem<int>(
-                                  value: 2,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.settings),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Settings',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Flexible(
-                    flex: 9,
-                    child: Stack(
-                      children: <Widget>[
-                        WebView(
-                          initialUrl: 'https://' + widget.text,
-                          onPageFinished: (data) {
-                            print(_webViewController.currentUrl());
-                            updateLoading(false);
-                            _webViewController.currentUrl().then((value) =>
-                                _teController.text = (value.toString()));
-                          },
-                          javascriptMode: JavascriptMode.unrestricted,
-                          onWebViewCreated: (webViewController) {
-                            _webViewController = webViewController;
-                          },
-                        ),
-                        GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTapDown: (_) => currentFocus.unfocus(),
-                          child: Container(),
-                        ),
-                        (showLoading)
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : Center()
-                      ],
-                    )),
-              ],
-            ),
+              ),
+              Flexible(
+                  flex: 9,
+                  child: Stack(
+                    children: <Widget>[
+                      WebView(
+                        initialUrl: widget.text.startsWith("https://")
+                            ? widget.text
+                            : "https://" + widget.text,
+                        onPageFinished: (data) async {
+                          updateLoading(false);
+                          _webViewController.currentUrl().then((value) async {
+                            _teController.text = (value.toString());
+                            Map data = {
+                              "url": value.toString(),
+                              "title": value.toString()
+                            };
+
+                            String bodyNewUrl = json.encode(data);
+                            final newUrl = await http.post(
+                              Uri.parse(API_URL + "/urls"),
+                              body: bodyNewUrl,
+                              encoding: Encoding.getByName('utf-8'),
+                            );
+                            if (storage.read('parent_id') != null) {
+                              Map dataVisit = {
+                                "url_id": json.decode(newUrl.body)["id"],
+                                "duration": 3,
+                                "parent_id": storage.read('parent_id')
+                              };
+                              String bodyNewVisit = json.encode(dataVisit);
+                              final newVisit = await http.post(
+                                  Uri.parse(API_URL + "/parentvisits"),
+                                  body: bodyNewVisit,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            } else {
+                              Map dataVisit = {
+                                "url_id": json.decode(newUrl.body)["id"],
+                                "duration": 3,
+                                "child_id": storage.read('child_id')
+                              };
+                              String bodyNewVisit = json.encode(dataVisit);
+                              final newVisit = await http.post(
+                                  Uri.parse(API_URL + "/childvisits"),
+                                  body: bodyNewVisit,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            }
+                          });
+                        },
+                        javascriptMode: JavascriptMode.unrestricted,
+                        onWebViewCreated: (webViewController) {
+                          _webViewController = webViewController;
+                        },
+                      ),
+                      (showLoading)
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Center()
+                    ],
+                  )),
+            ],
           ),
         ),
       ),
