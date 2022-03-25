@@ -74,12 +74,24 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(
+                bottom: 100, top: 80, left: 30, right: 30),
+            padding: const EdgeInsets.only(bottom: 30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                    blurRadius: 5, color: Colors.black, offset: Offset(0, 3))
+              ],
+              border: Border.all(),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
             child: Column(
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(20),
-                  child: Text('Hi,',
+                  child: Text(
+                    'Hi, let\'s start browsing',
                       style: GoogleFonts.average(
                         fontSize: 28,
                         fontWeight: FontWeight.w700,
@@ -136,6 +148,13 @@ class _LoginPageState extends State<LoginPage> {
                         _login(response);
                       }
                     },
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    '------ OR ------',
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 registerButton(context),
