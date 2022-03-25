@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/widgets/appbar.dart';
+import 'package:mosaic/widgets/form.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import '../constant.dart';
-
 
 class ParentRegistrationScreen extends StatefulWidget {
   const ParentRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  _ParentRegistrationScreenState createState() => _ParentRegistrationScreenState();
+  _ParentRegistrationScreenState createState() =>
+      _ParentRegistrationScreenState();
 }
 
 class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
-
   static final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -27,9 +29,7 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0)
-    ),
+        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
     width: 300.0,
     height: 200.0,
     alignment: AlignmentDirectional.center,
@@ -51,17 +51,27 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
         Container(
           margin: const EdgeInsets.only(top: 25.0),
           child: Center(
-            child: Text(
-                "Processing...",
+            child: Text("Processing...",
                 style: GoogleFonts.average(
                   fontWeight: FontWeight.w700,
-                )
-            ),
+                )),
           ),
         ),
       ],
     ),
   );
+
+  void _passwordToggle() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void _confirmPasswordToggle() {
+    setState(() {
+      _obscureConfirmPassword = !_obscureConfirmPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,76 +95,16 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter name';
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: "Name",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter email';
-                        }
-                        return null;
-                      },
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: "Your Email (Parent)",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter password';
-                        }
-                        return null;
-                      },
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter confirm password';
-                        }
-                        return null;
-                      },
-                      controller: confirmPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Confirm Password",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
+                commonForm(nameController, 'Name cannot be empty', 'Name'),
+                emailForm(emailController, 'Email (Parent)'),
+                passwordForm(passwordController, 'Password cannot be empty',
+                    'Password', _obscurePassword, _passwordToggle),
+                passwordForm(
+                    confirmPasswordController,
+                    'Confirm Password cannot be empty',
+                    'Confirm Password',
+                    _obscureConfirmPassword,
+                    _confirmPasswordToggle),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 196, 196, 196),
@@ -162,39 +112,39 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
                   child: Text(
                     "Create Account",
                     style: GoogleFonts.average(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black
-                    ),
+                        fontWeight: FontWeight.w700, color: Colors.black),
                   ),
                   onPressed: () async {
-                    Map data = {
-                      'nama': nameController.text.toString(),
-                      'email': emailController.text.toString(),
-                      'password': passwordController.text.toString(),
-                    };
+                    if (_formKey.currentState!.validate()) {
+                      Map data = {
+                        'nama': nameController.text.toString(),
+                        'email': emailController.text.toString(),
+                        'password': passwordController.text.toString(),
+                      };
 
-                    String body = json.encode(data);
+                      String body = json.encode(data);
 
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: bodyProgress,
-                          contentPadding: EdgeInsets.zero,
-                          backgroundColor: Colors.transparent,
-                        );
-                      },
-                    );
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: bodyProgress,
+                            contentPadding: EdgeInsets.zero,
+                            backgroundColor: Colors.transparent,
+                          );
+                        },
+                      );
 
-                    final response = await http.post(
-                      Uri.parse(API_URL + "/parents"),
-                      body: body,
-                      encoding: Encoding.getByName('utf-8'),
-                    );
+                      final response = await http.post(
+                        Uri.parse(API_URL + "/parents"),
+                        body: body,
+                        encoding: Encoding.getByName('utf-8'),
+                      );
 
-                    Navigator.pop(context); //pop dia
-                    _register(response);
+                      Navigator.pop(context); //pop dia
+                      _register(response);
+                    }
                   },
                 ),
               ],
@@ -216,12 +166,11 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
           DialogButton(
             child: const Text(
               "OK",
-              style:
-              TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: 14),
             ),
             onPressed: () {
-              Route route = MaterialPageRoute(
-                  builder: (context) => LoginPage());
+              Route route =
+                  MaterialPageRoute(builder: (context) => LoginPage());
               Navigator.push(context, route);
             },
           )
@@ -229,6 +178,4 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
       ).show();
     }
   }
-
 }
-

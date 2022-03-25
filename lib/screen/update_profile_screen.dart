@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/screen/change_password_screen.dart';
+import 'package:mosaic/widgets/form.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -80,38 +81,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               child: Image.asset('assets/img/profile-picture.png',
                   height: 150, fit: BoxFit.fill),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter name';
-                    }
-                    return null;
-                  },
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: "Name",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter email';
-                    }
-                    return null;
-                  },
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: "Your Email (Parent)",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  )),
-            ),
+            commonForm(nameController, 'Name cannot be empty', 'Name'),
+            emailForm(emailController, 'Email'),
             Padding(
               padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
               child: ElevatedButton(
