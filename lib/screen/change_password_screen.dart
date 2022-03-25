@@ -193,11 +193,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               "OK",
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
           )
         ],
       ).show();
-      Navigator.pop(context);
     } else {
       _showFailedPopup("");
     }
