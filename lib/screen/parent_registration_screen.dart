@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/widgets/appbar.dart';
-import 'package:mosaic/widgets/form.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import '../constant.dart';
@@ -73,18 +72,7 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
         child: Form(
           key: _formKey,
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(
-                    blurRadius: 5, color: Colors.black, offset: Offset(0, 3))
-              ],
-              border: Border.all(),
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            ),
-            padding: const EdgeInsets.only(bottom: 10),
-            margin:
-                const EdgeInsets.only(bottom: 30, top: 60, left: 30, right: 30),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               children: [
                 Padding(
@@ -97,11 +85,76 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
                     ),
                   ),
                 ),
-                nameForm(nameController, "Name"),
-                emailForm(emailController, "Your Email"),
-                passwordForm(passwordController),
-                confirmPasswordForm(
-                    confirmPasswordController, passwordController),
+                Padding(
+                  padding:
+                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter name';
+                        }
+                        return null;
+                      },
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        labelText: "Name",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
+                ),
+                Padding(
+                  padding:
+                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter email';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: "Your Email (Parent)",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
+                ),
+                Padding(
+                  padding:
+                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter password';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
+                ),
+                Padding(
+                  padding:
+                  const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter confirm password';
+                        }
+                        return null;
+                      },
+                      controller: confirmPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      )),
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 196, 196, 196),
@@ -178,3 +231,4 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
   }
 
 }
+
