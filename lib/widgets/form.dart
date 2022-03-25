@@ -68,6 +68,10 @@ Widget emailForm(emailController, String labelText) {
         if (value == null || value.isEmpty) {
           return 'Email cannot be empty';
         }
+
+        if (!EmailValidator.validate(value)) {
+          return 'Please enter a valid email address';
+        }
         return null;
       },
       decoration: InputDecoration(
