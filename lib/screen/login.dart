@@ -90,8 +90,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(20),
-                  child: Text(
-                    'Hi, let\'s start browsing',
+                  child: Text('Hi, let\'s start browsing',
                       style: GoogleFonts.average(
                         fontSize: 28,
                         fontWeight: FontWeight.w700,
@@ -150,11 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Text(
                     'OR',
-                    style: TextStyle(fontSize: 14),
+                    style: GoogleFonts.average(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 registerButton(context),
