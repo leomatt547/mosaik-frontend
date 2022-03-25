@@ -22,9 +22,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0)
-    ),
+        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
     width: 300.0,
     height: 200.0,
     alignment: AlignmentDirectional.center,
@@ -46,12 +44,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         Container(
           margin: const EdgeInsets.only(top: 25.0),
           child: Center(
-            child: Text(
-                "Processing...",
+            child: Text("Processing...",
                 style: GoogleFonts.average(
                   fontWeight: FontWeight.w700,
-                )
-            ),
+                )),
           ),
         ),
       ],
@@ -68,178 +64,101 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _getUserData();
 
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          'Update Profile',
-          style: GoogleFonts.average(
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            'Update Profile',
+            style: GoogleFonts.average(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          backgroundColor: const Color.fromARGB(255, 196, 196, 196),
         ),
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
-      ),
-      body: Center(
+        body: Center(
           child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 10, left: 20, right: 20),
-                  child: Image.asset('assets/img/profile-picture.png',
-                      height: 150, fit: BoxFit.fill),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 10, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter name';
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: "Name",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 10, left: 20, right: 20),
-                  child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter email';
-                        }
-                        return null;
-                      },
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: "Your Email (Parent)",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 5, left: 20, right: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 196, 196, 196),
+              key: _formKey,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 10, left: 20, right: 20),
+                      child: Image.asset('assets/img/profile-picture.png',
+                          height: 150, fit: BoxFit.fill),
                     ),
-                    child: Text(
-                      "Change Password",
-                      style: GoogleFonts.average(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
+                    commonForm(nameController, 'Name cannot be empty', 'Name'),
+                    emailForm(emailController, 'Email'),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 5, left: 20, right: 20),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 196, 196, 196),
+                        ),
+                        child: Text(
+                          "Change Password",
+                          style: GoogleFonts.average(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onPressed: () {
+                          Route route = MaterialPageRoute(
+                              builder: (context) => ChangePasswordScreen());
+                          Navigator.push(context, route);
+                        },
                       ),
                     ),
-                    onPressed: () {
-                      Route route =
-                      MaterialPageRoute(
-                          builder: (context) => ChangePasswordScreen());
-                      Navigator.push(context, route);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                    child: Text(
-                      "Save",
-                      style: GoogleFonts.average(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _showLoading();
+                    Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color.fromARGB(255, 196, 196, 196),
+                            ),
+                            child: Text(
+                              "Save",
+                              style: GoogleFonts.average(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _showLoading();
 
-                        Map data = {
-                          'nama': nameController.text.toString(),
-                          'email': emailController.text.toString(),
-                        };
+                                Map data = {
+                                  'nama': nameController.text.toString(),
+                                  'email': emailController.text.toString(),
+                                };
 
-                        String body = json.encode(data);
-                        String url;
-                        if (storage.read('parent_id') != null) {
-                          url = API_URL +
-                              '/parents/${storage.read('parent_id')}';
-                        } else if (storage.read('child_id') != null) {
-                          url = API_URL +
-                              '/childs/${storage.read('child_id')}';
-                        } else {
-                          _showFailedPopup();
-                          return;
-                        }
+                                String body = json.encode(data);
+                                String url;
+                                if (storage.read('parent_id') != null) {
+                                  url = API_URL +
+                                      '/parents/${storage.read('parent_id')}';
+                                } else if (storage.read('child_id') != null) {
+                                  url = API_URL +
+                                      '/childs/${storage.read('child_id')}';
+                                } else {
+                                  _showFailedPopup();
+                                  return;
+                                }
 
-                        final response = await http.put(
-                            Uri.parse(url),
-                            body: body,
-                            encoding: Encoding.getByName('utf-8'),
-                            headers: {
-                              'Authorization': 'Bearer ' + getToken()
-                            }
-                        );
+                                final response = await http.put(Uri.parse(url),
+                                    body: body,
+                                    encoding: Encoding.getByName('utf-8'),
+                                    headers: {
+                                      'Authorization': 'Bearer ' + getToken()
+                                    });
 
-                        Navigator.pop(context); //pop dialog
-                        _updateProfile(response);
-                      }
-                    },
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-              child: Image.asset('assets/img/profile-picture.png',
-                  height: 150, fit: BoxFit.fill),
-            ),
-            commonForm(nameController, 'Name cannot be empty', 'Name'),
-            emailForm(emailController, 'Email'),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 196, 196, 196),
-                ),
-                child: Text(
-                  "Change Password",
-                  style: GoogleFonts.average(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                onPressed: () {
-                  Route route =
-                      MaterialPageRoute(builder: (context) => ChangePasswordScreen());
-                  Navigator.push(context, route);
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 196, 196, 196),
-                ),
-                child: Text(
-                  "Save",
-                  style: GoogleFonts.average(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ])
-          ),
-      )
-    );
+                                Navigator.pop(context); //pop dialog
+                                _updateProfile(response);
+                              }
+                            }))
+                  ])),
+        ));
   }
 
   void _updateProfile(response) {
@@ -253,8 +172,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           DialogButton(
             child: const Text(
               "OK",
-              style:
-              TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: 14),
             ),
             onPressed: () => Navigator.pop(context),
           )
@@ -289,25 +207,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         DialogButton(
           child: const Text(
             "CLOSE",
-            style:
-            TextStyle(color: Colors.white, fontSize: 14),
+            style: TextStyle(color: Colors.white, fontSize: 14),
           ),
           onPressed: () => Navigator.pop(context),
         )
       ],
     ).show();
-
   }
 
   Future<void> _getUserData() async {
     String url;
 
     if (storage.read('parent_id') != null) {
-      url = API_URL +
-          '/parents/${storage.read('parent_id')}';
+      url = API_URL + '/parents/${storage.read('parent_id')}';
     } else if (storage.read('child_id') != null) {
-      url = API_URL +
-          '/parents/${storage.read('child_id')}';
+      url = API_URL + '/parents/${storage.read('child_id')}';
     } else {
       _showFailedPopup();
       return;
@@ -327,6 +241,5 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       nameController.text = extractedData['nama'];
       emailController.text = extractedData['email'];
     }
-
   }
 }
