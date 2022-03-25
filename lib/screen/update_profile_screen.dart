@@ -5,6 +5,7 @@ import 'package:mosaic/screen/change_password_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constant.dart';
+import 'package:mosaic/widgets/form.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     _getUserData();
-    
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -195,6 +196,44 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         _updateProfile(response);
                       }
                     },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
+              child: Image.asset('assets/img/profile-picture.png',
+                  height: 150, fit: BoxFit.fill),
+            ),
+            commonForm(nameController, 'Name cannot be empty', 'Name'),
+            emailForm(emailController, 'Email'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromARGB(255, 196, 196, 196),
+                ),
+                child: Text(
+                  "Change Password",
+                  style: GoogleFonts.average(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                onPressed: () {
+                  Route route =
+                      MaterialPageRoute(builder: (context) => ChangePasswordScreen());
+                  Navigator.push(context, route);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromARGB(255, 196, 196, 196),
+                ),
+                child: Text(
+                  "Save",
+                  style: GoogleFonts.average(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ])
