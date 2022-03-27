@@ -17,6 +17,9 @@ Widget commonForm(
       decoration: InputDecoration(
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        errorStyle: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+        ),
       ),
       style: GoogleFonts.average(
         fontWeight: FontWeight.w500,
@@ -43,16 +46,19 @@ Widget passwordForm(
         },
         obscureText: obscureText,
         decoration: InputDecoration(
-            labelText: labelText,
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-            suffixIcon: IconButton(
-              icon: Icon(
-                obscureText ? Icons.visibility : Icons.visibility_off,
-                color: Colors.grey,
-              ),
-              onPressed: setState,
-            )),
+          labelText: labelText,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+          suffixIcon: IconButton(
+            icon: Icon(
+              obscureText ? Icons.visibility : Icons.visibility_off,
+              color: Colors.grey,
+            ),
+            onPressed: setState,
+          ),
+          errorStyle: GoogleFonts.average(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         style: GoogleFonts.average(
           fontWeight: FontWeight.w500,
         ),
@@ -77,6 +83,9 @@ Widget emailForm(emailController, String labelText) {
       decoration: InputDecoration(
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        errorStyle: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+        ),
       ),
       style: GoogleFonts.average(
         fontWeight: FontWeight.w500,

@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
   TextEditingController emailController = TextEditingController();
