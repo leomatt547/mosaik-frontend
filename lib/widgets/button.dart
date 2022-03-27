@@ -18,8 +18,8 @@ Widget registerButton(context) {
         ),
       ),
       onPressed: () {
-        Route route =
-            MaterialPageRoute(builder: (context) => ParentRegistrationScreen());
+        Route route = MaterialPageRoute(
+            builder: (context) => const ParentRegistrationScreen());
         Navigator.push(context, route);
       },
     ),
