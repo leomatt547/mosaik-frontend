@@ -114,50 +114,49 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 196, 196, 196),
-                          ),
-                          child: Text(
-                            "Save",
-                            style: GoogleFonts.average(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color.fromARGB(255, 196, 196, 196),
                             ),
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _showLoading();
+                            child: Text(
+                              "Save",
+                              style: GoogleFonts.average(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _showLoading();
 
-                              Map data = {
-                                'nama': nameController.text.toString(),
-                                'email': emailController.text.toString(),
-                              };
+                                Map data = {
+                                  'nama': nameController.text.toString(),
+                                  'email': emailController.text.toString(),
+                                };
 
-                              String body = json.encode(data);
-                              String url;
-                              if (storage.read('parent_id') != null) {
-                                url = API_URL +
-                                    '/parents/${storage.read('parent_id')}';
-                              } else if (storage.read('child_id') != null) {
-                                url = API_URL +
-                                    '/parents/${storage.read('child_id')}';
-                              } else {
-                                _showFailedPopup();
-                                return;
+                                String body = json.encode(data);
+                                String url;
+                                if (storage.read('parent_id') != null) {
+                                  url = API_URL +
+                                      '/parents/${storage.read('parent_id')}';
+                                } else if (storage.read('child_id') != null) {
+                                  url = API_URL +
+                                      '/childs/${storage.read('child_id')}';
+                                } else {
+                                  _showFailedPopup();
+                                  return;
+                                }
+
+                                final response = await http.put(Uri.parse(url),
+                                    body: body,
+                                    encoding: Encoding.getByName('utf-8'),
+                                    headers: {
+                                      'Authorization': 'Bearer ' + getToken()
+                                    });
+
+                                Navigator.pop(context); //pop dialog
+                                _updateProfile(response);
                               }
-
-                              final response = await http.put(Uri.parse(url),
-                                  body: body,
-                                  encoding: Encoding.getByName('utf-8'),
-                                  headers: {
-                                    'Authorization': 'Bearer ' + getToken()
-                                  });
-
-                              Navigator.pop(context); //pop dialog
-                              _updateProfile(response);
-                            }
-                          },
-                        ))
+                            }))
                   ])),
         ));
   }

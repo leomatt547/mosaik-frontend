@@ -19,6 +19,7 @@ class ChildRegistrationScreen extends StatefulWidget {
 }
 
 class _ChildRegistrationScreenState extends State<ChildRegistrationScreen> {
+
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
