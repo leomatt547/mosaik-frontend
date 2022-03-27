@@ -14,25 +14,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  List<History> _userHistory = [
-    // History(
-    //   id: 'url1',
-    //   url:
-    //       'https://www.youtube.com/watch?v=Zi9To04PO78&list=RDuyaKoj7wABY&index=4&ab_channel=TheScriptVEVO',
-    // ),
-    // History(
-    //   id: 'url2',
-    //   url: 'https://translate.google.co.id/?sl=en&tl=id&op=translate&hl=id',
-    // ),
-    // History(
-    //   id: 'url3',
-    //   url: 'https://id-id.facebook.com/',
-    // ),
-    // History(
-    //   id: 'url4',
-    //   url: 'https://akademik.itb.ac.id/?context=mahasiswa:13519112',
-    // ),
-  ];
+  List<History> _userHistory = [];
   var _isLoading = false;
   @override
   void initState() {
@@ -55,6 +37,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           "/childvisits?child_id=" +
           storage.read('child_id').toString());
     }
+    print(url);
     try {
       final response = await http.get(url);
       List<dynamic> extractedData = json.decode(response.body);
@@ -70,6 +53,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       setState(() {
         _isLoading = false;
       });
+
       _userHistory = loadedProducts.reversed.toList();
     } catch (error) {
       throw (error);
@@ -99,7 +83,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {
       _isLoading = false;
     });
-    // existingProduct = null;
   }
 
   @override

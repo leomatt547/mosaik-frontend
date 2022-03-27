@@ -27,21 +27,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 3:
         // ignore: avoid_print
         print('Manage Account');
-        Route route =
-            MaterialPageRoute(builder: (context) => const UpdateProfileScreen());
+        Route route = MaterialPageRoute(
+            builder: (context) => const UpdateProfileScreen());
         Navigator.push(context, route);
         break;
       case 4:
         // ignore: avoid_print
         print('Create child account');
-        Route route =
-            MaterialPageRoute(builder: (context) => ChildRegistrationScreen());
+        Route route = MaterialPageRoute(
+            builder: (context) => const ChildRegistrationScreen());
         Navigator.push(context, route);
         break;
       case 5:
         storage.remove('token');
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
         );
         break;
     }
@@ -155,7 +155,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       return IconButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => const LoginPage()),
           );
         },
         icon: const Icon(Icons.account_circle_outlined),
