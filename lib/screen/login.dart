@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
       // Extract parent_id from token
       Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
       storage.write('parent_id', jwtPayload['parent_id']);
-
+      storage.write('child_id', jwtPayload['child_id']);
       Route route = MaterialPageRoute(builder: (context) => LandingPage());
       Navigator.push(context, route);
     } else {
