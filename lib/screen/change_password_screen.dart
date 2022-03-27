@@ -189,15 +189,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         desc: "Your password has been successfully changed",
         buttons: [
           DialogButton(
-            child: const Text(
-              "OK",
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            }
-          )
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              })
         ],
       ).show();
     } else {
