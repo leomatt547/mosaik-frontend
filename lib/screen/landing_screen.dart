@@ -53,8 +53,8 @@ class _LandingPageState extends State<LandingPage> {
                     child: TextFormField(
                       controller: textFieldController,
                       autocorrect: false,
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             borderSide:
