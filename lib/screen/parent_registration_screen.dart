@@ -115,34 +115,36 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
                         fontWeight: FontWeight.w700, color: Colors.black),
                   ),
                   onPressed: () async {
-                    Map data = {
-                      'nama': nameController.text.toString(),
-                      'email': emailController.text.toString(),
-                      'password': passwordController.text.toString(),
-                    };
+                    if (_formKey.currentState!.validate()) {
+                      Map data = {
+                        'nama': nameController.text.toString(),
+                        'email': emailController.text.toString(),
+                        'password': passwordController.text.toString(),
+                      };
 
-                    String body = json.encode(data);
+                      String body = json.encode(data);
 
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: bodyProgress,
-                          contentPadding: EdgeInsets.zero,
-                          backgroundColor: Colors.transparent,
-                        );
-                      },
-                    );
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: bodyProgress,
+                            contentPadding: EdgeInsets.zero,
+                            backgroundColor: Colors.transparent,
+                          );
+                        },
+                      );
 
-                    final response = await http.post(
-                      Uri.parse(API_URL + "/parents"),
-                      body: body,
-                      encoding: Encoding.getByName('utf-8'),
-                    );
+                      final response = await http.post(
+                        Uri.parse(API_URL + "/parents"),
+                        body: body,
+                        encoding: Encoding.getByName('utf-8'),
+                      );
 
-                    Navigator.pop(context); //pop dia
-                    _register(response);
+                      Navigator.pop(context); //pop dia
+                      _register(response);
+                    }
                   },
                 ),
               ],

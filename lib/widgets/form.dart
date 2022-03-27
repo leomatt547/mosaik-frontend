@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -66,6 +67,10 @@ Widget emailForm(emailController, String labelText) {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Email cannot be empty';
+        }
+
+        if (!EmailValidator.validate(value)) {
+          return 'Please enter a valid email address';
         }
         return null;
       },
