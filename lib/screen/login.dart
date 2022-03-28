@@ -70,11 +70,12 @@ class LoginPage extends StatelessWidget {
                         if (response.statusCode == 200) {
                           String jwt = response.body.replaceAll('"', '').trim();
                           storage.write('token', jwt);
-                          
+
                           // Extract parent_id from token
-                          Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
+                          Map<String, dynamic> jwtPayload =
+                              JwtHelper.parseJwtPayLoad(jwt);
                           storage.write('parent_id', jwtPayload['parent_id']);
-                          
+
                           Route route = MaterialPageRoute(
                               builder: (context) => LandingPage());
                           Navigator.push(context, route);

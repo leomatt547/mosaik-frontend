@@ -11,6 +11,7 @@ class UpdateProfilePage extends StatefulWidget {
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
   void onSave() {
     print(nameController.text.toString());
     print(emailController.text.toString());
