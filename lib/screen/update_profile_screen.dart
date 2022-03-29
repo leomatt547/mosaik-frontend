@@ -230,8 +230,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final response = await http.get(Uri.parse(url));
 
     var extractedData = json.decode(response.body);
-    // print('${extractedData['id']}, ${extractedData['nama']}, ${extractedData['email']}');
-    print('Test');
 
     if (extractedData == null) {
       return;
