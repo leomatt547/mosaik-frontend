@@ -170,7 +170,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login(response) {
     if (response.statusCode == 200) {
-      String jwt = response.body.replaceAll('"', '').trim();
+      final responseBody = json.decode(response.body);
+      String jwt = responseBody['Token'];
       storage.write('token', jwt);
 
       // Extract parent_id from token
