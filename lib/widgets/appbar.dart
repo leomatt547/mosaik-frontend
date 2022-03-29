@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
@@ -21,24 +22,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         );
         break;
       case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const DownloadsScreen()),
+        );
+        break;
+      case 3:
         // ignore: avoid_print
         print('go to Settings screen');
         break;
-      case 3:
+      case 4:
         // ignore: avoid_print
         print('Manage Account');
         Route route = MaterialPageRoute(
             builder: (context) => const UpdateProfileScreen());
         Navigator.push(context, route);
         break;
-      case 4:
+      case 5:
         // ignore: avoid_print
         print('Create child account');
         Route route = MaterialPageRoute(
             builder: (context) => const ChildRegistrationScreen());
         Navigator.push(context, route);
         break;
-      case 5:
+      case 6:
         storage.remove('token');
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -73,7 +79,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onSelected: (item) => onSelected(context, item),
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
-            value: 3,
+            value: 4,
             child: Row(
               children: const [
                 Icon(Icons.manage_accounts_rounded),
@@ -86,7 +92,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 4,
+            value: 5,
             child: Row(
               children: const [
                 Icon(Icons.person_add),
@@ -99,7 +105,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 5,
+            value: 6,
             child: Row(
               children: const [
                 Icon(Icons.logout),
@@ -120,7 +126,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onSelected: (item) => onSelected(context, item),
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
-            value: 3,
+            value: 4,
             child: Row(
               children: const [
                 Icon(Icons.manage_accounts_rounded),
@@ -133,7 +139,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 5,
+            value: 6,
             child: Row(
               children: const [
                 Icon(Icons.logout),
@@ -286,6 +292,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 PopupMenuItem<int>(
                   value: 2,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.download),
+                      SizedBox(width: 8),
+                      Text(
+                        'Downloads',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 3,
                   child: Row(
                     children: const [
                       Icon(Icons.settings),
