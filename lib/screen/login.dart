@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/reset_password/reset_password_screen.dart';
 import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/widgets/button.dart';
@@ -160,6 +162,29 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 registerButton(context),
+                Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: RichText(
+                        text: TextSpan(
+                            style: GoogleFonts.average(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            children: <TextSpan>[
+                          TextSpan(text: 'Forgot your password? '),
+                          TextSpan(
+                              text: 'Click here',
+                              style: GoogleFonts.average(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          ResetPasswordScreen()));
+                                })
+                        ])))
               ],
             ),
           ),
