@@ -3,6 +3,7 @@ import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/list_child_history_screen.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/screen/update_profile_screen.dart';
 
@@ -16,13 +17,32 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         print('New tab');
         break;
       case 1:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HistoryScreen()),
-        );
+        late Uri url;
+
+        if (storage.read('parent_id') != null) {
+          url = Uri.parse(API_URL +
+              "/parentvisits?parent_id=" +
+              storage.read('parent_id').toString());
+        } else {
+          url = Uri.parse(API_URL +
+              "/childvisits?child_id=" +
+              storage.read('child_id').toString());
+        }
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HistoryScreen(
+                url: url,
+              ),
+            ));
+
         break;
       case 2:
-        // ignore: avoid_print
-        print('go to Settings screen');
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => const ChildListHistoryScreen()),
+        );
+
         break;
       case 3:
         // ignore: avoid_print
@@ -284,19 +304,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
                 ),
-                PopupMenuItem<int>(
-                  value: 2,
-                  child: Row(
-                    children: const [
-                      Icon(Icons.settings),
-                      SizedBox(width: 8),
-                      Text(
-                        'Settings',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
+                if (storage.read('parent_id') != null) const PopupMenuDivider(),
+                if (storage.read('parent_id') != null)
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.history),
+                        SizedBox(width: 8),
+                        Text(
+                          'History Child',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),

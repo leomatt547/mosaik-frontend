@@ -16,7 +16,7 @@ class BrowsingScreen extends StatefulWidget {
 
 class _BrowsingScreenState extends State<BrowsingScreen> {
   late WebViewController _webViewController;
-  TextEditingController _teController = new TextEditingController();
+  TextEditingController _teController = TextEditingController();
   bool showLoading = false;
 
   void updateLoading(bool ls) {
@@ -30,17 +30,35 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
     void onSelectedMoreOptions(BuildContext context, int item) {
       switch (item) {
         case 0:
+          // ignore: avoid_print
           print('New tab');
           break;
         case 1:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const HistoryScreen()),
-          );
+          late Uri url;
+
+          if (storage.read('parent_id') != null) {
+            url = Uri.parse(API_URL +
+                "/parentvisits?parent_id=" +
+                storage.read('parent_id').toString());
+          } else {
+            url = Uri.parse(API_URL +
+                "/childvisits?child_id=" +
+                storage.read('child_id').toString());
+          }
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HistoryScreen(
+                  url: url,
+                ),
+              ));
           break;
         case 2:
+          // ignore: avoid_print
           print('Downloads');
           break;
         case 3:
+          // ignore: avoid_print
           print('go to Settings screen');
           break;
       }
@@ -206,7 +224,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 "parent_id": storage.read('parent_id')
                               };
                               String bodyNewVisit = json.encode(dataVisit);
-                              final newVisit = await http.post(
+                              await http.post(
                                   Uri.parse(API_URL + "/parentvisits"),
                                   body: bodyNewVisit,
                                   encoding: Encoding.getByName('utf-8'),
@@ -221,7 +239,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 "child_id": storage.read('child_id')
                               };
                               String bodyNewVisit = json.encode(dataVisit);
-                              final newVisit = await http.post(
+                              await http.post(
                                   Uri.parse(API_URL + "/childvisits"),
                                   body: bodyNewVisit,
                                   encoding: Encoding.getByName('utf-8'),
