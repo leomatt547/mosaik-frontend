@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/utils/jwt_helper.dart';
+import 'package:mosaic/widgets/LoadingDialog.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:mosaic/widgets/form.dart';
@@ -125,17 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         String body = json.encode(data);
 
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: bodyProgress,
-                              contentPadding: EdgeInsets.zero,
-                              backgroundColor: Colors.transparent,
-                            );
-                          },
-                        );
+                        showLoading("Logging in...", context);
 
                         final response = await http.post(
                           Uri.parse(API_URL + "/login"),
