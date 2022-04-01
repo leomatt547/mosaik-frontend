@@ -14,14 +14,6 @@ class ChildList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: Column(
           children: [
-            const Text(
-              'child',
-              style: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             SizedBox(
               height: 450,
               child: child.isEmpty
