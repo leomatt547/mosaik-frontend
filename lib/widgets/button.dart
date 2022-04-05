@@ -86,8 +86,8 @@ DialogButton deleteAccountButton(context) {
           if (extractedData == null) {
             return;
           }
-          List<Child> loadedProducts = [];
-          loadedProducts = extractedData.map((dynamic childResponse) {
+          List<Child> loadedChildren = [];
+          loadedChildren = extractedData.map((dynamic childResponse) {
             String id = childResponse['id'].toString();
             String nama = childResponse['nama'];
             String email = childResponse['email'];
@@ -95,7 +95,7 @@ DialogButton deleteAccountButton(context) {
           }).toList();
 
           // ignore: avoid_function_literals_in_foreach_calls
-          loadedProducts.forEach((Child child) async {
+          loadedChildren.forEach((Child child) async {
             await http.delete(
                 Uri.parse(API_URL + "/childs/" + child.id.toString()),
                 headers: {'Authorization': 'Bearer ' + storage.read('token')});
