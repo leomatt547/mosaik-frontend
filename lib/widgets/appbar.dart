@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
@@ -46,13 +46,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           MaterialPageRoute(
               builder: (context) => const ChildListHistoryScreen()),
         );
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const DownloadsScreen()),
-        );
-        break;
-      case 3:
-        // ignore: avoid_print
-        print('go to Settings screen');
         break;
       case 3:
         // ignore: avoid_print
@@ -96,6 +89,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 7:
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
+        );
+        break;
+      case 8:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const DownloadsScreen()),
         );
         break;
     }
@@ -200,7 +198,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onSelected: (item) => onSelected(context, item),
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
-            value: 4,
+            value: 3,
             child: Row(
               children: const [
                 Icon(Icons.manage_accounts_rounded),
@@ -213,7 +211,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 6,
+            value: 5,
             child: Row(
               children: const [
                 Icon(Icons.logout),
@@ -364,23 +362,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
                 ),
-                if (storage.read('parent_id') != null) const PopupMenuDivider(),
-                if (storage.read('parent_id') != null)
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: Row(
-                      children: const [
-                        Icon(Icons.history),
-                        SizedBox(width: 8),
-                        Text(
-                          'History Child',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
                 PopupMenuItem<int>(
-                  value: 2,
+                  value: 8,
                   child: Row(
                     children: const [
                       Icon(Icons.download),
@@ -392,19 +375,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
                 ),
-                PopupMenuItem<int>(
-                  value: 3,
-                  child: Row(
-                    children: const [
-                      Icon(Icons.settings),
-                      SizedBox(width: 8),
-                      Text(
-                        'Settings',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
+                if (storage.read('parent_id') != null) const PopupMenuDivider(),
+                if (storage.read('parent_id') != null)
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.history),
+                        SizedBox(width: 8),
+                        Text(
+                          'Children History',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
