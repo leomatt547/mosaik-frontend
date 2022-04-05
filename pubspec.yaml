@@ -43,10 +43,8 @@ dependencies:
   flutter_inappwebview: ^5.3.2
   flutter_downloader: ^1.7.3
   permission_handler: ^9.2.0
-<<<<<<< HEAD
   filesystem_picker: ^2.0.0
-=======
->>>>>>> main
+
 
 dev_dependencies:
   flutter_test:
