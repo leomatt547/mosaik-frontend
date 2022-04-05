@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
@@ -59,13 +60,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             builder: (context) => const ChildRegistrationScreen());
         Navigator.push(context, route);
         break;
-      case 6:
+      case 5:
         storage.remove('token');
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
         break;
-      case 7:
+      case 6:
         Alert(
           context: context,
           type: AlertType.warning,
@@ -83,6 +84,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             cancelButton(context),
           ],
         ).show();
+        break;
+      case 7:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
+        );
+        break;
     }
   }
 
@@ -125,7 +132,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 7,
+            value: 6,
             child: Row(
               children: const [
                 Icon(Icons.delete_forever_outlined),
@@ -151,7 +158,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 6,
+            value: 7,
+            child: Row(
+              children: const [
+                Icon(Icons.delete_forever_outlined),
+                SizedBox(width: 8),
+                Text(
+                  'Delete Child Account',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuItem<int>(
+            value: 5,
             child: Row(
               children: const [
                 Icon(Icons.logout),
@@ -185,7 +205,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           PopupMenuItem<int>(
-            value: 6,
+            value: 5,
             child: Row(
               children: const [
                 Icon(Icons.logout),
