@@ -6,6 +6,7 @@ import 'package:mosaic/constant.dart';
 import 'package:mosaic/utils/response_message.dart';
 import 'package:mosaic/widgets/circular_progress_bar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:mosaic/models/childs.dart';
 import 'package:http/http.dart' as http;
 import '../screen/parent_registration_screen.dart';
 
@@ -73,6 +74,35 @@ DialogButton deleteAccountButton(context) {
           headers: {'Authorization': 'Bearer ' + getToken()});
 
       if (response.statusCode == 204) {
+        final getChildrenResponse = await http.get(
+          Uri.parse(API_URL +
+              '/childs?parent_id=' +
+              storage.read('parent_id').toString()),
+        );
+
+        if (getChildrenResponse.statusCode == 200) {
+          List<dynamic> extractedData = json.decode(getChildrenResponse.body);
+          // ignore: unnecessary_null_comparison
+          if (extractedData == null) {
+            return;
+          }
+          List<Child> loadedProducts = [];
+          loadedProducts = extractedData.map((dynamic childResponse) {
+            String id = childResponse['id'].toString();
+            String nama = childResponse['nama'];
+            String email = childResponse['email'];
+            return Child(id: id, nama: nama, email: email);
+          }).toList();
+
+          // ignore: avoid_function_literals_in_foreach_calls
+          loadedProducts.forEach((Child child) async {
+            await http.delete(
+                Uri.parse(API_URL + "/childs/" + child.id.toString()),
+                headers: {'Authorization': 'Bearer ' + storage.read('token')});
+          });
+          print("SUUCC");
+        }
+
         storage.remove('token');
         Route route = MaterialPageRoute(
             builder: (context) => const ParentRegistrationScreen());
