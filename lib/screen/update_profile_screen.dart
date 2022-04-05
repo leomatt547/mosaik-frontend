@@ -54,13 +54,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     ),
   );
 
-  void onSave() {
-    // ignore: avoid_print
-    print(nameController.text.toString());
-    // ignore: avoid_print
-    print(emailController.text.toString());
-  }
-
   @override
   Widget build(BuildContext context) {
     _getUserData();
