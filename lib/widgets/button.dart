@@ -100,7 +100,6 @@ DialogButton deleteAccountButton(context) {
                 Uri.parse(API_URL + "/childs/" + child.id.toString()),
                 headers: {'Authorization': 'Bearer ' + storage.read('token')});
           });
-          print("SUUCC");
         }
 
         storage.remove('token');
