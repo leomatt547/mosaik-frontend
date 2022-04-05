@@ -12,6 +12,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'dart:convert';
+import 'package:filesystem_picker/filesystem_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BrowsingScreen extends StatefulWidget {
   final String text;
@@ -296,55 +298,66 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                           });
                         },
                         onDownloadStart: (controller, url) async {
-                          FlutterDownloader.enqueue(
-                            url: url.toString(),
-                            saveInPublicStorage: true,
-                            savedDir:
-                                (await getExternalStorageDirectory())!.path,
-                            showNotification: true,
-                            openFileFromNotification: true,
-                          );
+                          String? path = await FilesystemPicker.open(
+                              title: 'Save to folder',
+                              fsType: FilesystemType.folder,
+                              context: context,
+                              rootDirectory:
+                                  (await getApplicationDocumentsDirectory())
+                                      .parent,
+                              pickText: 'Save file to this folder',
+                              folderIconColor: Colors.grey[200],
+                              requestPermission: () async =>
+                                  await Permission.storage.request().isGranted);
 
-                          if (storage.read('parent_id') != null) {
-                            Map downloadData = {
-                              'target_path':
-                                  (await getExternalStorageDirectory())!.path,
-                              'site_url': Uri.parse(url.toString()).host,
-                              'tab_url': url.toString(),
-                              'mime_type': p.extension(url.toString()),
-                              'parent_id': storage.read('parent_id'),
-                            };
+                          if (path! != null) {
+                            FlutterDownloader.enqueue(
+                              url: url.toString(),
+                              saveInPublicStorage: true,
+                              savedDir: path,
+                              showNotification: true,
+                              openFileFromNotification: true,
+                            );
 
-                            String bodyRequest = json.encode(downloadData);
+                            if (storage.read('parent_id') != null) {
+                              Map downloadData = {
+                                'target_path': path,
+                                'site_url': Uri.parse(url.toString()).host,
+                                'tab_url': url.toString(),
+                                'mime_type': p.extension(url.toString()),
+                                'parent_id': storage.read('parent_id'),
+                              };
 
-                            await http.post(
-                                Uri.parse(API_URL + '/parentdownloads'),
-                                body: bodyRequest,
-                                encoding: Encoding.getByName('utf-8'),
-                                headers: {
-                                  'Authorization':
-                                      'Bearer ' + storage.read('token')
-                                });
-                          } else {
-                            Map downloadData = {
-                              'target_path':
-                                  (await getExternalStorageDirectory())!.path,
-                              'site_url': Uri.parse(url.toString()).host,
-                              'tab_url': url.toString(),
-                              'mime_type': p.extension(url.toString()),
-                              'child_id': storage.read('child_id'),
-                            };
+                              String bodyRequest = json.encode(downloadData);
 
-                            String bodyRequest = json.encode(downloadData);
+                              await http.post(
+                                  Uri.parse(API_URL + '/parentdownloads'),
+                                  body: bodyRequest,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            } else {
+                              Map downloadData = {
+                                'target_path': path,
+                                'site_url': Uri.parse(url.toString()).host,
+                                'tab_url': url.toString(),
+                                'mime_type': p.extension(url.toString()),
+                                'child_id': storage.read('child_id'),
+                              };
 
-                            await http.post(
-                                Uri.parse(API_URL + '/childdownloads'),
-                                body: bodyRequest,
-                                encoding: Encoding.getByName('utf-8'),
-                                headers: {
-                                  'Authorization':
-                                      'Bearer ' + storage.read('token')
-                                });
+                              String bodyRequest = json.encode(downloadData);
+
+                              await http.post(
+                                  Uri.parse(API_URL + '/childdownloads'),
+                                  body: bodyRequest,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            }
                           }
                         },
                         // javascriptMode: JavascriptMode.unrestricted,
