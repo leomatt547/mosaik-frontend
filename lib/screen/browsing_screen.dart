@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/widgets/appbar.dart';
@@ -38,7 +39,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
           );
           break;
         case 2:
-          print('Downloads');
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const DownloadsScreen()),
+          );
           break;
         case 3:
           print('go to Settings screen');
