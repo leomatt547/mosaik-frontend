@@ -80,50 +80,48 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
           backgroundColor: const Color.fromARGB(255, 196, 196, 196),
         ),
         body: _isLoading
-        ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.black,
-          ),
-        )
-        : ListView.builder(
-          itemBuilder: (context, index) {
-            String subtitle =
-                "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              )
+            : ListView.builder(
+                itemBuilder: (context, index) {
+                  String subtitle =
+                      "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
 
-            return Card(
-              child: ListTile(
-                  title: Text(
-                    downloads[index].targetPath,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.average(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  subtitle: Text(
-                    subtitle,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.average(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Colors.black,
-                    onPressed: () {
-                      _deleteDownload(downloads[index])
-                          .whenComplete(() {
-                            return;
-                      });
-                    },
-                  )),
-            );
-          },
-          itemCount: downloads.length,
-        ));
+                  return Card(
+                    child: ListTile(
+                        title: Text(
+                          downloads[index].targetPath,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.average(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        subtitle: Text(
+                          subtitle,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.average(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Colors.black,
+                          onPressed: () {
+                            _deleteDownload(downloads[index]).whenComplete(() {
+                              return;
+                            });
+                          },
+                        )),
+                  );
+                },
+                itemCount: downloads.length,
+              ));
   }
-
 
   void _showFailedPopup() {
     Alert(
@@ -133,12 +131,14 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       desc: "Oops, something has gone wrong",
       buttons: [
         DialogButton(
-          child: const Text(
-            "CLOSE",
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          ),
-          onPressed: () => Navigator.pop(context),
-        )
+            child: const Text(
+              "CLOSE",
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            onPressed: () {
+              int count = 0;
+              Navigator.of(context).popUntil((_) => count++ >= 2);
+            })
       ],
     ).show();
   }
@@ -160,8 +160,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
     }
 
     try {
-      final response = await http.delete(
-          Uri.parse(url),
+      final response = await http.delete(Uri.parse(url),
           headers: {'Authorization': 'Bearer ' + getToken()});
 
       print(response.statusCode);
@@ -174,7 +173,6 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       setState(() {
         _isLoading = false;
       });
-
     } catch (err) {
       _showFailedPopup();
     }
@@ -213,11 +211,9 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
           .reversed
           .toList();
 
-
       setState(() {
         _isLoading = false;
       });
-
     } catch (err) {
       _showFailedPopup();
     }
