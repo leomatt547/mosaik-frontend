@@ -76,7 +76,7 @@ Widget emailForm(emailController, String labelText) {
         }
 
         if (!EmailValidator.validate(value)) {
-          return 'Please enter a valid email address';
+          return 'Invalid email';
         }
         return null;
       },
