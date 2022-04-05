@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/widgets/appbar.dart';
-import 'package:mosaic/widgets/form.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import '../constant.dart';
@@ -19,7 +18,6 @@ class ChildRegistrationScreen extends StatefulWidget {
 }
 
 class _ChildRegistrationScreenState extends State<ChildRegistrationScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
@@ -85,7 +83,7 @@ class _ChildRegistrationScreenState extends State<ChildRegistrationScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Text(
                     'Child Account Registration',
                     style: GoogleFonts.average(

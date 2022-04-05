@@ -86,7 +86,7 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Text(
                     'Welcome',
                     style: GoogleFonts.average(
@@ -170,7 +170,7 @@ class _ParentRegistrationScreenState extends State<ParentRegistrationScreen> {
             ),
             onPressed: () {
               Route route =
-                  MaterialPageRoute(builder: (context) => LoginPage());
+                  MaterialPageRoute(builder: (context) => const LoginPage());
               Navigator.push(context, route);
             },
           )
