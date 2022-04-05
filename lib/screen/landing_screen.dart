@@ -46,7 +46,7 @@ class _LandingPageState extends State<LandingPage> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
                 children: [
                   Flexible(
