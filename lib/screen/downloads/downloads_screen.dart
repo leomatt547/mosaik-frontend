@@ -22,7 +22,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   //       "www.tokobagustokopedia.com"),
   //   Download(3, "Test123_WKWKWKWKWK.pdf", 100000, 100000, "www.yahoo.com")
   // ];
-  List<Download> downloads = [];
+  late List<Download> downloads;
+  bool _isLoading = false;
 
   var bodyProgress = Container(
     decoration: BoxDecoration(
@@ -59,6 +60,12 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    _getDownloadsData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -72,7 +79,13 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
           ),
           backgroundColor: const Color.fromARGB(255, 196, 196, 196),
         ),
-        body: ListView.builder(
+        body: _isLoading
+        ? const Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ),
+        )
+        : ListView.builder(
           itemBuilder: (context, index) {
             String subtitle =
                 "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
@@ -96,9 +109,14 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                     ),
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.more_vert),
+                    icon: Icon(Icons.delete),
                     color: Colors.black,
-                    onPressed: () {},
+                    onPressed: () {
+                      _deleteDownload(downloads[index])
+                          .whenComplete(() {
+                            return;
+                      });
+                    },
                   )),
             );
           },
@@ -106,19 +124,6 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         ));
   }
 
-  void _showLoading() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: bodyProgress,
-          contentPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-        );
-      },
-    );
-  }
 
   void _showFailedPopup() {
     Alert(
@@ -138,8 +143,47 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
     ).show();
   }
 
+  Future<void> _deleteDownload(Download item) async {
+    String url;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    if (storage.read('parent_id') != null) {
+      url = API_URL + '/parentdownloads/${item.id}';
+    } else if (storage.read('child_id') != null) {
+      url = API_URL + '/childdownloads/${item.id}';
+    } else {
+      _showFailedPopup();
+      return;
+    }
+
+    try {
+      final response = await http.delete(
+          Uri.parse(url),
+          headers: {'Authorization': 'Bearer ' + getToken()});
+
+      print(response.statusCode);
+      if (response.statusCode != 204) {
+        _showFailedPopup();
+      }
+
+      await _getDownloadsData();
+
+      setState(() {
+        _isLoading = false;
+      });
+
+    } catch (err) {
+      _showFailedPopup();
+    }
+  }
 
   Future<void> _getDownloadsData() async {
+    setState(() {
+      _isLoading = true;
+    });
     String url;
 
     if (storage.read('parent_id') != null) {
@@ -150,6 +194,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       _showFailedPopup();
       return;
     }
+
     try {
       final response = await http.get(Uri.parse(url));
       var data = json.decode(response.body);
@@ -158,13 +203,21 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
         return;
       }
 
-      downloads = data.map((el) {
-        return Download(el['id'], el['target_path'], el['received_bytes'],
-            el['total_bytes'], el['site_url']);
-      })
+      downloads = data
+          .map<Download>((el) {
+            print(el['id']);
+            return Download(el['id'], el['target_path'], el['received_bytes'],
+                el['total_bytes'], el['site_url']);
+          })
           .toList()
           .reversed
           .toList();
+
+
+      setState(() {
+        _isLoading = false;
+      });
+
     } catch (err) {
       _showFailedPopup();
     }
