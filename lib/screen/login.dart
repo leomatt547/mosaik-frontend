@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
   TextEditingController emailController = TextEditingController();
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Text('Hi, let\'s start browsing',
                       style: GoogleFonts.average(
                         fontSize: 28,
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     'OR',
                     style: GoogleFonts.average(

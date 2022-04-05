@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:mosaic/constant.dart';
+import 'package:mosaic/utils/response_message.dart';
+import 'package:mosaic/widgets/circular_progress_bar.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:http/http.dart' as http;
 import '../screen/parent_registration_screen.dart';
 
 Widget registerButton(context) {
@@ -23,5 +29,72 @@ Widget registerButton(context) {
         Navigator.push(context, route);
       },
     ),
+  );
+}
+
+DialogButton cancelButton(context) {
+  return DialogButton(
+    child: Text("Cancel",
+        style: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        )),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+}
+
+DialogButton deleteAccountButton(context) {
+  return DialogButton(
+    color: Colors.red,
+    child: Text("Delete",
+        style: GoogleFonts.average(
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        )),
+    onPressed: () async {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: circularProgresBar('Deleting account...'),
+            contentPadding: EdgeInsets.zero,
+            backgroundColor: Colors.transparent,
+          );
+        },
+      );
+
+      final response = await http.delete(
+          Uri.parse(
+              API_URL + '/parents/' + storage.read('parent_id').toString()),
+          encoding: Encoding.getByName('utf-8'),
+          headers: {'Authorization': 'Bearer ' + getToken()});
+
+      if (response.statusCode == 204) {
+        storage.remove('token');
+        Route route = MaterialPageRoute(
+            builder: (context) => const ParentRegistrationScreen());
+        Navigator.push(context, route);
+      } else {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: responseMessage['alertTitle']['failed'],
+          desc: responseMessage['alertDesc']['deleteAccount']['failed'],
+          style: AlertStyle(
+              titleStyle: GoogleFonts.average(
+                fontWeight: FontWeight.w500,
+              ),
+              descStyle: GoogleFonts.average(
+                fontWeight: FontWeight.w500,
+              )),
+          buttons: [
+            cancelButton(context),
+          ],
+        ).show();
+      }
+    },
   );
 }
