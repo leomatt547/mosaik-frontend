@@ -16,6 +16,7 @@ class AddBlockSiteScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
   final _formKey = GlobalKey<FormState>();
+  String _blockType = 'whitelist';
 
   TextEditingController urlController = TextEditingController();
 
@@ -59,8 +60,6 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _getUserData();
-
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
@@ -80,7 +79,71 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      commonForm(urlController, 'Name cannot be empty', 'Name'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: TextFormField(
+                          controller: urlController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "This form can't be empty";
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Url",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            errorStyle: GoogleFonts.average(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          style: GoogleFonts.average(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Radio(
+                                      value: 'whitelist',
+                                      groupValue: _blockType,
+                                      onChanged: (String? val) {
+                                        setState(() {
+                                          _blockType = val!;
+                                        });
+                                      }),
+                                  const Expanded(child: Text('Whitelist'))
+                                ],
+                              ),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Radio(
+                                      value: 'blacklist',
+                                      groupValue: _blockType,
+                                      onChanged: (String? val) {
+                                        setState(() {
+                                          _blockType = val!;
+                                        });
+                                      }),
+                                  const Expanded(
+                                    child: Text('Blacklist'),
+                                  )
+                                ],
+                              ),
+                              flex: 1,
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           child: ElevatedButton(
@@ -89,7 +152,7 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
                                     const Color.fromARGB(255, 196, 196, 196),
                               ),
                               child: Text(
-                                "Apply",
+                                "Add",
                                 style: GoogleFonts.average(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700,
@@ -97,60 +160,40 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  _showLoading();
+                                  // _showLoading();
 
                                   Map data = {
-                                    'nama': urlController.text.toString(),
+                                    'url': urlController.text.toString(),
+                                    'type': _blockType,
                                   };
+                                  // ignore: avoid_print
+                                  print(data);
 
-                                  String body = json.encode(data);
-                                  String url;
-                                  if (storage.read('parent_id') != null) {
-                                    url = API_URL +
-                                        '/parents/${storage.read('parent_id')}';
-                                  } else if (storage.read('child_id') != null) {
-                                    url = API_URL +
-                                        '/childs/${storage.read('child_id')}';
-                                  } else {
-                                    _showFailedPopup();
-                                    return;
-                                  }
+                                  // String body = json.encode(data);
+                                  // String url;
+                                  // if (storage.read('parent_id') != null) {
+                                  //   url = API_URL +
+                                  //       '/parents/${storage.read('parent_id')}';
+                                  // } else if (storage.read('child_id') != null) {
+                                  //   url = API_URL +
+                                  //       '/childs/${storage.read('child_id')}';
+                                  // } else {
+                                  //   _showFailedPopup();
+                                  //   return;
+                                  // }
 
-                                  final response = await http.put(
-                                      Uri.parse(url),
-                                      body: body,
-                                      encoding: Encoding.getByName('utf-8'),
-                                      headers: {
-                                        'Authorization': 'Bearer ' + getToken()
-                                      });
+                                  // final response = await http.put(
+                                  //     Uri.parse(url),
+                                  //     body: body,
+                                  //     encoding: Encoding.getByName('utf-8'),
+                                  //     headers: {
+                                  //       'Authorization': 'Bearer ' + getToken()
+                                  //     });
 
-                                  Navigator.pop(context); //pop dialog
-                                  _updateProfile(response);
+                                  // Navigator.pop(context); //pop dialog
                                 }
-                              }))
+                              })),
                     ]))));
-  }
-
-  void _updateProfile(response) {
-    if (response.statusCode == 200) {
-      Alert(
-        context: context,
-        type: AlertType.success,
-        title: "Success",
-        desc: "Your profile has been successfully changed",
-        buttons: [
-          DialogButton(
-            child: const Text(
-              "OK",
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ).show();
-    } else {
-      _showFailedPopup();
-    }
   }
 
   void _showLoading() {
@@ -183,30 +226,5 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
         )
       ],
     ).show();
-  }
-
-  Future<void> _getUserData() async {
-    String url;
-
-    if (storage.read('parent_id') != null) {
-      url = API_URL + '/parents/${storage.read('parent_id')}';
-    } else if (storage.read('child_id') != null) {
-      url = API_URL + '/parents/${storage.read('child_id')}';
-    } else {
-      _showFailedPopup();
-      return;
-    }
-
-    final response = await http.get(Uri.parse(url));
-
-    var extractedData = json.decode(response.body);
-
-    if (extractedData == null) {
-      return;
-    }
-
-    if (extractedData['nama'] != null) {
-      urlController.text = extractedData['nama'];
-    }
   }
 }

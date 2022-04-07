@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/block_site_screen.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
@@ -89,6 +90,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
         );
+        break;
+      case 8:
+        Route route =
+            MaterialPageRoute(builder: (context) => const BlockSiteScreen());
+        Navigator.push(context, route);
         break;
     }
   }
@@ -366,6 +372,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         SizedBox(width: 8),
                         Text(
                           'History Child',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (storage.read('parent_id') != null) const PopupMenuDivider(),
+                if (storage.read('parent_id') != null)
+                  PopupMenuItem<int>(
+                    value: 8,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.do_not_disturb_outlined),
+                        SizedBox(width: 8),
+                        Text(
+                          'Block Site',
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
