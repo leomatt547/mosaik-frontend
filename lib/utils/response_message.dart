@@ -11,4 +11,12 @@ Map responseMessage = {
   'invalidType': {
     'email': 'Email is invalid',
   },
+  'alertTitle': {
+    'failed': 'Failed',
+  },
+  'alertDesc': {
+    'deleteAccount': {
+      'failed': 'Account is not deleted',
+    },
+  },
 };

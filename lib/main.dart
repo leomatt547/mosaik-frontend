@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/screen/splash.dart';
-// ignore: unused_import
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
-  // Cannot implement async in android
-  // await dotenv.load(fileName: '.env');
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: false);
+  await Permission.storage.request();
   runApp(const MyApp());
 }
 
