@@ -13,7 +13,7 @@ class BlockSiteScreen extends StatefulWidget {
 }
 
 class _BlockSiteScreenState extends State<BlockSiteScreen> {
-  var _isWhiteList = false;
+  var _isWhiteList = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

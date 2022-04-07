@@ -82,7 +82,8 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                BlockedSiteList(_whiteList, deleteBlockedSite),
+                BlockedSiteList(
+                    _whiteList, deleteBlockedSite, "No Whitelisted Sites"),
               ],
             ),
     );

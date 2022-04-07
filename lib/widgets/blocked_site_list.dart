@@ -5,9 +5,11 @@ import 'package:mosaic/constant.dart';
 class BlockedSiteList extends StatelessWidget {
   final List<History> blockedSite;
   final Function deleteBlockedSite;
+  final String messageInfo;
 
   // ignore: use_key_in_widget_constructors
-  const BlockedSiteList(this.blockedSite, this.deleteBlockedSite);
+  const BlockedSiteList(
+      this.blockedSite, this.deleteBlockedSite, this.messageInfo);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,10 @@ class BlockedSiteList extends StatelessWidget {
               height: 450,
               child: blockedSite.isEmpty
                   ? Column(
-                      children: const <Widget>[
+                      children: <Widget>[
                         Text(
-                          'No blocked site',
-                          style: TextStyle(
-                            fontFamily: 'OpenSans',
+                          messageInfo,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
