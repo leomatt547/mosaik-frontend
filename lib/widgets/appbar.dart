@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
@@ -8,8 +7,6 @@ import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/list_child_history_screen.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/screen/update_profile_screen.dart';
-import 'package:mosaic/widgets/button.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -66,25 +63,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
         break;
-      case 6:
-        Alert(
-          context: context,
-          type: AlertType.warning,
-          title: 'Delete Account',
-          desc: 'Are you sure want to delete this account?',
-          style: AlertStyle(
-              titleStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              ),
-              descStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              )),
-          buttons: [
-            deleteAccountButton(context),
-            cancelButton(context),
-          ],
-        ).show();
-        break;
       case 7:
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
@@ -126,19 +104,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(width: 8),
                 Text(
                   'Manage Account',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-          ),
-          PopupMenuItem<int>(
-            value: 6,
-            child: Row(
-              children: const [
-                Icon(Icons.delete_forever_outlined),
-                SizedBox(width: 8),
-                Text(
-                  'Delete Account',
                   style: TextStyle(color: Colors.black),
                 ),
               ],
