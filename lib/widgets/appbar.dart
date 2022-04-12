@@ -4,12 +4,16 @@ import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
+import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/list_child_history_screen.dart';
 import 'package:mosaic/screen/login.dart';
+import 'package:mosaic/screen/login/login_screen.dart';
 import 'package:mosaic/screen/update_profile_screen.dart';
+import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -62,9 +66,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 5:
         storage.remove('token');
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
+        LoginScreen().launch(context);
         break;
       case 6:
         Alert(
@@ -102,9 +104,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       return IconButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => LandingPage()),
-          );
+          LandingScreen().launch(context);
         },
         icon: const Icon(Icons.cottage_outlined),
       );
@@ -115,14 +115,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (storage.read('parent_id') != null) {
       return PopupMenuButton<int>(
         icon: const Icon(Icons.account_circle_rounded),
-        color: const Color.fromARGB(255, 196, 196, 196),
+        color: Colors.white,
         onSelected: (item) => onSelected(context, item),
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
               children: const [
-                Icon(Icons.manage_accounts_rounded),
+                Icon(Icons.manage_accounts_rounded, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Manage Account',
@@ -135,7 +135,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 6,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.delete_forever_outlined, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Delete Account',
@@ -148,7 +148,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 4,
             child: Row(
               children: const [
-                Icon(Icons.person_add),
+                Icon(Icons.person_add, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Create Child Account',
@@ -161,7 +161,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.delete_forever_outlined, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Delete Child Account',
@@ -174,7 +174,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 5,
             child: Row(
               children: const [
-                Icon(Icons.logout),
+                Icon(Icons.logout, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Logout',
@@ -188,7 +188,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       return PopupMenuButton<int>(
         icon: const Icon(Icons.account_circle_rounded),
-        color: const Color.fromARGB(255, 196, 196, 196),
+        color: Colors.white,
         onSelected: (item) => onSelected(context, item),
         itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
@@ -226,11 +226,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (getToken() == null) {
       return IconButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
+          LoginScreen().launch(context);
         },
-        icon: const Icon(Icons.account_circle_outlined),
+        icon: const Icon(
+          Icons.account_circle_outlined,
+          color: primaryColor,
+        ),
       );
     } else {
       return handleUserTypeAccountButton(context);
@@ -241,7 +242,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (getToken() == null) {
       return AppBar(
         // automaticallyImplyLeading: false,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
         titleSpacing: 0.0,
         leading: const IconButton(
           onPressed: null,
@@ -264,16 +267,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.black,
-              iconTheme: const IconThemeData(color: Colors.black),
             ),
             child: PopupMenuButton<int>(
-              color: const Color.fromARGB(255, 196, 196, 196),
+              color: Colors.white,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [],
             ),
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
+        backgroundColor: Colors.white,
       );
     } else {
       return AppBar(
@@ -323,17 +325,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.black,
-              iconTheme: const IconThemeData(color: Colors.black),
             ),
             child: PopupMenuButton<int>(
-              color: const Color.fromARGB(255, 196, 196, 196),
+              color: Colors.white,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Row(
                     children: const [
-                      Icon(Icons.add),
+                      Icon(Icons.add, color: primaryColor),
                       SizedBox(width: 8),
                       Text(
                         'New tab',
@@ -347,7 +348,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   value: 1,
                   child: Row(
                     children: const [
-                      Icon(Icons.history),
+                      Icon(Icons.history, color: primaryColor),
                       SizedBox(width: 8),
                       Text(
                         'History',
@@ -362,7 +363,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: 2,
                     child: Row(
                       children: const [
-                        Icon(Icons.history),
+                        Icon(Icons.history, color: primaryColor),
                         SizedBox(width: 8),
                         Text(
                           'History Child',
@@ -375,7 +376,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
+        backgroundColor: Colors.white,
       );
     }
   }
