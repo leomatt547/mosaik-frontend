@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/browsing_screen.dart';
+import 'package:mosaic/screen/browsing/browsing_screen.dart';
 import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -88,10 +88,6 @@ class _LandingScreenState extends State<LandingScreen> {
 
   void _sendDataToSecondScreen(BuildContext context) {
     String textToSend = textFieldController.text;
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BrowsingScreen(textToSend),
-        ));
+    BrowsingScreen(textToSend).launch(context);
   }
 }
