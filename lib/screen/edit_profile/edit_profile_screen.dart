@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/change_password_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:mosaic/screen/change_password/change_password_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:mosaic/widgets/form.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -27,9 +25,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   FocusNode emailFocusNode = FocusNode();
 
   @override
-  Widget build(BuildContext context) {
-    _getUserData();
+  void initState() {
+    super.initState();
+    init();
+  }
 
+  Future<void> init() async {
+    _getUserData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -46,7 +62,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.grey.withOpacity(0.2)),
             ),
-            child: Icon(Icons.arrow_back, color: Colors.black,),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
           ).onTap(() {
             finish(context);
           }),
@@ -74,6 +93,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30))),
                 child: SingleChildScrollView(
+                    child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -95,19 +116,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             AppTextField(
                               decoration: inputDecoration(
                                 hint: 'Enter your full name here',
+                                prefixIcon: Icons.person_outline_outlined,
                               ),
                               textFieldType: TextFieldType.NAME,
                               keyboardType: TextInputType.name,
                               controller: nameController,
                               focus: nameFocusNode,
+                              nextFocus: emailFocusNode,
                             ),
                             16.height,
                             Text('Email', style: boldTextStyle(size: 14)),
                             8.height,
                             AppTextField(
                               decoration: inputDecoration(
-                                hint: 'Enter your email here',
-                              ),
+                                  hint: 'Enter your email here',
+                                  prefixIcon: Icons.email_outlined),
                               textFieldType: TextFieldType.EMAIL,
                               keyboardType: TextInputType.emailAddress,
                               controller: emailController,
@@ -123,9 +146,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Text('CHANGE PASSWORD',
                             style: boldTextStyle(color: Colors.white)),
                         shapeBorder: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(30)),
-                        onTap: () {},
+                            borderRadius: BorderRadius.circular(30)),
+                        onTap: () {
+                          ChangePasswordScreen().launch(context);
+                        },
                       ).center(),
                       16.height,
                       AppButton(
@@ -134,34 +158,59 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Text('SAVE',
                             style: boldTextStyle(color: Colors.white)),
                         shapeBorder: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(30)),
-                        onTap: () {},
+                            borderRadius: BorderRadius.circular(30)),
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            showLoading(context, 'Processing...');
+
+                            Map data = {
+                              'nama': nameController.text.toString(),
+                              'email': emailController.text.toString(),
+                            };
+
+                            String body = json.encode(data);
+                            String url;
+                            if (storage.read('parent_id') != null) {
+                              url = API_URL +
+                                  '/parents/${storage.read('parent_id')}';
+                            } else if (storage.read('child_id') != null) {
+                              url = API_URL +
+                                  '/childs/${storage.read('child_id')}';
+                            } else {
+                              showErrorAlertDialog(
+                                  context,
+                                  'Failed',
+                                  'Oops, something has gone wrong',
+                                  () => finish(context));
+                              return;
+                            }
+
+                            final response = await http.put(Uri.parse(url),
+                                body: body,
+                                encoding: Encoding.getByName('utf-8'),
+                                headers: {
+                                  'Authorization': 'Bearer ' + getToken()
+                                });
+
+                            Navigator.pop(context); //pop dialog
+                            _updateProfile(response);
+                          }
+                        },
                       ).center()
                     ],
                   ),
-                ),
+                )),
               ),
               Stack(
                 alignment: AlignmentDirectional.bottomEnd,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(right: 8),
                     height: 110,
                     width: 110,
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.2),
                         shape: BoxShape.circle),
                     child: Icon(Icons.person, color: primaryColor, size: 60),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    child: Container(
-                      padding: EdgeInsets.all(6),
-                      child: Icon(Icons.edit, color: Colors.white, size: 20),
-                      decoration: BoxDecoration(
-                          color: primaryColor, shape: BoxShape.circle),
-                    ),
                   ),
                 ],
               ),
@@ -174,22 +223,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _updateProfile(response) {
     if (response.statusCode == 200) {
-      Alert(
-        context: context,
-        type: AlertType.success,
-        title: "Success",
-        desc: "Your profile has been successfully changed",
-        buttons: [
-          DialogButton(
-            child: const Text(
-              "OK",
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ).show();
-    } else {}
+      showSuccessfulAlertDialog(context, 'Success',
+          'Your profile has been successfully changed', () => finish(context));
+    } else {
+      showErrorAlertDialog(context, 'Failed', 'Oops, something has gone wrong',
+          () => finish(context));
+    }
   }
 
   Future<void> _getUserData() async {
