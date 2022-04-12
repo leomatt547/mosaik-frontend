@@ -12,7 +12,7 @@ import 'package:mosaic/utils/widgets.dart';
 class RegisterParentScreen extends StatefulWidget {
   static String tag = '/registerScreen';
 
-  RegisterParentScreen({Key? key}) : super(key: key);
+  const RegisterParentScreen({Key? key}) : super(key: key);
 
   @override
   _RegisterParentScreenState createState() => _RegisterParentScreenState();

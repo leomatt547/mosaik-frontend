@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Text("Forgot password?",
                                           style: primaryTextStyle()),
                                     ),
-                                    30.height,
+                                    32.height,
                                     AppButton(
                                             text: "LOG IN",
                                             color: primaryColor,
