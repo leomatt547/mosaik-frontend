@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/history_screen.dart';
-import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/landing/landing_screen.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -17,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class BrowsingScreen extends StatefulWidget {
   const BrowsingScreen(this.text);
+
   final String text;
 
   @override
@@ -56,7 +60,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort? send =
-    IsolateNameServer.lookupPortByName('downloader_send_port');
+        IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
   }
 
@@ -71,7 +75,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
     void onSelectedMoreOptions(BuildContext context, int item) {
       switch (item) {
         case 0:
-        // ignore: avoid_print
+          // ignore: avoid_print
           print('New tab');
           break;
         case 1:
@@ -95,11 +99,11 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
               ));
           break;
         case 2:
-        // ignore: avoid_print
+          // ignore: avoid_print
           print('Downloads');
           break;
         case 3:
-        // ignore: avoid_print
+          // ignore: avoid_print
           print('go to Settings screen');
           break;
       }
@@ -117,7 +121,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
               Flexible(
                 flex: 1,
                 child: Container(
-                  color: const Color.fromARGB(255, 196, 196, 196),
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -132,33 +136,17 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LandingPage(),
-                                      ));
+                                  LandingScreen().launch(context);
                                 }),
                           ),
                         ),
                         Flexible(
                           flex: 4,
-                          child: TextFormField(
-                            autocorrect: false,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Colors.white,
-                                ),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 7),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                                fillColor: Color.fromARGB(255, 103, 103, 103),
-                                filled: true),
+                          child: AppTextField(
+                            textFieldType: TextFieldType.URL,
+                            decoration: inputDecoration(
+                                hint: 'Type web address',
+                                prefixIcon: Icons.lock),
                             onFieldSubmitted: (term) {
                               String finalURL = _teController.text;
                               if (!finalURL.startsWith("https://")) {
@@ -168,8 +156,8 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 updateLoading(true);
                                 _webViewController
                                     .loadUrl(
-                                    urlRequest: URLRequest(
-                                        url: Uri.parse(finalURL)))
+                                        urlRequest: URLRequest(
+                                            url: Uri.parse(finalURL)))
                                     .then((onValue) {})
                                     .catchError((e) {
                                   updateLoading(false);
@@ -183,10 +171,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                             .handleUserTypeAccountButton(context),
                         Theme(
                           data: Theme.of(context).copyWith(
-                            iconTheme: const IconThemeData(color: Colors.black),
                           ),
                           child: PopupMenuButton<int>(
-                            color: const Color.fromARGB(255, 196, 196, 196),
+                            color: Colors.white,
                             onSelected: (item) =>
                                 onSelectedMoreOptions(context, item),
                             itemBuilder: (context) => [
@@ -194,7 +181,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 1,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.history),
+                                    Icon(Icons.history, color: primaryColor,),
                                     SizedBox(width: 8),
                                     Text(
                                       'History',
@@ -207,7 +194,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 2,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.download),
+                                    Icon(Icons.download, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Download',
@@ -220,7 +207,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 3,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.settings),
+                                    Icon(Icons.settings, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Settings',
@@ -248,7 +235,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 : "https://" + widget.text)),
                         initialOptions: InAppWebViewGroupOptions(
                           crossPlatform:
-                          InAppWebViewOptions(useOnDownloadStart: true),
+                              InAppWebViewOptions(useOnDownloadStart: true),
                         ),
                         onLoadStop: (data, uri) async {
                           updateLoading(false);
@@ -278,7 +265,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   encoding: Encoding.getByName('utf-8'),
                                   headers: {
                                     'Authorization':
-                                    'Bearer ' + storage.read('token')
+                                        'Bearer ' + storage.read('token')
                                   });
                             } else {
                               Map dataVisit = {
@@ -293,7 +280,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   encoding: Encoding.getByName('utf-8'),
                                   headers: {
                                     'Authorization':
-                                    'Bearer ' + storage.read('token')
+                                        'Bearer ' + storage.read('token')
                                   });
                             }
                           });
@@ -304,12 +291,12 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               fsType: FilesystemType.folder,
                               context: context,
                               rootDirectory:
-                              (await getApplicationDocumentsDirectory())
-                                  .parent,
+                                  (await getApplicationDocumentsDirectory())
+                                      .parent,
                               pickText: 'Save file to this folder',
                               folderIconColor: Colors.grey[200],
                               requestPermission: () async =>
-                              await Permission.storage.request().isGranted);
+                                  await Permission.storage.request().isGranted);
 
                           if (path! != null) {
                             FlutterDownloader.enqueue(
@@ -337,7 +324,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   encoding: Encoding.getByName('utf-8'),
                                   headers: {
                                     'Authorization':
-                                    'Bearer ' + storage.read('token')
+                                        'Bearer ' + storage.read('token')
                                   });
                             } else {
                               Map downloadData = {
@@ -356,7 +343,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   encoding: Encoding.getByName('utf-8'),
                                   headers: {
                                     'Authorization':
-                                    'Bearer ' + storage.read('token')
+                                        'Bearer ' + storage.read('token')
                                   });
                             }
                           }
@@ -368,8 +355,8 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                       ),
                       (showLoading)
                           ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
+                              child: CircularProgressIndicator(),
+                            )
                           : const Center()
                     ],
                   )),
