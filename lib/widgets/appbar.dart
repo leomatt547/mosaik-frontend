@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
-import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/list_child_history_screen.dart';
-import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/screen/login/login_screen.dart';
-import 'package:mosaic/screen/update_profile_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/widgets/button.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -53,9 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 3:
         // ignore: avoid_print
         print('Manage Account');
-        Route route = MaterialPageRoute(
-            builder: (context) => const UpdateProfileScreen());
-        Navigator.push(context, route);
+        EditProfileScreen().launch(context);
         break;
       case 4:
         // ignore: avoid_print
@@ -66,7 +62,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 5:
         storage.remove('token');
-        LoginScreen().launch(context);
+        const LoginScreen().launch(context);
         break;
       case 6:
         Alert(
@@ -104,7 +100,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       return IconButton(
         onPressed: () {
-          LandingScreen().launch(context);
+          const LandingScreen().launch(context);
         },
         icon: const Icon(Icons.cottage_outlined),
       );
@@ -226,7 +222,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (getToken() == null) {
       return IconButton(
         onPressed: () {
-          LoginScreen().launch(context);
+          const LoginScreen().launch(context);
         },
         icon: const Icon(
           Icons.account_circle_outlined,
@@ -366,7 +362,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Icon(Icons.history, color: primaryColor),
                         SizedBox(width: 8),
                         Text(
-                          'History Child',
+                          'Children History',
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
