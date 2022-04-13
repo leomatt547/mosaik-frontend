@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/screen/list_child_account_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
@@ -65,7 +65,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 7:
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
+          MaterialPageRoute(
+              builder: (context) => const ListChildAccountScreen()),
         );
         break;
     }
@@ -109,6 +110,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 4,
             child: Row(
@@ -126,15 +128,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.manage_accounts_rounded),
                 SizedBox(width: 8),
                 Text(
-                  'Delete Child Account',
+                  'Manage Child Account',
                   style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 5,
             child: Row(
