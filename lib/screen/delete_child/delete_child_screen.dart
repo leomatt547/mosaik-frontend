@@ -58,7 +58,6 @@ class _DeleteChildScreenState extends State<DeleteChildScreen> {
   }
 
   Future<void> deleteChild(String? id) async {
-    print(id);
 
     setState(() {
       _isLoading = true;
