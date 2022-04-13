@@ -116,7 +116,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 width: context.width(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+                        image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(

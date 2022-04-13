@@ -36,7 +36,7 @@ class _LandingScreenState extends State<LandingScreen> {
             height: context.height(),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+                    image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

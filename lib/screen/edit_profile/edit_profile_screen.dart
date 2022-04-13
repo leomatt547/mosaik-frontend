@@ -6,7 +6,6 @@ import 'package:mosaic/screen/change_password/change_password_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/dialog.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -78,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           width: context.width(),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+                  image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
@@ -141,7 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       32.height,
                       AppButton(
-                        color: Color(0xFFFF7426),
+                        color: accentColor, //Color(0xFFFF7426),
                         width: context.width() * 0.8,
                         child: Text('CHANGE PASSWORD',
                             style: boldTextStyle(color: Colors.white)),

@@ -86,7 +86,7 @@ class _RegisterChildScreenState extends State<RegisterChildScreen> {
           height: context.height(),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover),
+                image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover),
           ),
           child: SingleChildScrollView(
             child: Form(

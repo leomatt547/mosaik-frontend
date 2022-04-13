@@ -78,7 +78,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           width: context.width(),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+                  image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
