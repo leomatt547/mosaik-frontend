@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mosaic/models/history.dart';
 import 'package:mosaic/constant.dart';
 import 'package:http/http.dart' as http;
@@ -108,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               }),
               centerTitle: true,
               elevation: 0.0,
-              brightness: Brightness.dark,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
             ),
             body: Container(
                 height: context.height(),
@@ -122,43 +123,45 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           color: Colors.black,
                         ),
                       )
-                    : ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          return Card(
-                            elevation: 5,
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 5,
-                            ),
-                            child: ListTile(
-                              title: Text(
-                                _userHistory[index].url.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 20,
+                    : _userHistory.isEmpty
+                        ? Text(
+                            'No browsing history',
+                            style: TextStyle(color: Colors.grey),
+                          ).center()
+                        : ListView.builder(
+                            itemBuilder: (ctx, index) {
+                              return Card(
+                                elevation: 5,
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 5,
                                 ),
-                              ),
-                              subtitle: Text(RegExp(
-                                      r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)')
-                                  .firstMatch(
-                                      _userHistory[index].url.toString())!
-                                  .group(1)
-                                  .toString()),
-                              trailing: storage.read('parent_id') != null
-                                  ? IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      color: Colors.black,
-                                      onPressed: () => deleteHistory(
-                                          _userHistory[index].id!),
-                                    )
-                                  : null,
-                            ),
-                          );
-                        },
-                        itemCount: _userHistory.length,
-                      )
-            )
-        )
-    );
+                                child: ListTile(
+                                  title: Text(
+                                    _userHistory[index].url.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  subtitle: Text(RegExp(
+                                          r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)')
+                                      .firstMatch(
+                                          _userHistory[index].url.toString())!
+                                      .group(1)
+                                      .toString()),
+                                  trailing: storage.read('parent_id') != null
+                                      ? IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          color: Colors.black,
+                                          onPressed: () => deleteHistory(
+                                              _userHistory[index].id!),
+                                        )
+                                      : null,
+                                ),
+                              );
+                            },
+                            itemCount: _userHistory.length,
+                          ))));
   }
 }
