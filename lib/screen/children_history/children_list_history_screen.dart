@@ -99,47 +99,52 @@ class _ChildrenListHistoryScreenState extends State<ChildrenListHistoryScreen> {
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Colors.black,
+                          color: primaryColor,
                         ),
                       )
-                    : ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          return Card(
-                            elevation: 5,
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 5,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _navigateToHistoryChild(
-                                    _userChildren[index].id!);
-                              },
-                              child: ListTile(
-                                  leading: Icon(
-                                    Icons.person,
-                                    color: primaryColor,
-                                    size: 56,
-                                  ),
-                                  title: Text(
-                                    _userChildren[index].nama.toString(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    _userChildren[index].email.toString(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
-                        itemCount: _userChildren.length,
-                      ))));
+                    : _userChildren.isEmpty
+                        ? Text(
+                            'You don\'t have any children yet',
+                            style: TextStyle(color: Colors.grey),
+                          ).center()
+                        : ListView.builder(
+                            itemBuilder: (ctx, index) {
+                              return Card(
+                                elevation: 5,
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 5,
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    _navigateToHistoryChild(
+                                        _userChildren[index].id!);
+                                  },
+                                  child: ListTile(
+                                      leading: Icon(
+                                        Icons.person,
+                                        color: primaryColor,
+                                        size: 56,
+                                      ),
+                                      title: Text(
+                                        _userChildren[index].nama.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        _userChildren[index].email.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )),
+                                ),
+                              );
+                            },
+                            itemCount: _userChildren.length,
+                          ))));
   }
 }
