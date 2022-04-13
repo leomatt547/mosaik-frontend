@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosaic/screen/splash.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/screen/splash/splash_screen.dart';
+import 'package:mosaic/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home: SplashScreen(),
+      theme: ThemeData(
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: primaryColor)),
     );
   }
 }
