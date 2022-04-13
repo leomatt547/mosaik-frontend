@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/models/childs.dart';
-import 'package:mosaic/screen/update_profile_screen.dart';
 
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:mosaic/constant.dart';
