@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/models/child.dart';
 import 'package:mosaic/screen/children_history/children_list_history_screen.dart';
 import 'package:mosaic/screen/delete_child/delete_child_screen.dart';
 import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
@@ -11,9 +12,9 @@ import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/screen/login/login_screen.dart';
 import 'package:mosaic/screen/register_child/register_child_screen.dart';
 import 'package:mosaic/utils/colors.dart';
-import 'package:mosaic/widgets/button.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:mosaic/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:http/http.dart' as http;
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('New tab');
         break;
       case 1:
@@ -42,12 +43,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ChildrenListHistoryScreen().launch(context);
         break;
       case 3:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('Manage Account');
         EditProfileScreen().launch(context);
         break;
       case 4:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('Create child account');
         RegisterChildScreen().launch(context);
         break;
@@ -56,23 +57,60 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         const LoginScreen().launch(context);
         break;
       case 6:
-        Alert(
-          context: context,
-          type: AlertType.warning,
-          title: 'Delete Account',
-          desc: 'Are you sure want to delete this account?',
-          style: AlertStyle(
-              titleStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              ),
-              descStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              )),
-          buttons: [
-            deleteAccountButton(context),
-            cancelButton(context),
-          ],
-        ).show();
+        showConfirmDialogCustom(context,
+            title: 'Delete Account',
+            subTitle: 'Are you sure want to delete this account?',
+            dialogType: DialogType.DELETE,
+            onAccept: (buildContext) async {
+              showLoading(buildContext, 'Deleting account...');
+              final response = await http.delete(
+                  Uri.parse(
+                      API_URL + '/parents/' +
+                          storage.read('parent_id').toString()),
+                  encoding: Encoding.getByName('utf-8'),
+                  headers: {'Authorization': 'Bearer ' + getToken()});
+
+              if (response.statusCode == 204) {
+                final getChildrenResponse = await http.get(
+                  Uri.parse(API_URL +
+                      '/childs?parent_id=' +
+                      storage.read('parent_id').toString()),
+                );
+
+                if (getChildrenResponse.statusCode == 200) {
+                  List<dynamic> extractedData = json.decode(
+                      getChildrenResponse.body);
+                  // ignore: unnecessary_null_comparison
+                  if (extractedData == null) {
+                    return;
+                  }
+                  List<Child> loadedChildren = [];
+                  loadedChildren = extractedData.map((dynamic childResponse) {
+                    String id = childResponse['id'].toString();
+                    String nama = childResponse['nama'];
+                    String email = childResponse['email'];
+                    return Child(id: id, nama: nama, email: email);
+                  }).toList();
+
+                  // ignore: avoid_function_literals_in_foreach_calls
+                  loadedChildren.forEach((Child child) async {
+                    await http.delete(
+                        Uri.parse(API_URL + "/childs/" + child.id.toString()),
+                        headers: {
+                          'Authorization': 'Bearer ' + storage.read('token')
+                        });
+                  });
+                }
+
+                storage.remove('token');
+                finish(buildContext);
+                LoginScreen().launch(buildContext);
+              } else {
+                showErrorAlertDialog(buildContext, 'Failed',
+                    'Oops, something has gone wrong', () =>
+                        finish(buildContext));
+              }
+            });
         break;
       case 7:
         DeleteChildScreen().launch(context);
@@ -107,7 +145,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.account_circle_rounded),
         color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) => [
+        itemBuilder: (BuildContext context) =>
+        [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
@@ -180,7 +219,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.account_circle_rounded),
         color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) => [
+        itemBuilder: (BuildContext context) =>
+        [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
@@ -319,7 +359,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: PopupMenuButton<int>(
               color: Colors.white,
               onSelected: (item) => onSelected(context, item),
-              itemBuilder: (context) => [
+              itemBuilder: (context) =>
+              [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Row(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosaic/screen/downloads/download.dart';
+import 'package:mosaic/utils/colors.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
@@ -16,34 +17,34 @@ class DownloadsScreen extends StatefulWidget {
 }
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
-  List<Download> downloads = [
-    Download(1, "Test.pdf", 1000, 1000, "www.google.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-        "www.tokobagustokopedia.com"),
-    Download(3, "Test123_WKWKWKWKWK.pdf", 100000, 100000, "www.yahoo.com")
-  ];
+  // List<Download> downloads = [
+  //   Download(1, "Test.pdf", 1000, 1000, "www.google.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+  //       "www.tokobagustokopedia.com"),
+  //   Download(3, "Test123_WKWKWKWKWK.pdf", 100000, 100000, "www.yahoo.com")
+  // ];
 
-  // late List<Download> downloads;
+  late List<Download> downloads;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    // _getDownloadsData();
+    _getDownloadsData();
   }
 
   @override
@@ -83,7 +84,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Colors.black,
+                          color: primaryColor,
                         ),
                       )
                     : ListView.builder(
@@ -93,6 +94,11 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
 
                           return Card(
                             child: ListTile(
+                                leading: Icon(
+                                  Icons.download_done,
+                                  color: primaryColor,
+                                  size: 56,
+                                ),
                                 title: Text(
                                   downloads[index].targetPath,
                                   overflow: TextOverflow.ellipsis,

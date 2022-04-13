@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/history_screen.dart';
+import 'package:mosaic/screen/history/history_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/utils/widgets.dart';
@@ -90,13 +90,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                 "/childvisits?child_id=" +
                 storage.read('child_id').toString());
           }
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HistoryScreen(
-                  url: url,
-                ),
-              ));
+          HistoryScreen(url: url).launch(context);
           break;
         case 2:
           // ignore: avoid_print
@@ -170,8 +164,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                         const CustomAppBar()
                             .handleUserTypeAccountButton(context),
                         Theme(
-                          data: Theme.of(context).copyWith(
-                          ),
+                          data: Theme.of(context).copyWith(),
                           child: PopupMenuButton<int>(
                             color: Colors.white,
                             onSelected: (item) =>
@@ -181,7 +174,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 1,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.history, color: primaryColor,),
+                                    Icon(
+                                      Icons.history,
+                                      color: primaryColor,
+                                    ),
                                     SizedBox(width: 8),
                                     Text(
                                       'History',

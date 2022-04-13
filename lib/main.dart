@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/splash.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/screen/splash/splash_screen.dart';
 import 'package:mosaic/utils/colors.dart';
