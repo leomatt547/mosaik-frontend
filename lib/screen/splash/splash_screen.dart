@@ -52,13 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.white,
               size: 100,
             ).center(),
-            // Image.asset(
-            //   'assets/app_logo.png',
-            //   color: Colors.white,
-            //   fit: BoxFit.cover,
-            //   height: 100,
-            //   width: 100,
-            // ).center(),
           ],
         ),
       ),
