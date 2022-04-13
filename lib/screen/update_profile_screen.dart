@@ -54,13 +54,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     ),
   );
 
-  void onSave() {
-    // ignore: avoid_print
-    print(nameController.text.toString());
-    // ignore: avoid_print
-    print(emailController.text.toString());
-  }
-
   @override
   Widget build(BuildContext context) {
     _getUserData();
@@ -232,8 +225,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final response = await http.get(Uri.parse(url));
 
     var extractedData = json.decode(response.body);
-    // print('${extractedData['id']}, ${extractedData['nama']}, ${extractedData['email']}');
-    print('Test');
 
     if (extractedData == null) {
       return;

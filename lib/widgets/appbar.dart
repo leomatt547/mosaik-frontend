@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
@@ -85,6 +86,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 7:
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
+        );
+        break;
+      case 8:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const DownloadsScreen()),
         );
         break;
     }
@@ -347,6 +353,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       SizedBox(width: 8),
                       Text(
                         'History',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 8,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.download),
+                      SizedBox(width: 8),
+                      Text(
+                        'Downloads',
                         style: TextStyle(color: Colors.black),
                       ),
                     ],
