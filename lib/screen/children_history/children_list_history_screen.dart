@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosaic/models/child.dart';
-import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:mosaic/screen/history/history_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'dart:convert';
 import 'package:nb_utils/nb_utils.dart';
@@ -59,11 +59,7 @@ class _ChildrenListHistoryScreenState extends State<ChildrenListHistoryScreen> {
   void _navigateToHistoryChild(String id) {
     late Uri url;
     url = Uri.parse(API_URL + "/childvisits?child_id=" + id.toString());
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HistoryScreen(url: url, role: 'child'),
-        ));
+    HistoryScreen(url: url, role: 'child').launch(context);
   }
 
   @override
