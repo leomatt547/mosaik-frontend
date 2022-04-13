@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:mosaic/screen/downloads/download.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
-
-import '../../constant.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:mosaic/constant.dart';
 
 class DownloadsScreen extends StatefulWidget {
   const DownloadsScreen({Key? key}) : super(key: key);
@@ -16,111 +16,112 @@ class DownloadsScreen extends StatefulWidget {
 }
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
-  // List<Download> downloads = [
-  //   Download(1, "Test.pdf", 1000, 1000, "www.google.com"),
-  //   Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
-  //       "www.tokobagustokopedia.com"),
-  //   Download(3, "Test123_WKWKWKWKWK.pdf", 100000, 100000, "www.yahoo.com")
-  // ];
-  late List<Download> downloads;
-  bool _isLoading = false;
+  List<Download> downloads = [
+    Download(1, "Test.pdf", 1000, 1000, "www.google.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(2, "Test_Pake_Banget_WKWKWKWKWK.pdf", 1000, 1000,
+        "www.tokobagustokopedia.com"),
+    Download(3, "Test123_WKWKWKWKWK.pdf", 100000, 100000, "www.yahoo.com")
+  ];
 
-  var bodyProgress = Container(
-    decoration: BoxDecoration(
-        color: Colors.grey[200], borderRadius: BorderRadius.circular(10.0)),
-    width: 300.0,
-    height: 200.0,
-    alignment: AlignmentDirectional.center,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Center(
-          child: SizedBox(
-            height: 50.0,
-            width: 50.0,
-            child: CircularProgressIndicator(
-              value: null,
-              strokeWidth: 7.0,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 25.0),
-          child: Center(
-            child: Text("Processing...",
-                style: GoogleFonts.average(
-                  fontWeight: FontWeight.w700,
-                )),
-          ),
-        ),
-      ],
-    ),
-  );
+  // late List<Download> downloads;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _getDownloadsData();
+    // _getDownloadsData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          title: Text(
-            'Downloads',
-            style: GoogleFonts.average(
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          backgroundColor: const Color.fromARGB(255, 196, 196, 196),
-        ),
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
+    return SafeArea(
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text(
+                'Downloads',
+                style: boldTextStyle(color: Colors.black, size: 20),
+              ),
+              leading: Container(
+                margin: EdgeInsets.all(8),
+                decoration: boxDecorationWithRoundedCorners(
+                  backgroundColor: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                ),
+                child: Icon(
+                  Icons.arrow_back,
                   color: Colors.black,
                 ),
-              )
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  String subtitle =
-                      "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
-
-                  return Card(
-                    child: ListTile(
-                        title: Text(
-                          downloads[index].targetPath,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.average(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: Text(
-                          subtitle,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.average(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
+              ).onTap(() {
+                finish(context);
+              }),
+              centerTitle: true,
+              elevation: 0.0,
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+            ),
+            body: Container(
+                height: context.height(),
+                width: context.width(),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
                           color: Colors.black,
-                          onPressed: () {
-                            _deleteDownload(downloads[index]).whenComplete(() {
-                              return;
-                            });
-                          },
-                        )),
-                  );
-                },
-                itemCount: downloads.length,
-              ));
+                        ),
+                      )
+                    : ListView.builder(
+                        itemBuilder: (context, index) {
+                          String subtitle =
+                              "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
+
+                          return Card(
+                            child: ListTile(
+                                title: Text(
+                                  downloads[index].targetPath,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  subtitle,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.delete),
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    _deleteDownload(downloads[index])
+                                        .whenComplete(() {
+                                      return;
+                                    });
+                                  },
+                                )),
+                          );
+                        },
+                        itemCount: downloads.length,
+                      ))));
   }
 
   void _showFailedPopup() {
