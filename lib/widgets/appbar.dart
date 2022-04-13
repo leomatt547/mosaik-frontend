@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/screen/children_history/children_list_history_screen.dart';
+import 'package:mosaic/screen/delete_child/delete_child_screen.dart';
 import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
 import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history/history_screen.dart';
-import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
-import 'package:mosaic/screen/list_child_history_screen.dart';
 import 'package:mosaic/screen/login/login_screen.dart';
 import 'package:mosaic/screen/register_child/register_child_screen.dart';
 import 'package:mosaic/utils/colors.dart';
@@ -39,10 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         HistoryScreen(url: url).launch(context);
         break;
       case 2:
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => const ChildListHistoryScreen()),
-        );
+        ChildrenListHistoryScreen().launch(context);
         break;
       case 3:
         // ignore: avoid_print
@@ -78,9 +75,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ).show();
         break;
       case 7:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
-        );
+        DeleteChildScreen().launch(context);
         break;
       case 8:
         Navigator.of(context).push(
