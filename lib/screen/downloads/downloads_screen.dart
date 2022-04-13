@@ -80,54 +80,60 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                 width: context.width(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
+                        image: AssetImage('assets/bg1.jpg'),
+                        fit: BoxFit.cover)),
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
                           color: primaryColor,
                         ),
                       )
-                    : ListView.builder(
-                        itemBuilder: (context, index) {
-                          String subtitle =
-                              "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
+                    : downloads.isEmpty
+                        ? Text(
+                            'No downloads yet',
+                            style: TextStyle(color: Colors.grey),
+                          ).center()
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              String subtitle =
+                                  "${downloads[index].receivedBytes} \u00B7 ${downloads[index].siteUrl}";
 
-                          return Card(
-                            child: ListTile(
-                                leading: Icon(
-                                  Icons.download_done,
-                                  color: primaryColor,
-                                  size: 56,
-                                ),
-                                title: Text(
-                                  downloads[index].targetPath,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  subtitle,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.delete),
-                                  color: Colors.black,
-                                  onPressed: () {
-                                    _deleteDownload(downloads[index])
-                                        .whenComplete(() {
-                                      return;
-                                    });
-                                  },
-                                )),
-                          );
-                        },
-                        itemCount: downloads.length,
-                      ))));
+                              return Card(
+                                child: ListTile(
+                                    leading: Icon(
+                                      Icons.download_done,
+                                      color: primaryColor,
+                                      size: 56,
+                                    ),
+                                    title: Text(
+                                      downloads[index].targetPath,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      subtitle,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      color: Colors.black,
+                                      onPressed: () {
+                                        _deleteDownload(downloads[index])
+                                            .whenComplete(() {
+                                          return;
+                                        });
+                                      },
+                                    )),
+                              );
+                            },
+                            itemCount: downloads.length,
+                          ))));
   }
 
   void _showFailedPopup() {

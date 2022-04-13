@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mosaic/models/history.dart';
 import 'package:mosaic/constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:mosaic/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -116,11 +117,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 width: context.width(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
+                        image: AssetImage('assets/bg1.jpg'),
+                        fit: BoxFit.cover)),
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Colors.black,
+                          color: primaryColor,
                         ),
                       )
                     : _userHistory.isEmpty
@@ -141,15 +143,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     _userHistory[index].url.toString(),
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  subtitle: Text(RegExp(
-                                          r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)')
-                                      .firstMatch(
-                                          _userHistory[index].url.toString())!
-                                      .group(1)
-                                      .toString()),
+                                  subtitle: Text(
+                                      RegExp(r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)')
+                                          .firstMatch(_userHistory[index]
+                                              .url
+                                              .toString())!
+                                          .group(1)
+                                          .toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      )),
                                   trailing: storage.read('parent_id') != null
                                       ? IconButton(
                                           icon: const Icon(Icons.delete),

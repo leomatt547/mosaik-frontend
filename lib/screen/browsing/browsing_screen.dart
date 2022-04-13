@@ -351,7 +351,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                       ),
                       (showLoading)
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
                             )
                           : const Center()
                     ],
