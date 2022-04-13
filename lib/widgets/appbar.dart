@@ -4,7 +4,7 @@ import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/child_delete_screen.dart';
 import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
 import 'package:mosaic/screen/downloads/downloads_screen.dart';
-import 'package:mosaic/screen/history_screen.dart';
+import 'package:mosaic/screen/history/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/screen/list_child_history_screen.dart';
@@ -36,13 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               "/childvisits?child_id=" +
               storage.read('child_id').toString());
         }
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HistoryScreen(
-                url: url,
-              ),
-            ));
+        HistoryScreen(url: url).launch(context);
         break;
       case 2:
         Navigator.of(context).push(
@@ -362,7 +356,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   value: 8,
                   child: Row(
                     children: const [
-                      Icon(Icons.download),
+                      Icon(Icons.download, color: primaryColor),
                       SizedBox(width: 8),
                       Text(
                         'Downloads',
