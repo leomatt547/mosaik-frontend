@@ -207,10 +207,10 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
   void _addNewSite(response) {
     if (response.statusCode == 201) {
       showSuccessfulAlertDialog(
-          context,
-          'Success',
-          "New $_blockType site has been added",
-          () => const BlockSiteScreen().launch(context));
+          context, 'Success', 'New $_blockType site has been added', () {
+        finish(context);
+        finish(context);
+      });
     } else {
       showErrorAlertDialog(context, 'Failed', 'Oops, something has gone wrong',
           () => Navigator.pop(context));
