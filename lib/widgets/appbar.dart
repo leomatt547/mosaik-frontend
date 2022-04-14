@@ -165,6 +165,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 6,
             child: Row(
