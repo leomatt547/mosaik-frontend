@@ -178,6 +178,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 4,
             child: Row(
@@ -195,15 +196,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined, color: primaryColor),
+                Icon(Icons.manage_accounts_rounded, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
-                  'Delete Child Account',
+                  'Manage Child Account',
                   style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 5,
             child: Row(
