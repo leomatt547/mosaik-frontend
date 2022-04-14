@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/models/child.dart';
+import 'package:mosaic/screen/block_site/block_site_screen.dart';
 import 'package:mosaic/screen/children_history/children_list_history_screen.dart';
 import 'package:mosaic/screen/delete_child/delete_child_screen.dart';
 import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
@@ -116,14 +117,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         DeleteChildScreen().launch(context);
         break;
       case 8:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const DownloadsScreen()),
-        );
+        DownloadsScreen().launch(context);
         break;
-      case 8:
-        Route route =
-            MaterialPageRoute(builder: (context) => const BlockSiteScreen());
-        Navigator.push(context, route);
+      case 9:
+        // Route route =
+        //     MaterialPageRoute(builder: (context) => const BlockSiteScreen());
+        // Navigator.push(context, route);
+      BlockSiteScreen().launch(context);
         break;
     }
   }
@@ -424,7 +424,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (storage.read('parent_id') != null) const PopupMenuDivider(),
                 if (storage.read('parent_id') != null)
                   PopupMenuItem<int>(
-                    value: 8,
+                    value: 9,
                     child: Row(
                       children: const [
                         Icon(Icons.do_not_disturb_outlined),
