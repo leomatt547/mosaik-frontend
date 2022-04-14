@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mosaic/screen/add_block_site/add_block_site_screen.dart';
 import 'package:mosaic/screen/block_site/blacklist.dart';
 import 'package:mosaic/screen/block_site/whitelist.dart';
 import 'package:mosaic/utils/colors.dart';
@@ -39,6 +40,23 @@ class _BlockSiteScreenState extends State<BlockSiteScreen> {
               ).onTap(() {
                 finish(context);
               }),
+              actions: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: boxDecorationWithRoundedCorners(
+                    backgroundColor: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                  ),
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  ),
+                ).onTap(() {
+                  AddBlockSiteScreen().launch(context);
+                }),
+              ],
               centerTitle: true,
               elevation: 0.0,
               systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -61,8 +79,9 @@ class _BlockSiteScreenState extends State<BlockSiteScreen> {
                         children: <Widget>[
                           AppButton(
                             text: 'Whitelist',
-                            color: primaryColor,
-                            textColor: Colors.white,
+                            color: _isWhiteList ? primaryColor : Colors.white,
+                            textColor:
+                                _isWhiteList ? Colors.white : primaryColor,
                             shapeBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)),
                             onTap: () {
@@ -71,10 +90,11 @@ class _BlockSiteScreenState extends State<BlockSiteScreen> {
                               });
                             },
                           ),
-                        AppButton(
+                          AppButton(
                             text: 'Blacklist',
-                            color: primaryColor,
-                            textColor: Colors.white,
+                            color: _isWhiteList ? Colors.white : primaryColor,
+                            textColor:
+                                _isWhiteList ? primaryColor : Colors.white,
                             shapeBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)),
                             onTap: () {
@@ -88,8 +108,9 @@ class _BlockSiteScreenState extends State<BlockSiteScreen> {
                     ),
                     16.height,
                     Expanded(
-                      child: _isWhiteList ? WhiteListWidget() : BlackListWidget()
-                    )
+                        child: _isWhiteList
+                            ? WhiteListWidget()
+                            : BlackListWidget())
                   ],
                 ))));
   }
