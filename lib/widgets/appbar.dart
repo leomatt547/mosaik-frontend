@@ -120,6 +120,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           MaterialPageRoute(builder: (context) => const DownloadsScreen()),
         );
         break;
+      case 8:
+        Route route =
+            MaterialPageRoute(builder: (context) => const BlockSiteScreen());
+        Navigator.push(context, route);
+        break;
     }
   }
 
@@ -411,6 +416,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         SizedBox(width: 8),
                         Text(
                           'Children History',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (storage.read('parent_id') != null) const PopupMenuDivider(),
+                if (storage.read('parent_id') != null)
+                  PopupMenuItem<int>(
+                    value: 8,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.do_not_disturb_outlined),
+                        SizedBox(width: 8),
+                        Text(
+                          'Block Site',
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
