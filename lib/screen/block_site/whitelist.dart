@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mosaic/models/history.dart';
-import 'package:mosaic/widgets/blocked_site_list.dart';
 import 'package:http/http.dart' as http;
-import '../constant.dart';
+import '../../constant.dart';
+import 'package:mosaic/screen/block_site/blocked_site_list.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class WhiteListWidget extends StatefulWidget {
   const WhiteListWidget({Key? key}) : super(key: key);
@@ -14,8 +16,14 @@ class WhiteListWidget extends StatefulWidget {
 }
 
 class _WhiteListWidgetState extends State<WhiteListWidget> {
-  List<History> _whiteList = [];
+  List<History> _whiteList = [
+    History(id: '1', url: 'google.com/1223/4444'),
+    History(id: '1', url: 'google.com/1223/4444'),
+    History(id: '1', url: 'google.com/1223/4444'),
+    History(id: '1', url: 'google.com/1223/4444'),
+  ];
   var _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,16 +77,13 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                BlockedSiteList(
-                    _whiteList, deleteBlockedSite, "No Whitelisted Sites"),
-              ],
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: primaryColor,
             ),
-    );
+          )
+        : BlockedSiteList(
+            _whiteList, deleteBlockedSite, "No Whitelisted Sites");
   }
 }

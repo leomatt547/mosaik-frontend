@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mosaic/models/history.dart';
-import 'package:mosaic/widgets/blocked_site_list.dart';
 import 'package:http/http.dart' as http;
-import '../constant.dart';
+import '../../constant.dart';
+import 'package:mosaic/screen/block_site/blocked_site_list.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class BlackListWidget extends StatefulWidget {
   const BlackListWidget({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class BlackListWidget extends StatefulWidget {
 class _BlackListWidgetState extends State<BlackListWidget> {
   List<History> _blackList = [];
   var _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -71,16 +74,13 @@ class _BlackListWidgetState extends State<BlackListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                BlockedSiteList(
-                    _blackList, deleteBlockedSite, "No Blacklisted Sites"),
-              ],
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: primaryColor,
             ),
-    );
+          )
+        : BlockedSiteList(
+            _blackList, deleteBlockedSite, "No Blacklisted Sites");
   }
 }

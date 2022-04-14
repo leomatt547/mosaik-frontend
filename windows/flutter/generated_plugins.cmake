@@ -3,7 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  connectivity_plus_windows
+  nb_utils
   permission_handler_windows
+  url_launcher_windows
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
