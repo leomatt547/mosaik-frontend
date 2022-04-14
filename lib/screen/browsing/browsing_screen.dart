@@ -4,10 +4,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/history_screen.dart';
-import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/history/history_screen.dart';
+import 'package:mosaic/screen/landing/landing_screen.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -16,8 +19,10 @@ import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class BrowsingScreen extends StatefulWidget {
-  final String text;
   const BrowsingScreen(this.text);
+
+  final String text;
+
   @override
   _BrowsingScreenState createState() => _BrowsingScreenState();
 }
@@ -85,13 +90,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                 "/childvisits?child_id=" +
                 storage.read('child_id').toString());
           }
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HistoryScreen(
-                  url: url,
-                ),
-              ));
+          HistoryScreen(url: url).launch(context);
           break;
         case 2:
           // ignore: avoid_print
@@ -116,7 +115,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
               Flexible(
                 flex: 1,
                 child: Container(
-                  color: const Color.fromARGB(255, 196, 196, 196),
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -131,33 +130,17 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LandingPage(),
-                                      ));
+                                  LandingScreen().launch(context);
                                 }),
                           ),
                         ),
                         Flexible(
                           flex: 4,
-                          child: TextFormField(
-                            autocorrect: false,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Colors.white,
-                                ),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 7),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                fillColor: Color.fromARGB(255, 103, 103, 103),
-                                filled: true),
+                          child: AppTextField(
+                            textFieldType: TextFieldType.URL,
+                            decoration: inputDecoration(
+                                hint: 'Type web address',
+                                prefixIcon: Icons.lock),
                             onFieldSubmitted: (term) {
                               String finalURL = _teController.text;
                               if (!finalURL.startsWith("https://")) {
@@ -181,11 +164,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                         const CustomAppBar()
                             .handleUserTypeAccountButton(context),
                         Theme(
-                          data: Theme.of(context).copyWith(
-                            iconTheme: const IconThemeData(color: Colors.black),
-                          ),
+                          data: Theme.of(context).copyWith(),
                           child: PopupMenuButton<int>(
-                            color: const Color.fromARGB(255, 196, 196, 196),
+                            color: Colors.white,
                             onSelected: (item) =>
                                 onSelectedMoreOptions(context, item),
                             itemBuilder: (context) => [
@@ -193,7 +174,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 1,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.history),
+                                    Icon(
+                                      Icons.history,
+                                      color: primaryColor,
+                                    ),
                                     SizedBox(width: 8),
                                     Text(
                                       'History',
@@ -206,7 +190,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 2,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.download),
+                                    Icon(Icons.download, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Download',
@@ -219,7 +203,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 3,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.settings),
+                                    Icon(Icons.settings, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Settings',
@@ -367,7 +351,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                       ),
                       (showLoading)
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
                             )
                           : const Center()
                     ],
