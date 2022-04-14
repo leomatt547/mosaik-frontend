@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mosaic/screen/change_password_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constant.dart';
-import 'package:mosaic/widgets/form.dart';
 
 class AddBlockSiteScreen extends StatefulWidget {
   const AddBlockSiteScreen({Key? key}) : super(key: key);
@@ -160,40 +158,67 @@ class _UpdateProfileScreenState extends State<AddBlockSiteScreen> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  // _showLoading();
+                                  _showLoading();
+                                  String finalURL = urlController.text;
+                                  if (!finalURL.startsWith("https://")) {
+                                    finalURL = "https://" + finalURL;
+                                  }
 
                                   Map data = {
-                                    'url': urlController.text.toString(),
-                                    'type': _blockType,
+                                    'url': finalURL.toLowerCase(),
                                   };
                                   // ignore: avoid_print
                                   print(data);
 
-                                  // String body = json.encode(data);
-                                  // String url;
-                                  // if (storage.read('parent_id') != null) {
-                                  //   url = API_URL +
-                                  //       '/parents/${storage.read('parent_id')}';
-                                  // } else if (storage.read('child_id') != null) {
-                                  //   url = API_URL +
-                                  //       '/childs/${storage.read('child_id')}';
-                                  // } else {
-                                  //   _showFailedPopup();
-                                  //   return;
-                                  // }
+                                  String body = json.encode(data);
+                                  String url;
+                                  if (_blockType == 'whitelist') {
+                                    url = API_URL + '/whitelist';
+                                  } else if (_blockType == 'blacklist') {
+                                    url = API_URL + '/blacklist';
+                                  } else {
+                                    _showFailedPopup();
+                                    return;
+                                  }
 
-                                  // final response = await http.put(
-                                  //     Uri.parse(url),
-                                  //     body: body,
-                                  //     encoding: Encoding.getByName('utf-8'),
-                                  //     headers: {
-                                  //       'Authorization': 'Bearer ' + getToken()
-                                  //     });
+                                  final response = await http.post(
+                                      Uri.parse(url),
+                                      body: body,
+                                      encoding: Encoding.getByName('utf-8'),
+                                      headers: {
+                                        'Authorization': 'Bearer ' + getToken()
+                                      });
 
-                                  // Navigator.pop(context); //pop dialog
+                                  Navigator.pop(context); //pop dialog
+                                  _addNewSite(response);
                                 }
                               })),
                     ]))));
+  }
+
+  void _addNewSite(response) {
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      Alert(
+        context: context,
+        type: AlertType.success,
+        title: "Success",
+        desc: "New $_blockType site has been added",
+        buttons: [
+          DialogButton(
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              })
+        ],
+      ).show();
+    } else {
+      _showFailedPopup();
+    }
   }
 
   void _showLoading() {
