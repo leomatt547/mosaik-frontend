@@ -191,7 +191,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.manage_accounts_rounded),
+                Icon(Icons.manage_accounts_rounded, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Manage Child Account',
