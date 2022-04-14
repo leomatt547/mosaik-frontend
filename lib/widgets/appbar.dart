@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/block_site_screen.dart';
-import 'package:mosaic/screen/child_delete_screen.dart';
+import 'package:mosaic/screen/list_child_account_screen.dart';
 import 'package:mosaic/screen/history_screen.dart';
 import 'package:mosaic/screen/child_registration_screen.dart';
 import 'package:mosaic/screen/landing_screen.dart';
 import 'package:mosaic/screen/list_child_history_screen.dart';
 import 'package:mosaic/screen/login.dart';
 import 'package:mosaic/screen/update_profile_screen.dart';
-import 'package:mosaic/widgets/button.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -67,28 +64,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
         break;
-      case 6:
-        Alert(
-          context: context,
-          type: AlertType.warning,
-          title: 'Delete Account',
-          desc: 'Are you sure want to delete this account?',
-          style: AlertStyle(
-              titleStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              ),
-              descStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              )),
-          buttons: [
-            deleteAccountButton(context),
-            cancelButton(context),
-          ],
-        ).show();
-        break;
       case 7:
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
+          MaterialPageRoute(
+              builder: (context) => const ListChildAccountScreen()),
         );
         break;
       case 8:
@@ -137,19 +116,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
-          PopupMenuItem<int>(
-            value: 6,
-            child: Row(
-              children: const [
-                Icon(Icons.delete_forever_outlined),
-                SizedBox(width: 8),
-                Text(
-                  'Delete Account',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-          ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 4,
             child: Row(
@@ -167,15 +134,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.manage_accounts_rounded),
                 SizedBox(width: 8),
                 Text(
-                  'Delete Child Account',
+                  'Manage Child Account',
                   style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 5,
             child: Row(

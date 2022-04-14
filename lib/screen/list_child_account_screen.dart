@@ -11,14 +11,14 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../widgets/button.dart';
 
-class ChildDeleteScreen extends StatefulWidget {
-  const ChildDeleteScreen({Key? key}) : super(key: key);
+class ListChildAccountScreen extends StatefulWidget {
+  const ListChildAccountScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChildDeleteScreen> createState() => _ChildDeleteScreenState();
+  State<ListChildAccountScreen> createState() => _ListChildAccountScreenState();
 }
 
-class _ChildDeleteScreenState extends State<ChildDeleteScreen> {
+class _ListChildAccountScreenState extends State<ListChildAccountScreen> {
   List<Child> _childs = [];
   var _isLoading = false;
   @override
@@ -131,6 +131,9 @@ class _ChildDeleteScreenState extends State<ChildDeleteScreen> {
                                           horizontal: 5,
                                         ),
                                         child: ListTile(
+                                          onTap: () {
+                                            // Go to manage child account page
+                                          },
                                           title: Text(
                                             _childs[index].nama.toString(),
                                             overflow: TextOverflow.ellipsis,

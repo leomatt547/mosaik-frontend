@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/screen/change_password_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:mosaic/widgets/button.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constant.dart';
 import 'package:mosaic/widgets/form.dart';
@@ -59,6 +60,45 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     print(nameController.text.toString());
     // ignore: avoid_print
     print(emailController.text.toString());
+  }
+
+  handleDeleteButton(context) {
+    if (storage.read('parent_id') != null) {
+      return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
+              child: Text(
+                "Delete Account",
+                style: GoogleFonts.average(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              onPressed: () async {
+                Alert(
+                  context: context,
+                  type: AlertType.warning,
+                  title: 'Delete Account',
+                  desc: 'Are you sure want to delete this account?',
+                  style: AlertStyle(
+                      titleStyle: GoogleFonts.average(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      descStyle: GoogleFonts.average(
+                        fontWeight: FontWeight.w500,
+                      )),
+                  buttons: [
+                    deleteAccountButton(context),
+                    cancelButton(context),
+                  ],
+                ).show();
+              }));
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   @override
@@ -158,7 +198,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 Navigator.pop(context); //pop dialog
                                 _updateProfile(response);
                               }
-                            }))
+                            })),
+                    handleDeleteButton(context),
                   ])),
         ));
   }
