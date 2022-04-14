@@ -427,7 +427,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: 9,
                     child: Row(
                       children: const [
-                        Icon(Icons.do_not_disturb_outlined),
+                        Icon(Icons.do_not_disturb_outlined, color: primaryColor),
                         SizedBox(width: 8),
                         Text(
                           'Block Site',
