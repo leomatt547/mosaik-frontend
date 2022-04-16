@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mosaic/models/history.dart';
+import 'package:http/http.dart' as http;
+import '../../constant.dart';
 import 'package:mosaic/screen/block_site/blocked_site_list.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -23,8 +27,6 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
   @override
   void initState() {
     super.initState();
-    // ignore: avoid_print
-    print("Whitelistwidget");
     fetchAndSetHistory();
   }
 
@@ -34,22 +36,22 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
     });
 
     try {
-      // final response = await http.get(url);
-      // List<dynamic> extractedData = json.decode(response.body);
-      // if (extractedData == null) {
-      //   return;
-      // }
-      // List<History> loadedProducts = [];
-      // loadedProducts = extractedData.map((dynamic hist) {
-      //   String id = hist['id'].toString();
-      //   String url = hist['Url']["url"];
-      //   return History(id: id, url: url);
-      // }).toList();
+      String url = API_URL + '/whitelist';
+      final response = await http.get(Uri.parse(url));
+      List<dynamic> extractedData = json.decode(response.body);
+
+      List<History> loadedProducts = [];
+      loadedProducts = extractedData.map((dynamic site) {
+        String id = site['id'].toString();
+        String url = site["url"];
+        return History(id: id, url: url);
+      }).toList();
+      print(loadedProducts);
       setState(() {
         _isLoading = false;
       });
 
-      // _whiteList = loadedProducts.reversed.toList();
+      _whiteList = loadedProducts.reversed.toList();
     } catch (error) {
       rethrow;
     }
@@ -59,24 +61,15 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
     setState(() {
       _isLoading = true;
     });
-    // late Uri url;
-    // if (storage.read('parent_id') != null) {
-    //   if (widget.role == 'child') {
-    //     url = Uri.parse(API_URL + "/childvisits/" + id);
-    //   } else {
-    //     url = Uri.parse(API_URL + "/parentvisits/" + id);
-    //   }
-    // }
-
-    // final existingProductIndex =
-    //     _whiteList.indexWhere((hist) => hist.id == id);
-    // var existingProduct = _whiteList[existingProductIndex];
-    // _whiteList.removeAt(existingProductIndex);
-    // final response = await http.delete(url,
-    //     headers: {'Authorization': 'Bearer ' + storage.read('token')});
-    // if (response.statusCode >= 400) {
-    //   _whiteList.insert(existingProductIndex, existingProduct);
-    // }
+    late Uri url = Uri.parse(API_URL + "/whitelist/" + id);
+    final existingProductIndex = _whiteList.indexWhere((site) => site.id == id);
+    var existingProduct = _whiteList[existingProductIndex];
+    _whiteList.removeAt(existingProductIndex);
+    final response = await http.delete(url,
+        headers: {'Authorization': 'Bearer ' + storage.read('token')});
+    if (response.statusCode >= 400) {
+      _whiteList.insert(existingProductIndex, existingProduct);
+    }
     setState(() {
       _isLoading = false;
     });
