@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mosaic/screen/splash.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:mosaic/screen/splash/splash_screen.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -82,6 +84,14 @@ class _MyAppState extends State<MyApp> {
   @override
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext ctx) {
-    return const MaterialApp(home: Splash());
+    return MaterialApp(
+      title: 'Mosaik',
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      home: SplashScreen(),
+      theme: ThemeData(
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: primaryColor)),
+    );
   }
 }
