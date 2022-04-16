@@ -8,16 +8,16 @@ import 'package:nb_utils/nb_utils.dart';
 import 'dart:convert';
 
 
-class DeleteChildScreen extends StatefulWidget {
-  const DeleteChildScreen({Key? key}) : super(key: key);
+class ManageChildScreen extends StatefulWidget {
+  const ManageChildScreen({Key? key}) : super(key: key);
 
   @override
-  State<DeleteChildScreen> createState() => _DeleteChildScreenState();
+  State<ManageChildScreen> createState() => _ManageChildScreenState();
 }
 
-class _DeleteChildScreenState extends State<DeleteChildScreen> {
+class _ManageChildScreenState extends State<ManageChildScreen> {
   List<Child> _userChildren = [];
-  var _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
