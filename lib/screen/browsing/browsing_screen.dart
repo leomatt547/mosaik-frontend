@@ -1,26 +1,71 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/history_screen.dart';
-import 'package:mosaic/screen/landing_screen.dart';
+import 'package:mosaic/screen/history/history_screen.dart';
+import 'package:mosaic/screen/landing/landing_screen.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/appbar.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 import 'dart:convert';
+import 'package:filesystem_picker/filesystem_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BrowsingScreen extends StatefulWidget {
-  final String text;
   const BrowsingScreen(this.text);
+
+  final String text;
+
   @override
   _BrowsingScreenState createState() => _BrowsingScreenState();
 }
 
 class _BrowsingScreenState extends State<BrowsingScreen> {
-  late WebViewController _webViewController;
-  TextEditingController _teController = new TextEditingController();
+  late InAppWebViewController _webViewController;
+  final TextEditingController _teController = TextEditingController();
   bool showLoading = false;
 
+  final ReceivePort _port = ReceivePort();
+
+  @override
+  void initState() {
+    super.initState();
+
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState(() {});
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send!.send([id, status, progress]);
+  }
+
   void updateLoading(bool ls) {
-    this.setState(() {
+    setState(() {
       showLoading = ls;
     });
   }
@@ -30,17 +75,29 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
     void onSelectedMoreOptions(BuildContext context, int item) {
       switch (item) {
         case 0:
+          // ignore: avoid_print
           print('New tab');
           break;
         case 1:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const HistoryScreen()),
-          );
+          late Uri url;
+
+          if (storage.read('parent_id') != null) {
+            url = Uri.parse(API_URL +
+                "/parentvisits?parent_id=" +
+                storage.read('parent_id').toString());
+          } else {
+            url = Uri.parse(API_URL +
+                "/childvisits?child_id=" +
+                storage.read('child_id').toString());
+          }
+          HistoryScreen(url: url).launch(context);
           break;
         case 2:
+          // ignore: avoid_print
           print('Downloads');
           break;
         case 3:
+          // ignore: avoid_print
           print('go to Settings screen');
           break;
       }
@@ -58,7 +115,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
               Flexible(
                 flex: 1,
                 child: Container(
-                  color: const Color.fromARGB(255, 196, 196, 196),
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -73,33 +130,17 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LandingPage(),
-                                      ));
+                                  LandingScreen().launch(context);
                                 }),
                           ),
                         ),
                         Flexible(
                           flex: 4,
-                          child: TextFormField(
-                            autocorrect: false,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Colors.white,
-                                ),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 7),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                fillColor: Color.fromARGB(255, 103, 103, 103),
-                                filled: true),
+                          child: AppTextField(
+                            textFieldType: TextFieldType.URL,
+                            decoration: inputDecoration(
+                                hint: 'Type web address',
+                                prefixIcon: Icons.lock),
                             onFieldSubmitted: (term) {
                               String finalURL = _teController.text;
                               if (!finalURL.startsWith("https://")) {
@@ -108,7 +149,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               if (_webViewController != null) {
                                 updateLoading(true);
                                 _webViewController
-                                    .loadUrl(finalURL)
+                                    .loadUrl(
+                                        urlRequest: URLRequest(
+                                            url: Uri.parse(finalURL)))
                                     .then((onValue) {})
                                     .catchError((e) {
                                   updateLoading(false);
@@ -121,11 +164,9 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                         const CustomAppBar()
                             .handleUserTypeAccountButton(context),
                         Theme(
-                          data: Theme.of(context).copyWith(
-                            iconTheme: const IconThemeData(color: Colors.black),
-                          ),
+                          data: Theme.of(context).copyWith(),
                           child: PopupMenuButton<int>(
-                            color: const Color.fromARGB(255, 196, 196, 196),
+                            color: Colors.white,
                             onSelected: (item) =>
                                 onSelectedMoreOptions(context, item),
                             itemBuilder: (context) => [
@@ -133,7 +174,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 value: 1,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.history),
+                                    Icon(
+                                      Icons.history,
+                                      color: primaryColor,
+                                    ),
                                     SizedBox(width: 8),
                                     Text(
                                       'History',
@@ -143,10 +187,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 ),
                               ),
                               PopupMenuItem<int>(
-                                value: 1,
+                                value: 2,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.download),
+                                    Icon(Icons.download, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Download',
@@ -156,10 +200,10 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 ),
                               ),
                               PopupMenuItem<int>(
-                                value: 2,
+                                value: 3,
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.settings),
+                                    Icon(Icons.settings, color: primaryColor),
                                     SizedBox(width: 8),
                                     Text(
                                       'Settings',
@@ -180,13 +224,18 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                   flex: 9,
                   child: Stack(
                     children: <Widget>[
-                      WebView(
-                        initialUrl: widget.text.startsWith("https://")
-                            ? widget.text
-                            : "https://" + widget.text,
-                        onPageFinished: (data) async {
+                      InAppWebView(
+                        initialUrlRequest: URLRequest(
+                            url: Uri.parse(widget.text.startsWith("https://")
+                                ? widget.text
+                                : "https://" + widget.text)),
+                        initialOptions: InAppWebViewGroupOptions(
+                          crossPlatform:
+                              InAppWebViewOptions(useOnDownloadStart: true),
+                        ),
+                        onLoadStop: (data, uri) async {
                           updateLoading(false);
-                          _webViewController.currentUrl().then((value) async {
+                          _webViewController.getUrl().then((value) async {
                             _teController.text = (value.toString());
                             Map data = {
                               "url": value.toString(),
@@ -206,7 +255,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 "parent_id": storage.read('parent_id')
                               };
                               String bodyNewVisit = json.encode(dataVisit);
-                              final newVisit = await http.post(
+                              await http.post(
                                   Uri.parse(API_URL + "/parentvisits"),
                                   body: bodyNewVisit,
                                   encoding: Encoding.getByName('utf-8'),
@@ -221,7 +270,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 "child_id": storage.read('child_id')
                               };
                               String bodyNewVisit = json.encode(dataVisit);
-                              final newVisit = await http.post(
+                              await http.post(
                                   Uri.parse(API_URL + "/childvisits"),
                                   body: bodyNewVisit,
                                   encoding: Encoding.getByName('utf-8'),
@@ -232,14 +281,79 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                             }
                           });
                         },
-                        javascriptMode: JavascriptMode.unrestricted,
+                        onDownloadStart: (controller, url) async {
+                          String? path = await FilesystemPicker.open(
+                              title: 'Save to folder',
+                              fsType: FilesystemType.folder,
+                              context: context,
+                              rootDirectory:
+                                  (await getApplicationDocumentsDirectory())
+                                      .parent,
+                              pickText: 'Save file to this folder',
+                              folderIconColor: Colors.grey[200],
+                              requestPermission: () async =>
+                                  await Permission.storage.request().isGranted);
+
+                          if (path! != null) {
+                            FlutterDownloader.enqueue(
+                              url: url.toString(),
+                              saveInPublicStorage: true,
+                              savedDir: path,
+                              showNotification: true,
+                              openFileFromNotification: true,
+                            );
+
+                            if (storage.read('parent_id') != null) {
+                              Map downloadData = {
+                                'target_path': path,
+                                'site_url': Uri.parse(url.toString()).host,
+                                'tab_url': url.toString(),
+                                'mime_type': p.extension(url.toString()),
+                                'parent_id': storage.read('parent_id'),
+                              };
+
+                              String bodyRequest = json.encode(downloadData);
+
+                              await http.post(
+                                  Uri.parse(API_URL + '/parentdownloads'),
+                                  body: bodyRequest,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            } else {
+                              Map downloadData = {
+                                'target_path': path,
+                                'site_url': Uri.parse(url.toString()).host,
+                                'tab_url': url.toString(),
+                                'mime_type': p.extension(url.toString()),
+                                'child_id': storage.read('child_id'),
+                              };
+
+                              String bodyRequest = json.encode(downloadData);
+
+                              await http.post(
+                                  Uri.parse(API_URL + '/childdownloads'),
+                                  body: bodyRequest,
+                                  encoding: Encoding.getByName('utf-8'),
+                                  headers: {
+                                    'Authorization':
+                                        'Bearer ' + storage.read('token')
+                                  });
+                            }
+                          }
+                        },
+                        // javascriptMode: JavascriptMode.unrestricted,
                         onWebViewCreated: (webViewController) {
                           _webViewController = webViewController;
                         },
                       ),
                       (showLoading)
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
                             )
                           : const Center()
                     ],
