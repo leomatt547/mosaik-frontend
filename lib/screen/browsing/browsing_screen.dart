@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/history/history_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
@@ -243,10 +244,22 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
+                                            Container(
+                                              height: 110,
+                                              width: 110,
+                                              decoration: BoxDecoration(
+                                                  color: primaryColor
+                                                      .withOpacity(0.2),
+                                                  shape: BoxShape.circle),
+                                              child: const Icon(
+                                                  Icons.do_not_disturb_outlined,
+                                                  color: primaryColor,
+                                                  size: 60),
+                                            ),
                                             Text(
                                               "YOU'RE NOT ALLOWED TO ACCESS THIS SITE",
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
+                                              style: GoogleFonts.average(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
                                             ),
