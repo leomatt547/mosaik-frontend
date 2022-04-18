@@ -112,7 +112,7 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
                                 hint: 'Enter URL here',
                                 prefixIcon: Icons.person_outline_outlined,
                               ),
-                              textFieldType: TextFieldType.URL,
+                              textFieldType: TextFieldType.NAME,
                               keyboardType: TextInputType.url,
                               controller: urlController,
                               focus: urlFocusNode,
