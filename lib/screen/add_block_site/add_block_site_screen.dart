@@ -112,7 +112,7 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
                                 hint: 'Enter URL here',
                                 prefixIcon: Icons.person_outline_outlined,
                               ),
-                              textFieldType: TextFieldType.URL,
+                              textFieldType: TextFieldType.NAME,
                               keyboardType: TextInputType.url,
                               controller: urlController,
                               focus: urlFocusNode,
@@ -207,10 +207,10 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
   void _addNewSite(response) {
     if (response.statusCode == 201) {
       showSuccessfulAlertDialog(
-          context,
-          'Success',
-          "New $_blockType site has been added",
-          () => const BlockSiteScreen().launch(context));
+          context, 'Success', 'New $_blockType site has been added', () {
+        finish(context);
+        finish(context);
+      });
     } else {
       showErrorAlertDialog(context, 'Failed', 'Oops, something has gone wrong',
           () => Navigator.pop(context));

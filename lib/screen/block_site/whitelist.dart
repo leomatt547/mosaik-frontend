@@ -36,7 +36,8 @@ class _WhiteListWidgetState extends State<WhiteListWidget> {
     });
 
     try {
-      String url = API_URL + '/whitelist';
+      String url = API_URL +
+          '/whitelist?parent_id=${storage.read('parent_id').toString()}';
       final response = await http.get(Uri.parse(url));
       List<dynamic> extractedData = json.decode(response.body);
 
