@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "687034767814",
+    "project_id": "mosaik-id",
+    "storage_bucket": "mosaik-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687034767814:android:6bc5956ddaf1ec999dbac7",
+        "android_client_info": {
+          "package_name": "com.example.mosaic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687034767814-j4n51eu8q0c4bkup3ndmpga533i2vni3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH17yoKVFNX1ZtAfqp8Kd7u93QESyOE1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687034767814-j4n51eu8q0c4bkup3ndmpga533i2vni3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
