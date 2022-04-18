@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
-      // ignore: avoid_print
+        // ignore: avoid_print
         print('New tab');
         break;
       case 1:
@@ -44,12 +44,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ChildrenListHistoryScreen().launch(context);
         break;
       case 3:
-      // ignore: avoid_print
+        // ignore: avoid_print
         print('Manage Account');
         EditProfileScreen().launch(context);
         break;
       case 4:
-      // ignore: avoid_print
+        // ignore: avoid_print
         print('Create child account');
         RegisterChildScreen().launch(context);
         break;
@@ -61,57 +61,54 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         showConfirmDialogCustom(context,
             title: 'Delete Account',
             subTitle: 'Are you sure want to delete this account?',
-            dialogType: DialogType.DELETE,
-            onAccept: (buildContext) async {
-              showLoading(buildContext, 'Deleting account...');
-              final response = await http.delete(
-                  Uri.parse(
-                      API_URL + '/parents/' +
-                          storage.read('parent_id').toString()),
-                  encoding: Encoding.getByName('utf-8'),
-                  headers: {'Authorization': 'Bearer ' + getToken()});
+            dialogType: DialogType.DELETE, onAccept: (buildContext) async {
+          showLoading(buildContext, 'Deleting account...');
+          final response = await http.delete(
+              Uri.parse(
+                  API_URL + '/parents/' + storage.read('parent_id').toString()),
+              encoding: Encoding.getByName('utf-8'),
+              headers: {'Authorization': 'Bearer ' + getToken()});
 
-              if (response.statusCode == 204) {
-                final getChildrenResponse = await http.get(
-                  Uri.parse(API_URL +
-                      '/childs?parent_id=' +
-                      storage.read('parent_id').toString()),
-                );
+          if (response.statusCode == 204) {
+            final getChildrenResponse = await http.get(
+              Uri.parse(API_URL +
+                  '/childs?parent_id=' +
+                  storage.read('parent_id').toString()),
+            );
 
-                if (getChildrenResponse.statusCode == 200) {
-                  List<dynamic> extractedData = json.decode(
-                      getChildrenResponse.body);
-                  // ignore: unnecessary_null_comparison
-                  if (extractedData == null) {
-                    return;
-                  }
-                  List<Child> loadedChildren = [];
-                  loadedChildren = extractedData.map((dynamic childResponse) {
-                    String id = childResponse['id'].toString();
-                    String nama = childResponse['nama'];
-                    String email = childResponse['email'];
-                    return Child(id: id, nama: nama, email: email);
-                  }).toList();
-
-                  // ignore: avoid_function_literals_in_foreach_calls
-                  loadedChildren.forEach((Child child) async {
-                    await http.delete(
-                        Uri.parse(API_URL + "/childs/" + child.id.toString()),
-                        headers: {
-                          'Authorization': 'Bearer ' + storage.read('token')
-                        });
-                  });
-                }
-
-                storage.remove('token');
-                finish(buildContext);
-                LoginScreen().launch(buildContext);
-              } else {
-                showErrorAlertDialog(buildContext, 'Failed',
-                    'Oops, something has gone wrong', () =>
-                        finish(buildContext));
+            if (getChildrenResponse.statusCode == 200) {
+              List<dynamic> extractedData =
+                  json.decode(getChildrenResponse.body);
+              // ignore: unnecessary_null_comparison
+              if (extractedData == null) {
+                return;
               }
-            });
+              List<Child> loadedChildren = [];
+              loadedChildren = extractedData.map((dynamic childResponse) {
+                String id = childResponse['id'].toString();
+                String nama = childResponse['nama'];
+                String email = childResponse['email'];
+                return Child(id: id, nama: nama, email: email);
+              }).toList();
+
+              // ignore: avoid_function_literals_in_foreach_calls
+              loadedChildren.forEach((Child child) async {
+                await http.delete(
+                    Uri.parse(API_URL + "/childs/" + child.id.toString()),
+                    headers: {
+                      'Authorization': 'Bearer ' + storage.read('token')
+                    });
+              });
+            }
+
+            storage.remove('token');
+            finish(buildContext);
+            LoginScreen().launch(buildContext);
+          } else {
+            showErrorAlertDialog(buildContext, 'Failed',
+                'Oops, something has gone wrong', () => finish(buildContext));
+          }
+        });
         break;
       case 7:
         DeleteChildScreen().launch(context);
@@ -123,7 +120,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         // Route route =
         //     MaterialPageRoute(builder: (context) => const BlockSiteScreen());
         // Navigator.push(context, route);
-      BlockSiteScreen().launch(context);
+        BlockSiteScreen().launch(context);
         break;
     }
   }
@@ -150,8 +147,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.account_circle_rounded),
         color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) =>
-        [
+        itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
@@ -226,8 +222,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.account_circle_rounded),
         color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) =>
-        [
+        itemBuilder: (BuildContext context) => [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
@@ -366,8 +361,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: PopupMenuButton<int>(
               color: Colors.white,
               onSelected: (item) => onSelected(context, item),
-              itemBuilder: (context) =>
-              [
+              itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Row(
@@ -429,7 +423,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: 9,
                     child: Row(
                       children: const [
-                        Icon(Icons.do_not_disturb_outlined, color: primaryColor),
+                        Icon(Icons.do_not_disturb_outlined,
+                            color: primaryColor),
                         SizedBox(width: 8),
                         Text(
                           'Block Site',
