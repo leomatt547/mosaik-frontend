@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/block_site/block_site_screen.dart';
 import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/utils/widgets.dart';
+import 'package:mosaic/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:http/http.dart' as http;
 
 class AddBlockSiteScreen extends StatefulWidget {
   const AddBlockSiteScreen({Key? key}) : super(key: key);
@@ -23,8 +29,7 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
     init();
   }
 
-  Future<void> init() async {
-  }
+  Future<void> init() async {}
 
   @override
   void dispose() {
@@ -77,7 +82,7 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
               Container(
                 margin: EdgeInsets.only(top: 80),
                 padding:
-                EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
+                    EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
                 width: context.width(),
                 height: context.height(),
                 decoration: boxDecorationWithShadow(
@@ -86,98 +91,97 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
                         topRight: Radius.circular(30))),
                 child: SingleChildScrollView(
                     child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    width: 0.5)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('URL', style: boldTextStyle()),
-                                8.height,
-                                AppTextField(
-                                  decoration: inputDecoration(
-                                    hint: 'Enter URL here',
-                                    prefixIcon: Icons.person_outline_outlined,
-                                  ),
-                                  textFieldType: TextFieldType.URL,
-                                  keyboardType: TextInputType.url,
-                                  controller: urlController,
-                                  focus: urlFocusNode,
-                                ),
-                                16.height,
-                                Text('Add to', style: boldTextStyle()),
-                                8.height,
-                                DropdownButtonFormField(
-                                  isExpanded: true,
-                                  decoration: inputDecoration(hint: "Select here"),
-                                  items: <String>['Whitelist', 'Blacklist'].map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    _blockType = value.toString().toLowerCase();
-                                  },
-                                ),
-                              ],
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: Colors.grey.withOpacity(0.2),
+                                width: 0.5)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('URL', style: boldTextStyle()),
+                            8.height,
+                            AppTextField(
+                              decoration: inputDecoration(
+                                hint: 'Enter URL here',
+                                prefixIcon: Icons.person_outline_outlined,
+                              ),
+                              textFieldType: TextFieldType.URL,
+                              keyboardType: TextInputType.url,
+                              controller: urlController,
+                              focus: urlFocusNode,
                             ),
-                          ),
-                          32.height,
-                          AppButton(
-                            color: primaryColor,
-                            width: context.width() * 0.8,
-                            child: Text('ADD',
-                                style: boldTextStyle(color: Colors.white)),
-                            shapeBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                // _showLoading();
-
-                                Map data = {
-                                  'url': urlController.text.toString(),
-                                  'type': _blockType,
-                                };
-                                // ignore: avoid_print
-                                print(data);
-
-                                // String body = json.encode(data);
-                                // String url;
-                                // if (storage.read('parent_id') != null) {
-                                //   url = API_URL +
-                                //       '/parents/${storage.read('parent_id')}';
-                                // } else if (storage.read('child_id') != null) {
-                                //   url = API_URL +
-                                //       '/childs/${storage.read('child_id')}';
-                                // } else {
-                                //   _showFailedPopup();
-                                //   return;
-                                // }
-
-                                // final response = await http.put(
-                                //     Uri.parse(url),
-                                //     body: body,
-                                //     encoding: Encoding.getByName('utf-8'),
-                                //     headers: {
-                                //       'Authorization': 'Bearer ' + getToken()
-                                //     });
-
-                                // Navigator.pop(context); //pop dialog
-                              }
-                            },
-                          ).center()
-                        ],
+                            16.height,
+                            Text('Add to', style: boldTextStyle()),
+                            8.height,
+                            DropdownButtonFormField(
+                              isExpanded: true,
+                              decoration: inputDecoration(hint: "Select here"),
+                              items: <String>['Whitelist', 'Blacklist']
+                                  .map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                _blockType = value.toString().toLowerCase();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                      32.height,
+                      AppButton(
+                        color: primaryColor,
+                        width: context.width() * 0.8,
+                        child: Text('ADD',
+                            style: boldTextStyle(color: Colors.white)),
+                        shapeBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            showLoading(context, 'Processing...');
+                            String finalURL = urlController.text;
+                            if (!finalURL.startsWith("https://")) {
+                              finalURL = "https://" + finalURL;
+                            }
+
+                            Map data = {
+                              'url': finalURL.toLowerCase(),
+                            };
+
+                            String body = json.encode(data);
+                            String url;
+                            if (_blockType == 'whitelist') {
+                              url = API_URL + '/whitelist';
+                            } else if (_blockType == 'blacklist') {
+                              url = API_URL + '/blacklist';
+                            } else {
+                              url = API_URL + '/errr';
+                            }
+
+                            final response = await http.post(Uri.parse(url),
+                                body: body,
+                                encoding: Encoding.getByName('utf-8'),
+                                headers: {
+                                  'Authorization': 'Bearer ' + getToken()
+                                });
+
+                            Navigator.pop(context); //pop dialog
+                            _addNewSite(response);
+                          }
+                        },
+                      ).center()
+                    ],
+                  ),
+                )),
               ),
               Stack(
                 alignment: AlignmentDirectional.bottomEnd,
@@ -188,7 +192,8 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.2),
                         shape: BoxShape.circle),
-                    child: Icon(Icons.do_not_disturb_outlined, color: primaryColor, size: 60),
+                    child: Icon(Icons.do_not_disturb_outlined,
+                        color: primaryColor, size: 60),
                   ),
                 ],
               ),
@@ -197,5 +202,18 @@ class _AddBlockSiteScreenState extends State<AddBlockSiteScreen> {
         ),
       ),
     );
+  }
+
+  void _addNewSite(response) {
+    if (response.statusCode == 201) {
+      showSuccessfulAlertDialog(
+          context, 'Success', 'New $_blockType site has been added', () {
+        finish(context);
+        finish(context);
+      });
+    } else {
+      showErrorAlertDialog(context, 'Failed', 'Oops, something has gone wrong',
+          () => Navigator.pop(context));
+    }
   }
 }

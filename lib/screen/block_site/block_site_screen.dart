@@ -109,8 +109,8 @@ class _BlockSiteScreenState extends State<BlockSiteScreen> {
                     16.height,
                     Expanded(
                         child: _isWhiteList
-                            ? WhiteListWidget()
-                            : BlackListWidget())
+                            ? const WhiteListWidget()
+                            : const BlackListWidget())
                   ],
                 ))));
   }
