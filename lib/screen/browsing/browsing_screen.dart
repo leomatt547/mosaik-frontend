@@ -10,6 +10,7 @@ import 'package:mosaic/utils/colors.dart';
 import 'package:mosaic/utils/widgets.dart';
 import 'package:mosaic/widgets/appbar.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:mosaic/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
   late InAppWebViewController _webViewController;
   final TextEditingController _teController = TextEditingController();
   bool showLoading = false;
+  var _isLoadingValidateSite = false;
 
   final ReceivePort _port = ReceivePort();
 
@@ -264,6 +266,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                         'Bearer ' + storage.read('token')
                                   });
                             } else {
+                              validateSite(value.toString());
                               Map dataVisit = {
                                 "url_id": json.decode(newUrl.body)["id"],
                                 "duration": 3,
@@ -363,5 +366,60 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
         ),
       ),
     );
+  }
+
+  void validateSite(site) async {
+    // Validasi whitelist
+    await http.post(Uri.parse(API_URL + "/whitelist/check"),
+        body: json.encode({'url': site}),
+        encoding: Encoding.getByName('utf-8'),
+        headers: {
+          'Authorization': 'Bearer ' + storage.read('token')
+        }).then((res) => {
+          if (json.decode(res.body)["is_allowed"] == false)
+            {
+              // Validasi blacklist
+              http.post(Uri.parse(API_URL + "/blacklist/check"),
+                  body: json.encode({'url': site}),
+                  encoding: Encoding.getByName('utf-8'),
+                  headers: {
+                    'Authorization': 'Bearer ' + storage.read('token')
+                  }).then((res) => {
+                    if (json.decode(res.body)["is_blocked"] == true)
+                      {
+                        showErrorAlertDialog(
+                            context,
+                            'Failed',
+                            "You're not allowed to open this site!",
+                            () => const LandingScreen().launch(context))
+                      }
+                    else
+                      {
+                        // Validasi AI
+                        http
+                            .post(
+                              Uri.parse(API_URL + "/nsfw"),
+                              body: json.encode({
+                                'url': site,
+                                "child_id": storage.read('child_id')
+                              }),
+                              encoding: Encoding.getByName('utf-8'),
+                            )
+                            .then((res) => {
+                                  if (json.decode(res.body)["is_blocked"] ==
+                                      true)
+                                    {
+                                      showErrorAlertDialog(
+                                          context,
+                                          'Failed',
+                                          "You're not allowed to open this site!",
+                                          () => const LandingScreen()
+                                              .launch(context))
+                                    }
+                                })
+                      }
+                  })
+            }
+        });
   }
 }
