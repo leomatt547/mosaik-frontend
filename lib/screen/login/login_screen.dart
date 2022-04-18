@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mosaic/constant.dart';
@@ -141,6 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 Map data = {
                                                   'email': email,
                                                   'password': password,
+                                                  'fcm': await FirebaseMessaging
+                                                      .instance
+                                                      .getToken(),
                                                 };
 
                                                 String body = json.encode(data);
