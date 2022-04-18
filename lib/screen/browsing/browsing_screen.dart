@@ -239,6 +239,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                     return initWebview(widget.text);
                                   } else {
                                     return Container(
+                                      padding: const EdgeInsets.all(4.0),
                                       child: Center(
                                         child: Column(
                                           mainAxisAlignment:
@@ -430,7 +431,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
             headers: {'Authorization': 'Bearer ' + storage.read('token')});
         print("dari Validate : ${json.decode(resValBlack.body)}");
         if (json.decode(resValBlack.body)["is_blocked"] == true) {
-          print("DIBLOKIR BLACKLISTTT");
           return false;
         } else {
           final resValAI = await http.post(
@@ -442,7 +442,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
             encoding: Encoding.getByName('utf-8'),
           );
           if (json.decode(resValAI.body)["is_blocked"] == true) {
-            print("di block AI");
             return false;
           } else {
             return true;
@@ -454,52 +453,5 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
     } catch (e) {
       rethrow;
     }
-
-    // try {
-    //   await http.post(Uri.parse(API_URL + "/whitelist/check"),
-    //       body: json.encode({'url': site}),
-    //       encoding: Encoding.getByName('utf-8'),
-    //       headers: {
-    //         'Authorization': 'Bearer ' + storage.read('token')
-    //       }).then((res) => {
-    //         if (json.decode(res.body)["is_allowed"] == false)
-    //           {
-    //             // Validasi blacklist
-    //             http.post(Uri.parse(API_URL + "/blacklist/check"),
-    //                 body: json.encode({'url': site}),
-    //                 encoding: Encoding.getByName('utf-8'),
-    //                 headers: {
-    //                   'Authorization': 'Bearer ' + storage.read('token')
-    //                 }).then((res) => {
-    //                   if (json.decode(res.body)["is_blocked"] == true)
-    //                     {false}
-    //                   else
-    //                     {
-    //                       // Validasi AI
-    //                       http
-    //                           .post(
-    //                             Uri.parse(API_URL + "/nsfw"),
-    //                             body: json.encode({
-    //                               'url': site,
-    //                               "child_id": storage.read('child_id')
-    //                             }),
-    //                             encoding: Encoding.getByName('utf-8'),
-    //                           )
-    //                           .then((res) => {
-    //                                 if (json.decode(res.body)["is_blocked"] ==
-    //                                     true)
-    //                                   {false}
-    //                                 else
-    //                                   {true}
-    //                               })
-    //                     }
-    //                 })
-    //           }
-    //         else
-    //           {true}
-    //       });
-    // } catch (e) {
-    //   rethrow;
-    // }
   }
 }
