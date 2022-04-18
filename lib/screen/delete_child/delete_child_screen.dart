@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
 import 'dart:convert';
 
-
 class DeleteChildScreen extends StatefulWidget {
   const DeleteChildScreen({Key? key}) : super(key: key);
 
@@ -58,7 +57,6 @@ class _DeleteChildScreenState extends State<DeleteChildScreen> {
   }
 
   Future<void> deleteChild(String? id) async {
-
     setState(() {
       _isLoading = true;
     });
@@ -114,7 +112,8 @@ class _DeleteChildScreenState extends State<DeleteChildScreen> {
                 width: context.width(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
+                        image: AssetImage('assets/bg1.jpg'),
+                        fit: BoxFit.cover)),
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
