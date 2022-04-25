@@ -263,7 +263,7 @@ class _RegisterChildScreenState extends State<RegisterChildScreen> {
     ));
   }
 
-  void _register(response) {
+  void _register(http.Response response) {
     if (response.statusCode == 201) {
       showSuccessfulAlertDialog(
           context, 'Success', 'Child account has been successfully created',
@@ -272,7 +272,7 @@ class _RegisterChildScreenState extends State<RegisterChildScreen> {
         finish(context);
       });
     } else {
-      showErrorAlertDialog(context, 'Failed', 'Oops, something has gone wrong',
+      showErrorAlertDialog(context, 'Failed', response.body,
           () => finish(context));
     }
   }
