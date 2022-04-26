@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:mosaic/constant.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/screen/register_parent/register_parent_screen.dart';
+import 'package:mosaic/screen/reset_password/forgot_password_screen.dart';
+import 'package:mosaic/screen/update_password/update_password_screen.dart';
 import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:mosaic/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -53,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Container(
           width: context.width(),
           height: context.height(),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
           child: SingleChildScrollView(
@@ -64,15 +66,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   50.height,
                   Text("Login", style: boldTextStyle(size: 24)),
                   Container(
-                    margin: EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: <Widget>[
                         Container(
                           width: context.width(),
                           padding:
-                              EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                          margin: EdgeInsets.only(top: 55.0),
+                              const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                          margin: const EdgeInsets.only(top: 55.0),
                           decoration: boxDecorationWithShadow(
                               borderRadius: BorderRadius.circular(30)),
                           child: Column(
@@ -82,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 50,
                                     ),
                                     Text("Email",
@@ -118,7 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Text("Forgot password?",
-                                          style: primaryTextStyle()),
+                                              style: boldTextStyle(
+                                                  color: primaryColor))
+                                          .onTap(() => const ForgotPasswordScreen()
+                                              .launch(context)),
                                     ),
                                     32.height,
                                     AppButton(
@@ -185,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 style: boldTextStyle(
                                                     color: primaryColor))
                                             .onTap(() {
-                                          RegisterParentScreen()
+                                          const RegisterParentScreen()
                                               .launch(context);
                                         }),
                                       ],
@@ -201,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 100,
                           width: 100,
                           decoration: boxDecorationRoundedWithShadow(30),
-                          child: Icon(
+                          child: const Icon(
                             Icons.search,
                             size: 60,
                           ),
@@ -222,6 +227,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login(response) {
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
+      bool isChange = responseBody['Details']['is_change'];
+      print(isChange);
       String jwt = responseBody['Token'];
       storage.write('token', jwt);
 
@@ -229,7 +236,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
       storage.write('parent_id', jwtPayload['parent_id']);
       storage.write('child_id', jwtPayload['child_id']);
-      LandingScreen().launch(context);
+
+      if (isChange) {
+        const UpdatePasswordScreen().launch(context);
+      } else {
+        const LandingScreen().launch(context);
+      }
+
     } else {
       showErrorAlertDialog(context, 'Invalid Credentials',
           'Wrong email or password', () => Navigator.pop(context));
