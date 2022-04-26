@@ -253,9 +253,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               future: validateSite(widget.text),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  // print("dari FUTUREE : ${snapshot.data}");
-                                  // print(snapshot.data);
-                                  // return initWebview(widget.text);
                                   if (snapshot.data == true) {
                                     return initWebview(widget.text);
                                   } else {
