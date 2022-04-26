@@ -1,15 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
-import 'package:mosaic/screen/child_delete_screen.dart';
-import 'package:mosaic/screen/history_screen.dart';
-import 'package:mosaic/screen/child_registration_screen.dart';
-import 'package:mosaic/screen/landing_screen.dart';
-import 'package:mosaic/screen/list_child_history_screen.dart';
-import 'package:mosaic/screen/login.dart';
-import 'package:mosaic/screen/update_profile_screen.dart';
-import 'package:mosaic/widgets/button.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:mosaic/models/child.dart';
+import 'package:mosaic/screen/block_site/block_site_screen.dart';
+import 'package:mosaic/screen/children_history/children_list_history_screen.dart';
+import 'package:mosaic/screen/edit_profile/edit_profile_screen.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
+import 'package:mosaic/screen/history/history_screen.dart';
+import 'package:mosaic/screen/landing/landing_screen.dart';
+import 'package:mosaic/screen/login/login_screen.dart';
+import 'package:mosaic/screen/manage_child/manage_child_screen.dart';
+import 'package:mosaic/screen/register_child/register_child_screen.dart';
+import 'package:mosaic/utils/colors.dart';
+import 'package:mosaic/widgets/dialog.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:http/http.dart' as http;
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -17,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('New tab');
         break;
       case 1:
@@ -32,63 +38,92 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               "/childvisits?child_id=" +
               storage.read('child_id').toString());
         }
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HistoryScreen(
-                url: url,
-              ),
-            ));
+        HistoryScreen(url: url).launch(context);
         break;
       case 2:
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => const ChildListHistoryScreen()),
-        );
+        ChildrenListHistoryScreen().launch(context);
         break;
       case 3:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('Manage Account');
-        Route route = MaterialPageRoute(
-            builder: (context) => const UpdateProfileScreen());
-        Navigator.push(context, route);
+        EditProfileScreen().launch(context);
         break;
       case 4:
-        // ignore: avoid_print
+      // ignore: avoid_print
         print('Create child account');
-        Route route = MaterialPageRoute(
-            builder: (context) => const ChildRegistrationScreen());
-        Navigator.push(context, route);
+        RegisterChildScreen().launch(context);
         break;
       case 5:
         storage.remove('token');
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
+        const LoginScreen().launch(context);
         break;
       case 6:
-        Alert(
-          context: context,
-          type: AlertType.warning,
-          title: 'Delete Account',
-          desc: 'Are you sure want to delete this account?',
-          style: AlertStyle(
-              titleStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              ),
-              descStyle: GoogleFonts.average(
-                fontWeight: FontWeight.w500,
-              )),
-          buttons: [
-            deleteAccountButton(context),
-            cancelButton(context),
-          ],
-        ).show();
+        showConfirmDialogCustom(context,
+            title: 'Delete Account',
+            subTitle: 'Are you sure want to delete this account?',
+            dialogType: DialogType.DELETE,
+            onAccept: (buildContext) async {
+              showLoading(buildContext, 'Deleting account...');
+              final response = await http.delete(
+                  Uri.parse(
+                      API_URL + '/parents/' +
+                          storage.read('parent_id').toString()),
+                  encoding: Encoding.getByName('utf-8'),
+                  headers: {'Authorization': 'Bearer ' + getToken()});
+
+              if (response.statusCode == 204) {
+                final getChildrenResponse = await http.get(
+                  Uri.parse(API_URL +
+                      '/childs?parent_id=' +
+                      storage.read('parent_id').toString()),
+                );
+
+                if (getChildrenResponse.statusCode == 200) {
+                  List<dynamic> extractedData = json.decode(
+                      getChildrenResponse.body);
+                  // ignore: unnecessary_null_comparison
+                  if (extractedData == null) {
+                    return;
+                  }
+                  List<Child> loadedChildren = [];
+                  loadedChildren = extractedData.map((dynamic childResponse) {
+                    String id = childResponse['id'].toString();
+                    String nama = childResponse['nama'];
+                    String email = childResponse['email'];
+                    return Child(id: id, nama: nama, email: email);
+                  }).toList();
+
+                  // ignore: avoid_function_literals_in_foreach_calls
+                  loadedChildren.forEach((Child child) async {
+                    await http.delete(
+                        Uri.parse(API_URL + "/childs/" + child.id.toString()),
+                        headers: {
+                          'Authorization': 'Bearer ' + storage.read('token')
+                        });
+                  });
+                }
+
+                storage.remove('token');
+                finish(buildContext);
+                LoginScreen().launch(buildContext);
+              } else {
+                showErrorAlertDialog(buildContext, 'Failed',
+                    'Oops, something has gone wrong', () =>
+                        finish(buildContext));
+              }
+            });
         break;
       case 7:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ChildDeleteScreen()),
-        );
+        ManageChildScreen().launch(context);
+        break;
+      case 8:
+        DownloadsScreen().launch(context);
+        break;
+      case 9:
+        // Route route =
+        //     MaterialPageRoute(builder: (context) => const BlockSiteScreen());
+        // Navigator.push(context, route);
+      BlockSiteScreen().launch(context);
         break;
     }
   }
@@ -102,9 +137,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       return IconButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => LandingPage()),
-          );
+          const LandingScreen().launch(context);
         },
         icon: const Icon(Icons.cottage_outlined),
       );
@@ -115,14 +148,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (storage.read('parent_id') != null) {
       return PopupMenuButton<int>(
         icon: const Icon(Icons.account_circle_rounded),
-        color: const Color.fromARGB(255, 196, 196, 196),
+        color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) => [
+        itemBuilder: (BuildContext context) =>
+        [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
               children: const [
-                Icon(Icons.manage_accounts_rounded),
+                Icon(Icons.manage_accounts_rounded, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Manage Account',
@@ -135,7 +169,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 6,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.delete_forever_outlined, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Delete Account',
@@ -144,11 +178,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 4,
             child: Row(
               children: const [
-                Icon(Icons.person_add),
+                Icon(Icons.person_add, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Create Child Account',
@@ -161,20 +196,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: 7,
             child: Row(
               children: const [
-                Icon(Icons.delete_forever_outlined),
+                Icon(Icons.manage_accounts_rounded, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
-                  'Delete Child Account',
+                  'Manage Child Account',
                   style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
           ),
+          const PopupMenuDivider(),
           PopupMenuItem<int>(
             value: 5,
             child: Row(
               children: const [
-                Icon(Icons.logout),
+                Icon(Icons.logout, color: primaryColor),
                 SizedBox(width: 8),
                 Text(
                   'Logout',
@@ -188,9 +224,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       return PopupMenuButton<int>(
         icon: const Icon(Icons.account_circle_rounded),
-        color: const Color.fromARGB(255, 196, 196, 196),
+        color: Colors.white,
         onSelected: (item) => onSelected(context, item),
-        itemBuilder: (BuildContext context) => [
+        itemBuilder: (BuildContext context) =>
+        [
           PopupMenuItem<int>(
             value: 3,
             child: Row(
@@ -226,11 +263,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (getToken() == null) {
       return IconButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
+          const LoginScreen().launch(context);
         },
-        icon: const Icon(Icons.account_circle_outlined),
+        icon: const Icon(
+          Icons.account_circle_outlined,
+          color: primaryColor,
+        ),
       );
     } else {
       return handleUserTypeAccountButton(context);
@@ -241,7 +279,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (getToken() == null) {
       return AppBar(
         // automaticallyImplyLeading: false,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
         titleSpacing: 0.0,
         leading: const IconButton(
           onPressed: null,
@@ -264,16 +304,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.black,
-              iconTheme: const IconThemeData(color: Colors.black),
             ),
             child: PopupMenuButton<int>(
-              color: const Color.fromARGB(255, 196, 196, 196),
+              color: Colors.white,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [],
             ),
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
+        backgroundColor: Colors.white,
       );
     } else {
       return AppBar(
@@ -323,17 +362,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.black,
-              iconTheme: const IconThemeData(color: Colors.black),
             ),
             child: PopupMenuButton<int>(
-              color: const Color.fromARGB(255, 196, 196, 196),
+              color: Colors.white,
               onSelected: (item) => onSelected(context, item),
-              itemBuilder: (context) => [
+              itemBuilder: (context) =>
+              [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Row(
                     children: const [
-                      Icon(Icons.add),
+                      Icon(Icons.add, color: primaryColor),
                       SizedBox(width: 8),
                       Text(
                         'New tab',
@@ -347,10 +386,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   value: 1,
                   child: Row(
                     children: const [
-                      Icon(Icons.history),
+                      Icon(Icons.history, color: primaryColor),
                       SizedBox(width: 8),
                       Text(
                         'History',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 8,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.download, color: primaryColor),
+                      SizedBox(width: 8),
+                      Text(
+                        'Downloads',
                         style: TextStyle(color: Colors.black),
                       ),
                     ],
@@ -362,10 +414,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: 2,
                     child: Row(
                       children: const [
-                        Icon(Icons.history),
+                        Icon(Icons.history, color: primaryColor),
                         SizedBox(width: 8),
                         Text(
-                          'History Child',
+                          'Children History',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (storage.read('parent_id') != null) const PopupMenuDivider(),
+                if (storage.read('parent_id') != null)
+                  PopupMenuItem<int>(
+                    value: 9,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.do_not_disturb_outlined, color: primaryColor),
+                        SizedBox(width: 8),
+                        Text(
+                          'Block Site',
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -375,7 +442,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 196, 196, 196),
+        backgroundColor: Colors.white,
       );
     }
   }
