@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mosaic/constant.dart';
+import 'package:mosaic/screen/block_site/block_site_screen.dart';
+import 'package:mosaic/screen/children_history/children_list_history_screen.dart';
+import 'package:mosaic/screen/downloads/downloads_screen.dart';
 import 'package:mosaic/screen/history/history_screen.dart';
 import 'package:mosaic/screen/landing/landing_screen.dart';
 import 'package:mosaic/utils/colors.dart';
@@ -96,12 +99,13 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
           HistoryScreen(url: url).launch(context);
           break;
         case 2:
-          // ignore: avoid_print
-          print('Downloads');
+          const DownloadsScreen().launch(context);
           break;
         case 3:
-          // ignore: avoid_print
-          print('go to Settings screen');
+          const ChildrenListHistoryScreen().launch(context);
+          break;
+        case 4:
+          const BlockSiteScreen().launch(context);
           break;
       }
     }
@@ -207,7 +211,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 const PopupMenuDivider(),
                               if (storage.read('parent_id') != null)
                                 PopupMenuItem<int>(
-                                  value: 2,
+                                  value: 3,
                                   child: Row(
                                     children: const [
                                       Icon(Icons.history, color: primaryColor),
@@ -223,7 +227,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                 const PopupMenuDivider(),
                               if (storage.read('parent_id') != null)
                                 PopupMenuItem<int>(
-                                  value: 9,
+                                  value: 4,
                                   child: Row(
                                     children: const [
                                       Icon(Icons.do_not_disturb_outlined,
