@@ -140,6 +140,7 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                         Flexible(
                           flex: 4,
                           child: AppTextField(
+                            enabled: false,
                             textFieldType: TextFieldType.URL,
                             decoration: inputDecoration(
                                 hint: 'Type web address',
@@ -202,19 +203,39 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                                   ],
                                 ),
                               ),
-                              PopupMenuItem<int>(
-                                value: 3,
-                                child: Row(
-                                  children: const [
-                                    Icon(Icons.settings, color: primaryColor),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'Settings',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ],
+                              if (storage.read('parent_id') != null)
+                                const PopupMenuDivider(),
+                              if (storage.read('parent_id') != null)
+                                PopupMenuItem<int>(
+                                  value: 2,
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.history, color: primaryColor),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Children History',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              if (storage.read('parent_id') != null)
+                                const PopupMenuDivider(),
+                              if (storage.read('parent_id') != null)
+                                PopupMenuItem<int>(
+                                  value: 9,
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.do_not_disturb_outlined,
+                                          color: primaryColor),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Block Site',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -232,9 +253,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
                               future: validateSite(widget.text),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  // print("dari FUTUREE : ${snapshot.data}");
-                                  // print(snapshot.data);
-                                  // return initWebview(widget.text);
                                   if (snapshot.data == true) {
                                     return initWebview(widget.text);
                                   } else {
@@ -328,7 +346,6 @@ class _BrowsingScreenState extends State<BrowsingScreen> {
             encoding: Encoding.getByName('utf-8'),
           );
           if (storage.read('parent_id') != null) {
-            // validateSite(value.toString());
             Map dataVisit = {
               "url_id": json.decode(newUrl.body)["id"],
               "duration": 3,

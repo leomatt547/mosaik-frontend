@@ -288,14 +288,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: null,
             icon: Icon(Icons.arrow_forward),
           ),
-          const IconButton(onPressed: null, icon: Icon(Icons.refresh_outlined)),
           homeButton(context),
         ]),
         actions: <Widget>[
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.check_box_outline_blank_outlined),
-          ),
           accountButton(context),
           Theme(
             data: Theme.of(context).copyWith(
@@ -315,45 +310,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         // automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.black),
         titleSpacing: 0.0,
-        leading: IconButton(
-          onPressed: () {
-            // ignore: todo
-            // TODO: Next Page when browsing (nice to have)
-            // ignore: avoid_print
-            print("left");
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
         title: Row(children: [
-          IconButton(
-            onPressed: () {
-              // ignore: todo
-              // TODO: Next Page when browsing (nice to have)
-              // ignore: avoid_print
-              print("right");
-            },
-            icon: const Icon(Icons.arrow_forward),
-          ),
-          IconButton(
-              onPressed: () {
-                // ignore: todo
-                // TODO: Refresh when browsing
-                // ignore: avoid_print
-                print("refresh");
-              },
-              icon: const Icon(Icons.refresh_outlined)),
           homeButton(context),
         ]),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              // ignore: todo
-              // TODO: Tab when browsing
-              // ignore: avoid_print
-              print("box");
-            },
-            icon: const Icon(Icons.check_box_outline_blank_outlined),
-          ),
           accountButton(context),
           Theme(
             data: Theme.of(context).copyWith(
@@ -363,20 +323,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [
-                PopupMenuItem<int>(
-                  value: 0,
-                  child: Row(
-                    children: const [
-                      Icon(Icons.add, color: primaryColor),
-                      SizedBox(width: 8),
-                      Text(
-                        'New tab',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-                const PopupMenuDivider(),
                 PopupMenuItem<int>(
                   value: 1,
                   child: Row(

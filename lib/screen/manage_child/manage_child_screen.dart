@@ -15,7 +15,7 @@ class ManageChildScreen extends StatefulWidget {
   State<ManageChildScreen> createState() => _ManageChildScreenState();
 }
 
-class _ManageChildScreenState extends State<ManageChildScreen>{
+class _ManageChildScreenState extends State<ManageChildScreen> {
   List<Child> _userChildren = [];
   bool _isLoading = false;
 
@@ -117,11 +117,12 @@ class _ManageChildScreenState extends State<ManageChildScreen>{
                                   ),
                                   child: InkWell(
                                       onTap: () async {
-                                        final result = await EditChildProfileScreen(
-                                                id: _userChildren[index]
-                                                    .id
-                                                    .toString())
-                                            .launch(context);
+                                        final result =
+                                            await EditChildProfileScreen(
+                                                    id: _userChildren[index]
+                                                        .id
+                                                        .toString())
+                                                .launch(context);
                                         if (result) {
                                           setState(() {
                                             fetchAndSetChild();
